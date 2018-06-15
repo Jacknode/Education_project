@@ -9,11 +9,7 @@
         <router-link to="/AgenciesHome" class="goHomePageWords">返回首页</router-link>
       </div>
       <!--错误内容-->
-      <div class="errorContent">
-        <div>
-
-        </div>
-      </div>
+      <div class="errorContent"></div>
     </div>
   </div>
 </template>
