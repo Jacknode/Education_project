@@ -30,6 +30,11 @@ export default [
     component: (reslove) => require(['@/components/404'], reslove)
   },
   {
+    path: '/login',
+    name: 'Login',
+    component: (reslove) => require(['@/components/public/Login'], reslove)
+  },
+  {
     path: '*',
     hidden: true,
     redirect: {name: 'Home'}
