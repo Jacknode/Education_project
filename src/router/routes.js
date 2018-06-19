@@ -17,6 +17,24 @@ export default [
         },
         name: 'Home'
       },
+      //个人中心
+      {
+        path: 'personalCenter',
+        components: {
+          default: (resolve) => require(['@/components/PersonalCenter'], resolve),
+          User: (resolve) => require(['@/components/PersonalCenter'], resolve),
+        },
+        name: 'PersonalCenter'
+      },
+      //查看视频
+      {
+        path: 'videoSearch',
+        components: {
+          default: (resolve) => require(['@/components/VideoSearch'], resolve),
+          User: (resolve) => require(['@/components/VideoSearch'], resolve),
+        },
+        name: 'VideoSearch'
+      },
     ]
   },
   {
@@ -33,6 +51,11 @@ export default [
     path: '/login',
     name: 'Login',
     component: (reslove) => require(['@/components/public/Login'], reslove)
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: (reslove) => require(['@/components/public/Register'], reslove)
   },
   {
     path: '*',

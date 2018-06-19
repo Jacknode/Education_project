@@ -21,6 +21,17 @@
           <a href="javascript:;" class="register">注册</a>
         </div>
       </div>
+      <!--上导航-->
+      <div class="allNavTop">
+        <div class="allNavTopContent clearfix">
+          <div class="allNavRight">
+            <a href="javascript:;" class="active">首页</a>
+            <a href="javascript:;">我的课程</a>
+            <a href="javascript:;">公开课</a>
+            <a href="javascript:;">公开课</a>
+          </div>
+        </div>
+      </div>
     </header>
     <section>
       <router-view name="User"></router-view>
@@ -64,7 +75,8 @@
         </div>
         <div class="footerBottom">
           <strong>Copyright © 2018 Tencent. All Rights Reserved. 版权所有</strong><span>|</span><a
-          href="javascript:;">课堂服务协议</a><span>|</span><a href="javascript:;">站点地图</a><span>|</span><a href="javascript:;">侵权投诉</a><span>|</span><a
+          href="javascript:;">课堂服务协议</a><span>|</span><a href="javascript:;">站点地图</a><span>|</span><a
+          href="javascript:;">侵权投诉</a><span>|</span><a
           href="javascript:;">问题反馈</a><span>|</span><a href="javascript:;">帮助</a>
         </div>
       </div>
@@ -89,13 +101,12 @@
   header {
     width: 100%;
     background-color: #fff;
-    height: 100px;
-    padding: 24px 0;
+    padding-top: 24px;
   }
 
   #headerContent {
     width: 1200px;
-    margin: 0 auto;
+    margin: 0 auto 24px;
   }
 
   #headerContent > div {
@@ -189,6 +200,40 @@
     float: left;
     font: bold 13px/2 "微软雅黑";
     color: #999999;
+  }
+
+  .allNavTop {
+    background-color: #154784;
+    width: 100%;
+  }
+
+  .allNavTopContent {
+    width: 1200px;
+    margin: 0 auto;
+    font: 17px/45px "微软雅黑";
+  }
+
+  .allNavRight {
+    float: right;
+    margin-right: 50px;
+  }
+
+  .allNavRight > a {
+    float: left;
+    padding: 0 35px;
+    color: #fff;
+  }
+
+  .allNavRight > a:hover {
+    background-color: #0059bd;
+    border-bottom: 2px solid #efefef;
+    height: 45px;
+  }
+
+  .allNavRight > a.active {
+    background-color: #0059bd;
+    border-bottom: 2px solid #efefef;
+    height: 45px;
   }
 
   /*头部结束*/

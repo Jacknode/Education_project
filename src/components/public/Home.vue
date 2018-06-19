@@ -3,21 +3,10 @@
   <div class="HomePage">
 
     <div class="allNav">
-      <!--上导航-->
-      <div class="allNavTop">
-        <div class="allNavTopContent clearfix">
-          <strong>全部课程分类</strong>
-          <div class="allNavRight">
-            <a href="javascript:;" class="active">首页</a>
-            <a href="javascript:;">我的课程</a>
-            <a href="javascript:;">公开课</a>
-            <a href="javascript:;">公开课</a>
-          </div>
-        </div>
-      </div>
       <!--大导航-->
       <div class="navBigBox">
         <div class="navBoxContent clearfix">
+          <strong>全部课程分类</strong>
           <ul class="curriculumType">
             <li class="clearfix">
               <i></i>
@@ -247,8 +236,8 @@
     },
     methods: {
       //去登录
-      goLogin(){
-        this.$router.push({name:'Login'})
+      goLogin() {
+        this.$router.push({name: 'Login'})
       }
     },
   }
@@ -259,52 +248,21 @@
     background-color: transparent;
   }
 
-  .allNavTop {
-    background-color: #154784;
-    width: 100%;
-  }
-
-  .allNavTopContent {
-    width: 1200px;
-    margin: 0 auto;
-    font: 17px/45px "微软雅黑";
-  }
-
-  .allNavTopContent > strong {
-    float: left;
-    width: 304px;
-    text-align: center;
-    background-color: #0059bd;
-    color: #fff;
-  }
-
-  .allNavRight {
-    float: right;
-    margin-right: 50px;
-  }
-
-  .allNavRight > a {
-    float: left;
-    padding: 0 35px;
-    color: #fff;
-  }
-
-  .allNavRight > a:hover {
-    background-color: #0059bd;
-    border-bottom: 2px solid #efefef;
-    height: 45px;
-  }
-
-  .allNavRight > a.active {
-    background-color: #0059bd;
-    border-bottom: 2px solid #efefef;
-    height: 45px;
-  }
-
   .navBigBox {
     width: 100%;
     height: 550px;
     background: url("../../assets/img/homeBg.png") no-repeat center center;
+  }
+
+  .navBoxContent > strong {
+    font: 16px/45px "微软雅黑";
+    width: 304px;
+    color: #fff;
+    background-color: #0059bd;
+    position: absolute;
+    top: -45px;
+    left: 0;
+    text-align: center;
   }
 
   .navBoxContent {
