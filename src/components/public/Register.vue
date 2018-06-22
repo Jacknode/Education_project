@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="wrapBox"></div>
     <div id="wrap">
       <header class="clearfix">
         <div class="logoBox">
@@ -10,7 +11,7 @@
           <span>已有账号,</span>
           <a href="javascript:;">马上登录</a>
           <em></em>
-          <a href="javascript:;">返回首页</a>
+          <router-link to="Home">返回首页</router-link>
         </div>
       </header>
       <section>
@@ -18,13 +19,14 @@
         <div>
           <div class="formBox">
             <input placeholder="手机号"/>
-            <div>
-              <span>请按住滑块，拖动到最右侧</span>
+            <div id="slider">
+              <span unselectable="on">请按住滑块，拖动到最右侧</span>
               <div></div>
             </div>
           </div>
           <div class="userFont">
-            <el-checkbox v-model="checked">我已阅读并接受用户协议</el-checkbox>
+            <el-checkbox v-model="checked"></el-checkbox>
+            <span>我已阅读并接受用户协议</span>
           </div>
           <div class="registerSub">
             <button>注册</button>
@@ -55,10 +57,56 @@
         checked: true,
       }
     },
-    methods: {},
+    methods: {
+      initData(){
+        console.log(1)
+      }
+    },
+    mounted() {
+      //拖动滑块
+      let slider = document.getElementById('slider');
+      let sliderC = slider.children[1];
+      let sliderCW = sliderC.offsetWidth;
+      let sliderLeft = slider.offsetLeft;
+      let sliderRight = slider.offsetWidth - sliderCW;
+      let sliderCLeft = 0;
+      sliderC.onmousedown = (e) => {
+        let X = e.offsetX;
+        document.onmousemove = (e) => {
+          let sliderCL = e.clientX;
+          sliderCLeft = sliderCL - sliderLeft - X;
+          if (sliderCLeft < 0) {
+            sliderCLeft = 0;
+          }
+          if (sliderCLeft > sliderRight) {
+            sliderCLeft = sliderRight;
+          }
+          sliderC.style.left = sliderCLeft + 'px'
+        }
+      }
+      sliderC.onmouseup = document.onmouseup = () => {
+        document.onmousemove = null;
+        if( sliderCLeft == sliderRight ){
+
+        }
+      }
+
+      //拖动滑块结束
+
+    },
   }
 </script>
 <style scoped>
+  #wrapBox {
+    position: fixed;
+    z-index: -1;
+    background-color: #f9f9f9;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
   #wrap {
     width: 900px;
     margin: 90px auto 0;
@@ -106,7 +154,7 @@
 
   section {
     background-color: #fff;
-    box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 20px #ccc;
   }
 
   section > h2 {
@@ -143,6 +191,11 @@
     position: relative;
   }
 
+  .formBox > div > span {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+  }
+
   .formBox > div > div {
     width: 42px;
     height: 34px;
@@ -154,6 +207,11 @@
 
   .userFont {
     margin: 20px 0 30px;
+  }
+
+  .userFont > span {
+    padding-left: 10px;
+    color: #999;
   }
 
   .registerSub > button {
@@ -204,11 +262,6 @@
   .QQCode {
     -ms-background-position: -233px -164px;
     background-position: -233px -164px;
-  }
-
-  footer {
-
-
   }
 
   footer {

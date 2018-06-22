@@ -24,7 +24,45 @@ export default [
           default: (resolve) => require(['@/components/PersonalCenter'], resolve),
           User: (resolve) => require(['@/components/PersonalCenter'], resolve),
         },
-        name: 'PersonalCenter'
+        name: 'PersonalCenter',
+        children:[
+          //基本信息
+          {
+            path: 'userInformation',
+            components: {
+              default: (resolve) => require(['@/components/UserInformation'], resolve),
+              User: (resolve) => require(['@/components/UserInformation'], resolve),
+            },
+            name: 'UserInformation'
+          },
+          //我的课程
+          {
+            path: 'myClass',
+            components: {
+              default: (resolve) => require(['@/components/MyClass'], resolve),
+              User: (resolve) => require(['@/components/MyClass'], resolve),
+            },
+            name: 'MyClass'
+          },
+          //修改密码
+          {
+            path: 'updatePassword',
+            components: {
+              default: (resolve) => require(['@/components/UpdatePassword'], resolve),
+              User: (resolve) => require(['@/components/UpdatePassword'], resolve),
+            },
+            name: 'UpdatePassword'
+          },
+          //我的余额
+          {
+            path: 'myBalance',
+            components: {
+              default: (resolve) => require(['@/components/MyBalance'], resolve),
+              User: (resolve) => require(['@/components/MyBalance'], resolve),
+            },
+            name: 'MyBalance'
+          },
+        ]
       },
       //查看视频
       {
@@ -35,6 +73,25 @@ export default [
         },
         name: 'VideoSearch'
       },
+      //播放视频
+      {
+        path: 'playVideo',
+        components: {
+          default: (resolve) => require(['@/components/PlayVideo'], resolve),
+          User: (resolve) => require(['@/components/PlayVideo'], resolve),
+        },
+        name: 'PlayVideo'
+      },
+      //视频详情页
+      {
+        path: 'videoDetails',
+        components: {
+          default: (resolve) => require(['@/components/VideoDetails'], resolve),
+          User: (resolve) => require(['@/components/VideoDetails'], resolve),
+        },
+        name: 'VideoDetails'
+      },
+
     ]
   },
   {
