@@ -16,9 +16,9 @@
           <span>四川</span>
         </div>
         <div class="loginAndRegister">
-          <a href="javascript:;" class="login">登录</a>
+          <router-link to="/Login" class="login">登录</router-link>
           <span></span>
-          <a href="javascript:;" class="register">注册</a>
+          <router-link to="/Register" class="register">注册</router-link>
         </div>
       </div>
       <!--上导航-->
@@ -28,7 +28,7 @@
             <a href="javascript:;" class="active">首页</a>
             <a href="javascript:;">我的课程</a>
             <a href="javascript:;">公开课</a>
-            <a href="javascript:;">公开课</a>
+            <a href="javascript:;">系统课程</a>
           </div>
         </div>
       </div>

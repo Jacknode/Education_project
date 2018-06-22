@@ -14,7 +14,7 @@
         <div class="videlAndInformation clearfix">
           <div class="videoShow">
             <img src="../assets/img/video.png" width="610" height="400">
-            <div class="videoIcon"></div>
+            <div class="videoIcon" @click="goPlay"></div>
             <div class="videoTeacher">
               <div class="headIcon"></div>
               <strong>李强</strong>
@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="informationShow">
-            <h4>电商运营实操在线系统网课 玩转2017淘宝新规</h4>
+            <h4 @click="goPlay">电商运营实操在线系统网课 玩转2017淘宝新规</h4>
             <div class="videoOperation clearfix">
               <strong>326 人学习</strong>
               <a href="javascript:;" class="share"><i></i>分享</a>
@@ -53,31 +53,113 @@
         </div>
       </div>
       <div class="secContentWrap clearfix">
+        <!--课程介绍-->
         <div class="secContent">
           <div class="classRecommend">
-            <strong class="classType">课程介绍</strong>
-            <ul class="classRecommendList clearfix">
-              <li>
-                <strong class="addEm">简介</strong><em>:</em>
-                <span>《电商运营实操在线系统网课 玩转2017淘宝新规》由中公优就业电商研究院倾力打造，让您熟练掌握开店技巧 ，打造黄金旺铺。通过全黄金旺铺。通过全黄金旺铺。通过全</span>
-              </li>
-              <li>
-                <strong>学习目标 :</strong>
-                <span>《电商运营实操在线系统网课 玩转2017淘宝新规》，《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装</span>
-              </li>
-              <li>
-                <strong>适合人群 :</strong>
-                <span>适合人群： 零基础小白、无互联网相关经验人员。</span>
-              </li>
-              <li>
-                <strong>详细介绍 :</strong>
-                <span>√学员后续服务： 学习及售后的一系列问题欢迎加入我们的QQ群，群号：496038649qq√相关面授课程推</span>
-              </li>
-            </ul>
+            <!--课程介绍-->
+            <div>
+              <strong class="classType">课程介绍</strong>
+              <ul class="classRecommendList clearfix">
+                <li>
+                  <strong class="addEm">简介</strong><em>:</em>
+                  <span>《电商运营实操在线系统网课 玩转2017淘宝新规》由中公优就业电商研究院倾力打造，让您熟练掌握开店技巧 ，打造黄金旺铺。通过全黄金旺铺。通过全黄金旺铺。通过全</span>
+                </li>
+                <li>
+                  <strong>学习目标 :</strong>
+                  <span>《电商运营实操在线系统网课 玩转2017淘宝新规》，《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装</span>
+                </li>
+                <li>
+                  <strong>适合人群 :</strong>
+                  <span>适合人群： 零基础小白、无互联网相关经验人员。</span>
+                </li>
+                <li>
+                  <strong>详细介绍 :</strong>
+                  <span>√学员后续服务： 学习及售后的一系列问题欢迎加入我们的QQ群，群号：496038649qq√相关面授课程推</span>
+                </li>
+              </ul>
+            </div>
+            <!--课程目录-->
+            <div class="classMeun">
+              <strong class="classType">课程目录</strong>
+              <dl>
+                <dt>第1章节·EPM基础篇</dt>
+                <dd class="clearfix" v-for="item,index in 20">
+                  <strong>第1节·EPM基础篇-初识电商EPM(上)</strong>
+                  <span></span>
+                  <i></i>
+                  <em>24:06</em>
+                  <b></b>
+                  <a href="JavaScript:;">播放视频</a>
+                </dd>
+                <dt>第2章节·EPM基础篇</dt>
+                <dd class="clearfix" v-for="item,index in 20">
+                  <strong>第1节·EPM基础篇-初识电商EPM(上)</strong>
+                  <span></span>
+                  <i></i>
+                  <em>24:06</em>
+                  <b></b>
+                  <a href="JavaScript:;">播放视频</a>
+                </dd>
+              </dl>
+            </div>
+            <!--学员评价-->
+            <div class="studentEvaluate">
+              <strong class="classType">学员评价</strong>
+              <div class="evaluateNav clearfix">
+                <strong><span>95%</span>好评度</strong>
+                <div>
+                  <el-radio v-model="radio" label="1">全部评价(168)</el-radio>
+                  <el-radio v-model="radio" label="2">好评(150)</el-radio>
+                  <el-radio v-model="radio" label="3">中评(15)</el-radio>
+                  <el-radio v-model="radio" label="4">差评(3)</el-radio>
+                </div>
+              </div>
+              <ul class="evaluateList">
+                <li class="clearfix" v-for="item,index in 3">
+                  <div class="studentBox">
+                    <div class="studentIcon"></div>
+                    <div class="studentName">纯粹</div>
+                  </div>
+                  <div class="studentContent">
+                    <div class="evaluateStar">
+                      <el-rate
+                        v-model="starValue"
+                        disabled
+                        :colors="['#e8751a', '#e8751a', '#e8751a']"
+                      >
+                      </el-rate>
+                    </div>
+                    <p>我从一个小白，到认识这个软件，一直能做些简单的图画，这些都是从腾讯课堂上学的，课程非常细心，讲的知识点也很容易让人明白理解。真</p>
+                    <span>2018-06-16</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <!--分页-->
+            <div class="paging">
+              <el-pagination
+                background
+                :page-size="5"
+                layout="prev, pager, next"
+                @current-change="handleCurrentChange"
+                :total="total">
+              </el-pagination>
+            </div>
           </div>
         </div>
+        <!--课程推荐-->
         <div class="secRecommend">
-
+          <strong>课程推荐</strong>
+          <ul class="recommendList">
+            <li v-for="item,index in 4">
+              <img src="../assets/img/video.png" width="230" height="160">
+              <strong>高考语文高分复习指导</strong>
+              <div class="clearfix">
+                <span>免费</span>
+                <a href="javascript:;">开始学习</a>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </section>
@@ -90,13 +172,24 @@
   export default {
     computed: mapGetters([]),
     data() {
-      return {}
+      return {
+        radio: '1',
+        starValue: 4,
+        total: 1000,
+      }
     },
     methods: {
       initData() {
       },
       search() {
         this.initData()
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+      //去播放
+      goPlay(){
+        this.$router.push({name:'PlayVideo'});
       }
     },
   }
@@ -119,6 +212,10 @@
 
   nav a {
     float: left;
+  }
+
+  nav a:hover {
+    color: #0461b1;
   }
 
   nav span {
@@ -187,6 +284,11 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+
+  .informationShow h4:hover {
+    cursor: pointer;
+    color: #0461b1;
   }
 
   .videoOperation {
@@ -319,7 +421,7 @@
   .classRecommendList > li {
     float: left;
     width: 100%;
-    margin-top:13px;
+    margin-top: 13px;
   }
 
   .classRecommendList > li > * {
@@ -331,7 +433,7 @@
   }
 
   .classRecommendList > li > em {
-    margin-left:-35px;
+    margin-left: -35px;
   }
 
   .addEm {
@@ -339,12 +441,239 @@
   }
 
   .classRecommendList > li > span {
-    width:745px;
+    width: 745px;
+  }
+
+  .classMeun {
+    margin-top: 24px;
+  }
+
+  .classMeun dl {
+    font: 16px/3 "微软雅黑";
+    height: 600px;
+    overflow: auto;
+  }
+
+  .classMeun dt {
+    font-weight: bold;
+    color: #333333;
+    padding-left: 25px;
+  }
+
+  .classMeun dd {
+    padding: 0 20px 0 25px;
+    color: #333;
+  }
+
+  .classMeun dd strong {
+    width: 283px;
+    float: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .classMeun dd span {
+    float: left;
+    width: 300px;
+    border-bottom: 1px dashed #b3b3b3;
+    margin-top: 25px;
+    margin-right: 7px;
+  }
+
+  .classMeun dd i {
+    float: left;
+    width: 33px;
+    height: 18px;
+    background: url("../assets/img/Icon.png") no-repeat 0 -664px;
+    margin-top: 15px;
+    margin-right: 25px;
+  }
+
+  .classMeun dd em {
+    float: left;
+  }
+
+  .classMeun dd b {
+    float: right;
+    width: 27px;
+    height: 27px;
+    background: url("../assets/img/Icon.png") no-repeat 0 -762px;
+    margin: 10px 25px 0 0;
+  }
+
+  .classMeun dd a {
+    float: right;
+    margin-right: 20px;
+    font: 12px/2 "微软雅黑";
+    background-color: #0461b1;
+    color: #e6e6e6;
+    padding: 0 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-top: 13px;
+    display: none;
+  }
+
+  .classMeun dd:hover {
+    background-color: #f4f4f4;
+    box-shadow: 0 0 1px 2px #ececec;
+  }
+
+  .classMeun dd:hover strong,
+  .classMeun dd:hover span,
+  .classMeun dd:hover em,
+  .classMeun dd:hover i {
+    color: #0059bd;
+    border-color: #0059bd;
+    background-position-x: -60px;
+  }
+
+  .classMeun dd:hover b {
+    display: none;
+  }
+
+  .classMeun dd:hover a {
+    display: block;
+  }
+
+  .studentEvaluate {
+    margin-top: 20px;
+  }
+
+  .evaluateNav {
+    margin-top: 22px;
+    background-color: #e3e1e5;
+    box-shadow: 0 0 1px 2px #dedddf;
+    padding: 10px 0;
+  }
+
+  .evaluateNav > strong {
+    float: left;
+    font: 16px/30px "微软雅黑";
+    width: 170px;
+    text-align: center;
+    border-right: 1px solid #b3b3b3;
+    margin-right: 30px;
+    color: #333333;
+  }
+
+  .evaluateNav > strong span {
+    color: #f43232;
+  }
+
+  .evaluateNav .el-radio {
+    line-height: 30px;
+  }
+
+  .evaluateList {
+    padding: 10px 22px 0 14px;
+  }
+
+  .evaluateList > li {
+    padding: 15px 0 10px;
+    border-bottom: 1px solid #ccc8c8;
+  }
+
+  .studentBox {
+    float: left;
+    width: 64px;
+  }
+
+  .studentIcon {
+    width: 64px;
+    height: 64px;
+    background-color: #ccc;
+    border-radius: 50%;
+  }
+
+  .studentContent {
+    float: left;
+    margin-left: 14px;
+    width: 755px;
+    font: 13px/20px "微软雅黑";
+  }
+
+  .studentName {
+    font: 14px/2 "微软雅黑";
+    text-align: center;
+    color: #494949;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .evaluateStar {
+    margin-bottom: 12px;
+  }
+
+  .studentContent p {
+    color: #494949;
+  }
+
+  .studentContent span {
+    color: #e3e1e5;
+    display: block;
+    text-align: right;
+  }
+
+  .paging {
+    margin-top:20px;
+    text-align: center;
   }
 
   /**/
   .secRecommend {
     float: left;
     width: 296px;
+    background-color: #f0edf2;
+    margin-top: 30px;
+    box-shadow: 1px 1px 2px 1px #ccc;
+    padding: 0 15px 20px 16px;
+  }
+
+  .secRecommend > strong {
+    font: bold 16px/64px "微软雅黑";
+    color: #333333;
+  }
+
+  .recommendList > li {
+    background-color: #fff;
+    padding: 13px 17px;
+    margin-bottom: 18px;
+    box-shadow: 1px 1px 1px 1px #ccc;
+  }
+
+  .recommendList > li:hover {
+    background-color: #f1f1f1;
+  }
+
+  .recommendList strong {
+    font: 15px/3 "微软雅黑";
+    color: #333333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    white-space: nowrap;
+  }
+
+  .recommendList div {
+    font: 15px/22px "微软雅黑";
+  }
+
+  .recommendList div span {
+    float: left;
+    color: #00a131;
+  }
+  .recommendList div a {
+    float: right;
+    font: 13px/22px "微软雅黑";
+    padding: 0 8px;
+    color: #e6e6e6;
+    background-color: #0461b1;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
   }
 </style>

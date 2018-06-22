@@ -5,6 +5,18 @@
     <div class="allNav">
       <!--大导航-->
       <div class="navBigBox">
+        <div class="bigImageBox">
+          <ul class="bigImageList clearfix" id="bigImageList" ref="bigImageList">
+            <li v-for="item,index in 5"><img src="../../assets/img/homeBg.png"></li>
+          </ul>
+          <div class="imgNav" id="imgNav">
+            <a href="javascript:;"
+               :class="{active:item == num}"
+               v-for="item,index in 5"
+               @mouseover="switchSpot(index+1)"
+            ></a>
+          </div>
+        </div>
         <div class="navBoxContent clearfix">
           <strong>全部课程分类</strong>
           <ul class="curriculumType">
@@ -72,7 +84,7 @@
           <div class="LoginBox">
             <div class="headPortrait"></div>
             <button class="loginBtn" @click="goLogin">登录</button>
-            <button class="registerBtn">注册</button>
+            <button class="registerBtn" @click="goRegister">注册</button>
             <a href="javascript:;" class="clearfix"><i></i><span>微信公众号</span></a>
           </div>
         </div>
@@ -120,7 +132,7 @@
                   <!--时长-->
                   <span>00:25:00</span>
                   <!--btn-->
-                  <button>学习</button>
+                  <button @click="goStudy">学习</button>
                 </li>
               </ul>
             </div>
@@ -137,7 +149,7 @@
         <div class="RecommendDetail">
           <div class="RecommendMore">
             <strong>课程推荐</strong>
-            <a href="">更多&gt;&gt;</a>
+            <router-link to="VideoSearch">更多&gt;&gt;</router-link>
           </div>
           <!--推荐内容-->
           <div class="RecommendCont">
@@ -229,6 +241,9 @@
         courses: ["免费公开课",],
         conts: ["平面设计", "事业单位", "考研", "地方公务员"],
         ClassLists: ["", "", "", ""],
+        num: 1,
+        timer: null,
+        liW: 0,
       }
     },
     computed: mapGetters([]),
@@ -238,7 +253,56 @@
       //去登录
       goLogin() {
         this.$router.push({name: 'Login'})
+      },
+      //去注册
+      goRegister() {
+        this.$router.push({name: 'Register'})
+      },
+      //移入变图片
+      switchSpot(index) {
+        this.num = index;
+        this.$refs.bigImageList.style.transform = 'translateX(-' + (this.num - 1) * this.liW + 'px)';
+        clearInterval(this.timer)
+      },
+      //学习视频
+      goStudy(){
+        this.$router.push({name: 'PlayVideo'})
       }
+    },
+    mounted() {
+      this.liW = document.body.offsetWidth;
+      let bigImageList = document.getElementById('bigImageList');
+      let lis = bigImageList.children;
+      for (let i = 0; i < lis.length; i++) {
+        lis[i].style.width = this.liW + 'px';
+      }
+      bigImageList.style.width = lis.length * this.liW + 'px';
+      let ulL = (lis.length - 1) * this.liW;
+
+      function timers(_this) {
+        let ulP = _this.num * _this.liW;
+        _this.num++;
+        if (ulP > ulL) {
+          bigImageList.style.transform = 'translateX(0px)';
+          _this.num = 1;
+        } else {
+          bigImageList.style.transform = 'translateX(-' + ulP + 'px)';
+        }
+      }
+
+      this.timer = setInterval(() => {
+        timers(this);
+      }, 2000);
+      bigImageList.onmouseover = () => {
+        clearInterval(this.timer)
+      }
+      bigImageList.onmouseout = () => {
+        this.timer = setInterval(() => {
+          timers(this);
+        }, 2000);
+      }
+//      let spots = document.getElementById('imgNav').children;
+
     },
   }
 </script>
@@ -250,13 +314,61 @@
 
   .navBigBox {
     width: 100%;
-    height: 550px;
-    background: url("../../assets/img/homeBg.png") no-repeat center center;
+    height: 500px;
+    position: relative;
+  }
+
+  .bigImageBox {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+  }
+
+  .bigImageList {
+    transition: 1s;
+  }
+
+  .bigImageList > li {
+    float: left;
+    height: 500px;
+  }
+
+  .bigImageList > li img {
+    display: block;
+    width: 100%;
+    height: 500px;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+
+  .imgNav {
+    position: absolute;
+    bottom: 25px;
+    right: 10%;
+  }
+
+  .imgNav > a {
+    float: left;
+    width: 16px;
+    height: 16px;
+    background-color: #999999;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    margin: 0 9px;
+  }
+
+  .imgNav > a.active {
+    background-color: #fff;
   }
 
   .navBoxContent > strong {
     font: 16px/45px "微软雅黑";
-    width: 304px;
+    width: 282px;
     color: #fff;
     background-color: #0059bd;
     position: absolute;
@@ -273,13 +385,14 @@
 
   .navBoxContent .allList {
     position: absolute;
-    left: 304px;
+    left: 282px;
     top: 0;
     width: 500px;
-    height: 490.5px;
+    height: 500px;
     background-color: #fff;
     padding: 10px;
     font: 14px/2 "微软雅黑";
+    z-index: 1;
   }
 
   .navBoxContent .allList a {
@@ -288,10 +401,13 @@
   }
 
   .curriculumType {
-    width: 304px;
+    width: 282px;
+    height: 500px;
     background-color: #fff;
     padding: 7px 0;
     float: left;
+    position: relative;
+    z-index: 1;
   }
 
   .curriculumType > li {
@@ -300,13 +416,10 @@
 
   .curriculumType > li > i {
     float: left;
-  }
-
-  .curriculumType > li > i {
     width: 26px;
     height: 26px;
     background: url("../../assets/img/Icon.png") no-repeat;
-    margin: 18px 19px 0;
+    margin: 18px 15px 0;
   }
 
   .curriculumType > li:nth-of-type(1) > i {
@@ -385,6 +498,8 @@
     background-color: #fff;
     padding: 20px 50px 40px;
     margin-top: 85px;
+    position: relative;
+    z-index: 1;
   }
 
   .headPortrait {
