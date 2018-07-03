@@ -31,7 +31,7 @@ export default [
             path: 'userInformation',
             components: {
               default: (resolve) => require(['@/components/UserInformation'], resolve),
-              User: (resolve) => require(['@/components/UserInformation'], resolve),
+              Center: (resolve) => require(['@/components/UserInformation'], resolve),
             },
             name: 'UserInformation'
           },
@@ -40,7 +40,7 @@ export default [
             path: 'myClass',
             components: {
               default: (resolve) => require(['@/components/MyClass'], resolve),
-              User: (resolve) => require(['@/components/MyClass'], resolve),
+              Center: (resolve) => require(['@/components/MyClass'], resolve),
             },
             name: 'MyClass'
           },
@@ -49,7 +49,7 @@ export default [
             path: 'updatePassword',
             components: {
               default: (resolve) => require(['@/components/UpdatePassword'], resolve),
-              User: (resolve) => require(['@/components/UpdatePassword'], resolve),
+              Center: (resolve) => require(['@/components/UpdatePassword'], resolve),
             },
             name: 'UpdatePassword'
           },
@@ -58,7 +58,7 @@ export default [
             path: 'myBalance',
             components: {
               default: (resolve) => require(['@/components/MyBalance'], resolve),
-              User: (resolve) => require(['@/components/MyBalance'], resolve),
+              Center: (resolve) => require(['@/components/MyBalance'], resolve),
             },
             name: 'MyBalance'
           },
@@ -66,7 +66,7 @@ export default [
       },
       //查看视频
       {
-        path: 'videoSearch',
+        path: 'videoSearch/:id',
         components: {
           default: (resolve) => require(['@/components/VideoSearch'], resolve),
           User: (resolve) => require(['@/components/VideoSearch'], resolve),
@@ -75,7 +75,7 @@ export default [
       },
       //播放视频
       {
-        path: 'playVideo',
+        path: 'playVideo/:id',
         components: {
           default: (resolve) => require(['@/components/PlayVideo'], resolve),
           User: (resolve) => require(['@/components/PlayVideo'], resolve),
@@ -84,13 +84,31 @@ export default [
       },
       //视频详情页
       {
-        path: 'videoDetails',
+        path: 'videoDetails/:id/:name/:cid/:cname',
         components: {
           default: (resolve) => require(['@/components/VideoDetails'], resolve),
           User: (resolve) => require(['@/components/VideoDetails'], resolve),
         },
         name: 'VideoDetails'
       },
+      //订单详情页
+      {
+        path: 'orderDetails',
+        components: {
+          default: (resolve) => require(['@/components/OrderDetails'], resolve),
+          User: (resolve) => require(['@/components/OrderDetails'], resolve),
+        },
+        name: 'OrderDetails'
+      },
+      //支付订单
+      {
+        path: 'payOrder',
+        components: {
+          default: (resolve) => require(['@/components/PayOrder'], resolve),
+          User: (resolve) => require(['@/components/PayOrder'], resolve),
+        },
+        name: 'PayOrder'
+      }
 
     ]
   },

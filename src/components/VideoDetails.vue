@@ -3,13 +3,18 @@
     <div id="wrap">
       <div id="wrapBox">
         <nav class="clearfix">
-          <a href="javascript:;">全部课程</a>
+          <a href="javascript:;">{{typeName}}</a>
           <span>&gt;</span>
-          <a href="javascript:;">软件技术</a>
+          <a href="javascript:;">{{childrenName}}</a>
         </nav>
         <dl class="classType clearfix">
           <dt>课程分类</dt>
-          <dd v-for="item,index in 11">互联网产品</dd>
+          <dd
+            v-for="item,index in videoDetailsList"
+            @click="changeClassType(item,index)"
+            :class="{active: activeIndex == index}"
+          >{{item.ed_te_Name}}
+          </dd>
         </dl>
         <ul class="screenCondition clearfix">
           <li><a href="javascript:;">综合排序</a></li>
@@ -23,11 +28,13 @@
           <li><a href="javascript:;">付费</a></li>
         </ul>
         <ul class="classList clearfix">
-          <li v-for="item,index in 12">
-            <img src="../assets/img/video.png" width=" 260px" height="193">
-            <strong>高考语文高分复习指导</strong>
+          <li class="prompt" v-show="!typeVideoList.length">暂无相关视频</li>
+          <li v-for="item,index in typeVideoList" @click="goVideoSearch(item)">
+            <img v-lazy="item.ed_vo_ImageURL" width=" 260px" height="193">
+            <strong>{{item.ed_vo_Title}}</strong>
             <div class="clearfix">
-              <span>¥18:00</span>
+              <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
+              <span v-if="item.ed_vo_Price != 0">￥{{item.ed_vo_Price}}</span>
               <a href="javascript:;">我要报名</a>
             </div>
           </li>
@@ -35,10 +42,13 @@
         <div class="paging">
           <el-pagination
             background
-            :page-size="5"
+            :page-size="12"
             layout="prev, pager, next"
             @current-change="handleCurrentChange"
-            :total="total">
+            :total="total"
+            v-show="total
+"
+          >
           </el-pagination>
         </div>
       </div>
@@ -49,20 +59,84 @@
   import {mapGetters} from 'vuex'
 
   export default {
-    computed: mapGetters([]),
+    computed: mapGetters([
+      'videoDetailsList',
+      'typeVideoList'
+    ]),
     data() {
       return {
         total: 1000,
+        typeId: '',
+        typeName: '',
+        typeCId: '',
+        childrenName: '',
+        activeIndex: 0,
+        total: 0,
       }
     },
+    created() {
+      this.typeId = this.$route.params.id;
+      this.typeName = this.$route.params.name;
+      this.typeCId = this.$route.params.cid;
+      this.childrenName = this.$route.params.cname;
+      this.initData();
+      this.initTypeVideo();
+    },
     methods: {
+      //查询类型
       initData() {
+        let SecondaryPage = {
+          "loginUserID": "huileyou",  //惠乐游用户ID
+          "loginUserPass": "123",  //惠乐游用户密码
+          "operateUserID": "",//操作员编码
+          "operateUserName": "",//操作员名称
+          "pcName": "",        //机器码
+          "ed_vt_ID": this.typeId, //类型
+        };
+        this.$store.dispatch('initVideoDetails', SecondaryPage)
+          .then(() => {
+            for (let i = 0; i < this.videoDetailsList.length; i++) {
+              if (this.videoDetailsList[i].ed_te_ID == this.typeCId) {
+                this.childrenName = this.videoDetailsList[i].ed_te_Name;
+                this.activeIndex = i;
+              }
+            }
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
       },
-      search() {
-        this.initData()
+      //查询类型对应得视频
+      initTypeVideo(num) {
+        let SecondaryVode = {
+          "loginUserID": "huileyou",  //惠乐游用户ID
+          "loginUserPass": "123",  //惠乐游用户密码
+          "operateUserID": "",//操作员编码
+          "operateUserName": "",//操作员名称
+          "pcName": "",        //机器码
+          "ed_vt_ID": this.typeCId, //类型
+          "page": num?num:1,//页码
+          "rows": 12//条数
+        };
+        this.$store.dispatch('initTypeVideo', SecondaryVode)
+          .then(total=>{
+            this.total = Number(total)
+          })
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      //分页
+      handleCurrentChange(num) {
+        this.initTypeVideo(num)
+      },
+      changeClassType(item, index) {
+        this.activeIndex = index;
+        this.childrenName = item.ed_te_Name;
+        this.typeCId = item.ed_te_ID;
+        this.initTypeVideo();
+      },
+      goVideoSearch(item){
+        this.$router.push({name:'VideoSearch',params:{id:item.ed_vo_ID}})
       },
     },
   }
@@ -211,6 +285,20 @@
   .paging {
     text-align: center;
     margin-top: 20px;
+  }
+
+  .classList .prompt:hover {
+    box-shadow: none;
+    background-color: #fafafa;
+    cursor: inherit;
+  }
+
+  .classList .prompt {
+    width: 100%;
+    display: block;
+    float: none;
+    text-align: center;
+    color: #ccc;
   }
 
 </style>

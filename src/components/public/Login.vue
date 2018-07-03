@@ -11,31 +11,43 @@
         <section>
           <div class="qrCode"></div>
           <div class="loginType clearfix">
-            <a href="javascript:;" class="active">密码登录</a>
-            <a href="javascript:;">短信登录</a>
+            <a href="javascript:;"
+               v-for="item,index in loginType"
+               :class="{active: loginTypeId == index}"
+               @click="changeLoginTyle(index)"
+            >{{item}}</a>
           </div>
-          <div class="loginForm">
-            <input type="text" placeholder="手机号/邮箱">
-            <input type="password" placeholder="密码">
-            <input type="button" value="登录">
+          <div class="loginForm" v-show="showPassworld">
+            <input type="text" v-model="userID" placeholder="手机号/邮箱">
+            <input type="password" v-model="password" placeholder="密码">
+            <input type="button" value="登录" @click="loginSubmit">
+          </div>
+          <!--验证码登录-->
+          <div class="messageLogin" v-show="!showPassworld">
+            <input type="text" v-model="telePhone" placeholder="请输入手机号">
+            <div class="messageNum clearfix">
+              <input type="text" v-model="messageNum" placeholder="请输入验证码">
+              <button @click="sendMessage">{{sendOut}}</button>
+            </div>
+            <button @click="messageLoginSubmit">登录</button>
           </div>
           <div class="loginTo clearfix">
             <strong>
-              <el-checkbox v-model="checked">下次自动登录</el-checkbox>
+              <!--<el-checkbox v-model="checked">下次自动登录</el-checkbox>-->
             </strong>
             <span>
-            <a href="javascript:;">忘记密码</a>
-            <em></em>
-            <a href="javascript:;">注册</a>
+            <!--<a href="javascript:;">忘记密码</a>-->
+              <!--<em></em>-->
+            <router-link to="Register">注册</router-link>
           </span>
           </div>
-          <div class="otherLogin">
-            <p>第三方账号登录</p>
-            <div>
-              <a href="javascript:;" class="weChat"></a><a href="javascript:;" class="microBlog"></a><a
-              href="javascript:;" class="QQCode"></a>
-            </div>
-          </div>
+          <!--<div class="otherLogin">-->
+          <!--<p>第三方账号登录</p>-->
+          <!--<div>-->
+          <!--<a href="javascript:;" class="weChat"></a><a href="javascript:;" class="microBlog"></a><a-->
+          <!--href="javascript:;" class="QQCode"></a>-->
+          <!--</div>-->
+          <!--</div>-->
         </section>
         <footer>
           <strong>Copyright © 2018 Tencent. All Rights Reserved. 版权所有</strong><span>|</span><a
@@ -55,16 +67,176 @@
     computed: mapGetters([]),
     data() {
       return {
-        checked: false
+        checked: false,
+        userID: '',
+        password: '',
+        loginType: [
+          '密码登录',
+          '短信登录'
+        ],
+        loginTypeId: 0,
+        showPassworld: true,
+        telePhone: '',
+        messageNum: '',
+        sendOut: '发送验证码',
+        isTrue: false,
       }
     },
     methods: {
-      initData() {
+      //登录提交
+      loginSubmit() {
+        if (!this.userID) {
+          this.$notify({
+            message: '请输入账号!!',
+            type: 'error'
+          })
+          return
+        }
+        if (!this.password) {
+          this.$notify({
+            message: '请输入密码!!',
+            type: 'error'
+          })
+          return
+        }
+        let userLogin = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "userID": this.userID,//用户编码
+          "password": this.password//密码
+        }
+        this.$store.dispatch('loginSubmit', userLogin)
+          .then(data => {
+            this.$notify({
+              message: data.resultcontent,
+              type: 'success'
+            })
+            this.userID = '';
+            this.password = '';
+            sessionStorage.setItem('userInfo', JSON.stringify(data.data))
+            this.$router.push({name: 'Home'})
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
       },
-      search() {
-        this.initData()
-      }
+      //切换登录状态
+      changeLoginTyle(index) {
+        this.loginTypeId = index;
+        if (index) {
+          this.showPassworld = false;
+        } else {
+          this.showPassworld = true;
+        }
+      },
+      //发送短信
+      sendMessage() {
+        if (this.isTrue) {
+          return
+        }
+        if (!this.telePhone) {
+          this.$notify({
+            message: '请输入手机号!!',
+            type: 'error'
+          })
+          return
+        }
+        let userSendMessage = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "phone": this.telePhone,//用户编码
+          "sendType": "2",//0注册发送短信 1 找回密码发送短信 2 动态密码
+        }
+        this.isTrue = true;
+        let num = 60;
+        let timer = setInterval(() => {
+          num--;
+          this.sendOut = '重新发送(' + num + 's)';
+          if (num == 0) {
+            this.sendOut = '重新发送'
+            this.isTrue = false;
+            clearInterval(timer)
+          }
+        }, 1000)
+
+        this.$store.dispatch('sendMessageLogin', userSendMessage)
+          .then(suc => {
+            this.$notify({
+              message: suc,
+              type: 'success'
+            })
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
+
+
+      },
+      //短信登录
+      messageLoginSubmit() {
+        if (!this.telePhone) {
+          this.$notify({
+            message: '请输入手机号!!',
+            type: 'error'
+          })
+          return
+        }
+        if (!this.messageNum) {
+          this.$notify({
+            message: '请输入动态密码!!',
+            type: 'error'
+          })
+          return
+        }
+        let autoPasswordLogin = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "phone": this.telePhone,
+          "validateNo": this.messageNum,//验证码
+        }
+        this.$store.dispatch('messageLoginSubmit', autoPasswordLogin)
+          .then(data => {
+            this.$notify({
+              message: data.resultcontent,
+              type: 'success'
+            })
+            this.telePhone = '';
+            this.messageNum = '';
+            sessionStorage.setItem('userInfo', JSON.stringify(data.data))
+            this.$router.push({name: 'Home'})
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
+      },
     },
+    mounted() {
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode == 13) {
+          if (this.loginTypeId == 0) {
+            this.loginSubmit();
+          } else {
+            this.messageLoginSubmit();
+          }
+
+        }
+      })
+    }
   }
 </script>
 <style scoped>
@@ -194,6 +366,50 @@
 
   .loginTo > span a {
     color: #999;
+  }
+
+  .messageLogin {
+    margin-top: 25px;
+  }
+
+  .messageLogin input,
+  .messageLogin > button {
+    width: 100%;
+    font: 12px/40px "微软雅黑";
+    border: 2px solid #e9e9e9;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 0 30px;
+    margin-top: 20px;
+    background-color: #f4f4f4;
+    color: #999999;
+  }
+
+  .messageLogin > button {
+    border: none;
+  }
+
+  .messageNum {
+    margin-top: 20px;
+  }
+
+  .messageNum > input {
+    float: left;
+    width: 50%;
+    margin: 0;
+  }
+
+  .messageNum > button {
+    float: right;
+    width: 40%;
+    font: 12px/40px "微软雅黑";
+    border: none;
+    background-color: #f4f4f4;
+    color: #999999;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
   }
 
   .otherLogin {

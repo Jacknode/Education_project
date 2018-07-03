@@ -1,18 +1,17 @@
 <template>
   <!--教育首页-->
   <div class="HomePage">
-
     <div class="allNav">
       <!--大导航-->
       <div class="navBigBox">
         <div class="bigImageBox">
           <ul class="bigImageList clearfix" id="bigImageList" ref="bigImageList">
-            <li v-for="item,index in 5"><img src="../../assets/img/homeBg.png"></li>
+            <li v-for="item,index in homePictureList"><img v-lazy="item.ed_re_SeriesImageURL"></li>
           </ul>
           <div class="imgNav" id="imgNav">
             <a href="javascript:;"
-               :class="{active:item == num}"
-               v-for="item,index in 5"
+               v-for="item,index in homePictureList"
+               :class="{active:index+1 == num}"
                @mouseover="switchSpot(index+1)"
             ></a>
           </div>
@@ -20,83 +19,57 @@
         <div class="navBoxContent clearfix">
           <strong>全部课程分类</strong>
           <ul class="curriculumType">
-            <li class="clearfix">
+            <li
+              class="clearfix"
+              :class="{active: classIndex == index}"
+              v-for="item,index in homeNavList"
+              v-show="item.children.length"
+              @mouseover="showDetalis(item,index)"
+            >
               <i></i>
-              <strong>软件技术</strong>
-              <a href="javascript:;">前端开发</a>
-              <a href="javascript:;">Java</a>
-              <span></span>
-            </li>
-            <li class="clearfix">
-              <i></i>
-              <strong>设计创作</strong>
-              <a href="javascript:;">平面设计</a>
-              <a href="javascript:;">UI设计</a>
-              <span></span>
-            </li>
-            <li class="clearfix">
-              <i></i>
-              <strong>职称考试</strong>
-              <a href="javascript:;">教师考试</a>
-              <a href="javascript:;">公务员</a>
-              <span></span>
-            </li>
-            <li class="clearfix">
-              <i></i>
-              <strong>技工技术</strong>
-              <a href="javascript:;">会计</a>
-              <a href="javascript:;">人力资源</a>
-              <span></span>
-            </li>
-            <li class="clearfix">
-              <i></i>
-              <strong>名师讲座</strong>
-              <a href="javascript:;">邢海龙</a>
-              <a href="javascript:;">崔永元</a>
-              <span></span>
-            </li>
-            <li class="clearfix">
-              <i></i>
-              <strong>兴趣生活</strong>
-              <a href="javascript:;">摄影</a>
-              <a href="javascript:;">美妆</a>
-              <span></span>
-            </li>
-            <li class="clearfix">
-              <i></i>
-              <strong>自学外语</strong>
-              <a href="javascript:;">实用英语</a>
-              <a href="javascript:;">托福</a>
-              <span></span>
-            </li>
-            <li class="clearfix">
-              <i></i>
-              <strong>大纲教育</strong>
-              <a href="javascript:;">小学</a>
-              <a href="javascript:;">初中</a>
+              <strong>{{item.label}}</strong>
+              <a href="javascript:;"
+                 @click.stop="goSearch(item.children[0])">{{item.children[0] ? item.children[0].label : ''}}</a>
+              <a href="javascript:;"
+                 @click.stop="goSearch(item.children[1])">{{item.children[1] ? item.children[1].label : ''}}</a>
               <span></span>
             </li>
           </ul>
           <div class="allList clearfix">
-            <a href="javascript:;" v-for="item,index in 20">前端开发</a>
+            <a
+              href="javascript:;"
+              v-for="item,index in classTypeList"
+              @click="goSearch(item)"
+            >{{item.label}}</a>
           </div>
-          <!--登录 & 注册-->
           <div class="LoginBox">
-            <div class="headPortrait"></div>
-            <button class="loginBtn" @click="goLogin">登录</button>
-            <button class="registerBtn" @click="goRegister">注册</button>
+            <div v-show="!showLogin">
+              <div class="headPortrait"></div>
+              <button class="loginBtn" @click="goLogin">登录</button>
+              <button class="registerBtn" @click="goRegister">注册</button>
+            </div>
+            <div class="loginOutBox clearfix" v-show="showLogin">
+              <div class="headerIcon">
+                <img :src="userImage" width="46" height="46">
+              </div>
+              <div class="headerInfo">
+                <strong @click="goPersonalCenter">{{userName}}</strong>
+                <a href="javascript:;" @click="outLogin">退出</a>
+              </div>
+            </div>
             <a href="javascript:;" class="clearfix"><i></i><span>微信公众号</span></a>
           </div>
+          <!--登录 & 注册-->
+
         </div>
       </div>
     </div>
 
-
     <section>
       <!--精选视频-->
-      <div class="SelectVideo">
+      <div class="SelectVideo" v-show="false">
         <!--模块线-->
-        <span style="width: 100%;height: 30px;background-color: #c8c8c8;display: inline-block;"></span>
+        <span style="width: 100%;height: 46px;background-color: #c8c8c8;display: inline-block;"></span>
         <!--精选视频详情-->
         <div class="SelectDetail">
           <!--精选视频nav-->
@@ -112,7 +85,6 @@
           <!--精选视频内容-->
           <div class="SelectCont">
             <!--content detail-->
-            <!--左边视频轮播-->
             <div class="LeftCarousel">
               <img src="../../assets/img/video.png" width="554" height="363" alt="">
               <div class="videoIcon"></div>
@@ -125,12 +97,12 @@
             <!--右边菜单栏-->
             <div class="RightMenu">
               <ul>
-                <li v-for="ins in 10">
+                <li v-for="item,index in homeVideoList">
                   <i></i>
                   <!--课程名-->
-                  <strong>精通网络精通网络精通网络精通网络精通网络精通网络精通网络</strong>
+                  <strong>{{item.ed_re_Name}}</strong>
                   <!--时长-->
-                  <span>00:25:00</span>
+                  <span></span>
                   <!--btn-->
                   <button @click="goStudy">学习</button>
                 </li>
@@ -144,7 +116,7 @@
       <!--课程推荐-->
       <div class="RecommendClass">
         <!--模块线-->
-        <span style="width: 100%;height: 30px;background-color: #c8c8c8;display: inline-block"></span>
+        <span style="width: 100%;height: 46px;background-color: #c8c8c8;display: inline-block"></span>
         <!--推荐详情-->
         <div class="RecommendDetail">
           <div class="RecommendMore">
@@ -152,51 +124,45 @@
             <router-link to="VideoSearch">更多&gt;&gt;</router-link>
           </div>
           <!--推荐内容-->
-          <div class="RecommendCont">
-            <ul>
-              <li v-for="ils in ClassLists">
-                <img src="@/assets/img/教育_90.jpg" alt="" style="width: 256px;height: 188px;margin: 15px 22px 0px 22px;">
-                <p>高考语文高分复习指导</p>
-                <div class="ClassValue">
-                  <span>￥18.00</span>
-                  <button>我要报名</button>
-                </div>
-              </li>
-            </ul>
-          </div>
+          <ul class="systemCC clearfix">
+            <li v-for="item,index in homeVideoList" @click="goPlayVideo(item)">
+              <img v-lazy="item.ed_re_SeriesImageURL" width="260" height="190">
+              <strong>{{item.ed_re_Name}}</strong>
+              <div class="clearfix">
+                <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
+                <span v-if="item.ed_vo_Price != 0" style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
+                <a href="javascript:;">我要报名</a>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
 
 
       <!--免费公开课-->
-      <div class="CurriculumClass" v-for="its in courses">
-        <!--模块线-->
-        <span style="width: 100%;height: 30px;background-color: #c8c8c8;display: inline-block"></span>
-        <!--系统课程详情-->
-        <div class="CurriculumDetail">
-          <!--系统课程Nav-->
-          <div class="CurriculumNav">
-            <strong>{{its}}</strong>
-            <!--栏目Menu-->
-            <dl>
-              <!--<dl>-->
-              <dd v-for="ims in conts">{{ims}}</dd>
-            </dl>
-          </div>
-          <!--系统课程内容-->
-          <div class="CurriculumCont">
-            <ul>
-              <li v-for="is in ClassLists">
-                <img src="@/assets/img/教育_64.jpg" alt="" style="width: 256px;height: 188px;margin: 15px 22px 0px 22px;">
-                <p>高考语文高分复习指导</p>
-                <div class="CurriculumValue">
-                  <span>免费</span>
-                  <button>我要报名</button>
-                </div>
-              </li>
-            </ul>
+      <div class="systemCurriculum">
+        <div class="systemNav">
+          <div class="systemNavCon clearfix">
+            <strong>免费公开课</strong>
+            <!--<div class="systemN">-->
+            <!--<a href="javascript:;">平面设计</a>-->
+            <!--<a href="javascript:;">事业单位</a>-->
+            <!--<a href="javascript:;">考研</a>-->
+            <!--<a href="javascript:;">地方公务员</a>-->
+            <!--</div>-->
           </div>
         </div>
+        <ul class="systemCC clearfix">
+          <li v-for="item,index in homeRecommendList" @click="goPlayVideo(item)">
+            <img v-lazy="item.ed_re_SeriesImageURL" width="260" height="190">
+            <strong>{{item.ed_re_Name}}</strong>
+            <div class="clearfix">
+              <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
+              <span v-if="item.ed_vo_Price != 0" style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
+              <a href="javascript:;">我要报名</a>
+            </div>
+          </li>
+        </ul>
       </div>
 
       <!--系统课程-->
@@ -205,19 +171,22 @@
           <div class="systemNavCon clearfix">
             <strong>系统课程</strong>
             <div class="systemN">
-              <a href="javascript:;">平面设计</a>
-              <a href="javascript:;">事业单位</a>
-              <a href="javascript:;">考研</a>
-              <a href="javascript:;">地方公务员</a>
+              <a href="javascript:;"
+                 :class="{active:typeIndex == index}"
+                 v-for="item,index in homeClassList"
+                 v-show="item.vedio.length"
+                 @mouseover="changeClassType(item,index)"
+              >{{item.ed_te_Name}}</a>
             </div>
           </div>
         </div>
         <ul class="systemCC clearfix">
-          <li v-for="item,index in 4">
-            <img src="../../assets/img/video.png" width="260" height="190">
-            <strong>高考语文高分复习指导</strong>
+          <li v-for="item,index in classList" @click="goPlaySeriesVideo(item)">
+            <img v-lazy="item.ed_vo_ImageURL" width="260" height="190">
+            <strong>{{item.ed_vo_Title}}</strong>
             <div class="clearfix">
-              <span>¥1800:00</span>
+              <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
+              <span v-if="item.ed_vo_Price != 0" style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
               <a href="javascript:;">我要报名</a>
             </div>
           </li>
@@ -232,27 +201,114 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
+  import {getTiem} from '@/assets/js/public'
 
   export default {
     name: '',
     data() {
       return {
-        //"系统课程"
-        courses: ["免费公开课",],
-        conts: ["平面设计", "事业单位", "考研", "地方公务员"],
-        ClassLists: ["", "", "", ""],
         num: 1,
         timer: null,
         liW: 0,
+        classTypeList: [],
+        classIndex: 0,
+        classList: [],
+        typeIndex: 0,
+        allList: [],
+        showLogin: false,
+        userInfo: {},
+        userName: '',
+        userImage: '',
       }
     },
-    computed: mapGetters([]),
+    computed: mapGetters([
+      'homePictureList',
+      'homeVideoList',
+      'homeRecommendList',
+      'homeClassList',
+      'homeNavList'
+    ]),
     created() {
+      if (sessionStorage.getItem('userInfo')) {
+        this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        this.showLogin = true;
+        this.userName = this.userInfo.sm_ui_Name;
+        this.userImage = this.userInfo.sm_ui_HeadImage;
+      }
+      this.initData();
     },
     methods: {
+//      初始化首页数据
+      initData() {
+        let HomeShow = {
+          "loginUserID": "huileyou",  //惠乐游用户ID
+          "loginUserPass": "123",  //惠乐游用户密码
+          "operateUserID": "",//操作员编码
+          "operateUserName": "",//操作员名称
+          "pcName": "",        //机器码
+          "ed_vt_ID": "0", //类型
+          "page": 1,//页码
+          "rows": 100//条数
+        };
+        this.$store.dispatch('initHomeData', HomeShow)
+          .then(() => {
+            this.$nextTick(() => {
+              this.playPicture();
+            })
+            this.classList = this.homeClassList.filter(item => {
+              if (item.vedio.length) {
+                return true;
+              }
+              return false;
+            })[0].vedio;
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
+      },
+      //轮播
+      playPicture() {
+        this.liW = document.body.offsetWidth;
+        let bigImageList = document.getElementById('bigImageList');
+        let lis = bigImageList.children;
+        for (let i = 0; i < lis.length; i++) {
+          lis[i].style.width = this.liW + 'px';
+        }
+        bigImageList.style.width = lis.length * this.liW + 'px';
+        let ulL = (lis.length - 1) * this.liW;
+
+        function timers(_this) {
+          let ulP = _this.num * _this.liW;
+          _this.num++;
+          if (ulP > ulL) {
+            bigImageList.style.transform = 'translateX(0px)';
+            _this.num = 1;
+          } else {
+            bigImageList.style.transform = 'translateX(-' + ulP + 'px)';
+          }
+        }
+
+        this.timer = setInterval(() => {
+          timers(this);
+        }, 5000);
+        bigImageList.onmouseover = () => {
+          clearInterval(this.timer)
+        }
+        bigImageList.onmouseout = () => {
+          this.timer = setInterval(() => {
+            timers(this);
+          }, 5000);
+        }
+      },
+
       //去登录
       goLogin() {
-        this.$router.push({name: 'Login'})
+        const {href} = this.$router.resolve({
+          name: 'Login',
+        });
+        window.open(href, '_blank')
       },
       //去注册
       goRegister() {
@@ -265,43 +321,51 @@
         clearInterval(this.timer)
       },
       //学习视频
-      goStudy(){
+      goStudy() {
         this.$router.push({name: 'PlayVideo'})
+      },
+      //显示详情
+      showDetalis(item, index) {
+        this.allList = item;
+        this.classIndex = index;
+        this.classTypeList = item.children;
+      },
+
+      changeClassType(item, index) {
+        this.classList = item.vedio;
+        this.typeIndex = index;
+      },
+      //去播放视频
+      goPlayVideo(item) {
+        this.$router.push({name: 'VideoSearch', params: {id: item.ed_re_ID}})
+      },
+      //去播放视频
+      goPlaySeriesVideo(item) {
+        this.$router.push({name: 'VideoSearch', params: {id: item.ed_vo_ID}})
+      },
+      //带子集的查询
+      goSearch(item) {
+        this.$router.push({
+          name: 'VideoDetails',
+          params: {
+            id: this.allList.value,
+            name: this.allList.label,
+            cid: item.value,
+            cname: item.label
+          }
+        })
+      },
+      //退出登录
+      outLogin() {
+        sessionStorage.removeItem('userInfo');
+        window.location.reload()
+      },
+      //去个人中心
+      goPersonalCenter() {
+        this.$router.push({name: 'UserInformation'})
       }
     },
     mounted() {
-      this.liW = document.body.offsetWidth;
-      let bigImageList = document.getElementById('bigImageList');
-      let lis = bigImageList.children;
-      for (let i = 0; i < lis.length; i++) {
-        lis[i].style.width = this.liW + 'px';
-      }
-      bigImageList.style.width = lis.length * this.liW + 'px';
-      let ulL = (lis.length - 1) * this.liW;
-
-      function timers(_this) {
-        let ulP = _this.num * _this.liW;
-        _this.num++;
-        if (ulP > ulL) {
-          bigImageList.style.transform = 'translateX(0px)';
-          _this.num = 1;
-        } else {
-          bigImageList.style.transform = 'translateX(-' + ulP + 'px)';
-        }
-      }
-
-      this.timer = setInterval(() => {
-        timers(this);
-      }, 2000);
-      bigImageList.onmouseover = () => {
-        clearInterval(this.timer)
-      }
-      bigImageList.onmouseout = () => {
-        this.timer = setInterval(() => {
-          timers(this);
-        }, 2000);
-      }
-//      let spots = document.getElementById('imgNav').children;
 
     },
   }
@@ -329,7 +393,7 @@
   }
 
   .bigImageList {
-    transition: 1s;
+    transition: .5s;
   }
 
   .bigImageList > li {
@@ -393,11 +457,25 @@
     padding: 10px;
     font: 14px/2 "微软雅黑";
     z-index: 1;
+    box-shadow: 0 0 10px #ccc;
+    opacity: 0;
+    transform: rotateY(90deg);
+    transition: .5s;
+  }
+
+  .allList:hover {
+    opacity: 1;
+    transform: rotateY(0deg);
   }
 
   .navBoxContent .allList a {
     float: left;
-    margin: 0 10px;
+    margin: 10px 20px;
+    color: #808080;
+  }
+
+  .navBoxContent .allList a:hover {
+    color: #286eb6;
   }
 
   .curriculumType {
@@ -408,6 +486,11 @@
     float: left;
     position: relative;
     z-index: 1;
+  }
+
+  .curriculumType:hover + .allList {
+    opacity: 1;
+    transform: rotateY(0deg);
   }
 
   .curriculumType > li {
@@ -461,9 +544,13 @@
   }
 
   .curriculumType > li > a {
+    width: 60px;
     float: left;
     color: #808080;
-    margin-left: 20px;
+    margin-left: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .curriculumType > li > span {
@@ -474,20 +561,25 @@
     margin: 24px 10px 0 0;
   }
 
-  .curriculumType > li:hover {
+  .curriculumType > li:hover,
+  .curriculumType > li.active {
     background-color: #efefef;
   }
 
-  .curriculumType > li:hover > strong {
+  .curriculumType > li:hover > strong,
+  .curriculumType > li.active > strong {
     color: #286eb6;
   }
 
-  .curriculumType > li:hover > a {
+  .curriculumType > li:hover > a,
+  .curriculumType > li.active > a {
     color: #286eb6;
   }
 
   .curriculumType > li:hover > i,
-  .curriculumType > li:hover > span {
+  .curriculumType > li:hover > span,
+  .curriculumType > li.active > i,
+  .curriculumType > li.active > span {
     background-position-x: -60px;
   }
 
@@ -496,10 +588,11 @@
     width: 190px;
     text-align: center;
     background-color: #fff;
-    padding: 20px 50px 40px;
+    padding: 18px 0 18px;
     margin-top: 85px;
     position: relative;
     z-index: 1;
+    box-shadow: 0 0 10px #ccc;
   }
 
   .headPortrait {
@@ -512,14 +605,15 @@
     background: url("../../assets/img/Icon.png") no-repeat -60px 0;
   }
 
-  .LoginBox > button {
+  .LoginBox button {
     width: 83px;
     font: 12px/2 "微软雅黑";
     border: 2px solid #0461b1;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    margin-top: 20px;
+    display: block;
+    margin: 20px auto 0;
   }
 
   .LoginBox .loginBtn {
@@ -531,12 +625,13 @@
     color: #0461b1;
   }
 
-  .LoginBox a {
+  .LoginBox > a {
     font: 12px/52px "微软雅黑";
     color: #8b8b8b;
+    padding: 0 50px;
   }
 
-  .LoginBox a i {
+  .LoginBox > a i {
     float: left;
     width: 19px;
     height: 15px;
@@ -544,7 +639,7 @@
     margin: 18px 5px 0 0;
   }
 
-  .LoginBox a span {
+  .LoginBox > a span {
     float: left;
   }
 
@@ -654,14 +749,14 @@
       width: 100%;
       //精选视频详情
       .SelectDetail {
-        margin: -30px auto 0px;
+        margin: -46px auto 0px;
         width: 1200px;
         //精选视频导航
         .SelectNav {
           height: 27px;
           position: relative;
           strong {
-            line-height: 27px;
+            line-height: 46px;
             font-family: "Microsoft YaHei";
             font-size: 20px;
             position: absolute;
@@ -672,7 +767,7 @@
             width: 590px;
             position: absolute;
             right: 0;
-            line-height: 27px;
+            line-height: 46px;
             font-size: 16px;
             &:after {
               content: '';
@@ -689,17 +784,17 @@
               float: right;
               margin-right: 0;
               color: #0461b1;
-              font: 12px/30px "微软雅黑";
+              font: 12px/46px "微软雅黑";
             }
 
             dd.active {
-              height: 28px;
+              height: 44px;
               color: #0ad;
               border-bottom: 1px solid #0ad;
             }
 
             dd {
-              height: 28px;
+              height: 44px;
               &:hover {
                 cursor: pointer;
                 color: #0ad;
@@ -768,18 +863,22 @@
               }
               .videoName {
                 float: left;
+                width: 300px;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
               }
             }
           }
           //右边Menu
           .RightMenu {
-            width: 596px;
-            height: 361px;
+            width: 600px;
+            height: 365px;
             float: right;
             margin-left: 46px;
-            border: 2px solid #ddd;
             position: relative;
             overflow: auto;
+            box-shadow: 0 0 10px #ccc;
             ul {
               width: 570px;
               position: absolute;
@@ -850,11 +949,11 @@
       //more
       .RecommendDetail {
         width: 1200px;
-        margin: -30px auto 0px;
+        margin: -46px auto 0px;
         .RecommendMore {
           width: 100%;
-          height: 27px;
-          line-height: 27px;
+          height: 46px;
+          line-height: 46px;
           position: relative;
           strong {
             font-family: "Microsoft YaHei";
@@ -862,7 +961,7 @@
             position: absolute;
             left: 0;
             margin-left: 48px;
-            color: #0461b1;
+            color: #333;
           }
           a {
             position: absolute;
@@ -871,61 +970,6 @@
             color: #7d7d7d;
             &:hover {
               color: #0461b1;
-            }
-          }
-        }
-        //推荐内容
-        .RecommendCont {
-          width: 100%;
-          margin-top: 30px;
-          &:after {
-            content: '';
-            height: 0;
-            display: block;
-            overflow: hidden;
-            clear: both;
-          }
-          ul {
-            li {
-              width: 300px;
-              height: 300px;
-              font-family: "Microsoft YaHei";
-              font-size: 16px;
-              float: left;
-              &:hover {
-                background-color: #fff;
-              }
-              p {
-                margin: 10px 22px 0px 22px;
-                width: 256px;
-                overflow: hidden;
-                &:hover {
-                  color: #0ad;
-                  cursor: pointer;
-                }
-              }
-              .ClassValue {
-                height: 50px;
-                margin: 20px 22px 0px 22px;
-                span {
-                  color: #f00;
-                }
-                button {
-                  border: none;
-                  width: 100px;
-                  height: 24px;
-                  line-height: 20px;
-                  font-family: "Microsoft YaHei";
-                  font-size: 16px;
-                  float: right;
-                  background-color: #0ad;
-                  border-radius: 2px;
-                  color: #fff;
-                  &:hover {
-                    opacity: .7;
-                  }
-                }
-              }
             }
           }
         }
@@ -1037,5 +1081,50 @@
         }
       }
     }
+  }
+
+  .loginOutBox {
+    padding: 0 18px 22px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 110px;
+  }
+
+  .headerIcon {
+    width: 46px;
+    height: 46px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #ccc;
+    float: left;
+  }
+
+  .headerInfo {
+    float: left;
+    margin-left: 5px;
+    font: 14px/20px "微软雅黑";
+  }
+
+  .headerInfo > strong {
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100px;
+    text-align: left;
+    color: #2b6fb7;
+  }
+
+  .headerInfo > strong:hover {
+    cursor: pointer;
+  }
+
+  .headerInfo > a {
+    display: block;
+    text-align: left;
+    color: #808080;
+    margin-top: 10px;
+    font-size: 12px;
   }
 </style>

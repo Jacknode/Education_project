@@ -13,16 +13,16 @@
         </nav>
         <div class="videlAndInformation clearfix">
           <div class="videoShow">
-            <img src="../assets/img/video.png" width="610" height="400">
-            <div class="videoIcon" @click="goPlay"></div>
+            <img v-lazy="videoDeatilsObj.ed_vo_ImageURL" width="610" height="400">
+            <div class="videoIcon" @click="goPlay(videoDeatilsObj)"></div>
             <div class="videoTeacher">
               <div class="headIcon"></div>
               <strong>李强</strong>
-              <span>网站构架建设基础</span>
+              <span>{{videoDeatilsObj.ed_vo_Title}}</span>
             </div>
           </div>
           <div class="informationShow">
-            <h4 @click="goPlay">电商运营实操在线系统网课 玩转2017淘宝新规</h4>
+            <h4 @click="goPlay(videoDeatilsObj)">{{videoDeatilsObj.ed_vo_Title}}</h4>
             <div class="videoOperation clearfix">
               <strong>326 人学习</strong>
               <a href="javascript:;" class="share"><i></i>分享</a>
@@ -30,11 +30,11 @@
             </div>
             <div class="price clearfix">
               <strong>价格</strong>
-              <span>￥<em>1800.00</em></span>
+              <span>￥<em>{{videoDeatilsObj.ed_vo_Price}}.00</em></span>
             </div>
             <div class="classTime">
               <strong>课程安排 :</strong>
-              <span> 20课时</span>
+              <span> {{videoAboutList.length + 1}}课时</span>
             </div>
             <div class="aboutMe clearfix">
               <button>我要报名</button>
@@ -62,19 +62,19 @@
               <ul class="classRecommendList clearfix">
                 <li>
                   <strong class="addEm">简介</strong><em>:</em>
-                  <span>《电商运营实操在线系统网课 玩转2017淘宝新规》由中公优就业电商研究院倾力打造，让您熟练掌握开店技巧 ，打造黄金旺铺。通过全黄金旺铺。通过全黄金旺铺。通过全</span>
+                  <span>{{videoDeatilsObj.ed_vo_Introduce}}</span>
                 </li>
                 <li>
                   <strong>学习目标 :</strong>
-                  <span>《电商运营实操在线系统网课 玩转2017淘宝新规》，《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装《电商运营实操在线系统网课 玩转2017淘宝新规》，共有7篇，分别是《EPM基础篇》、《开店基础篇》、《开店实操篇》、《旺铺装</span>
+                  <span>{{videoDeatilsObj.ed_vo_Target}}</span>
                 </li>
                 <li>
                   <strong>适合人群 :</strong>
-                  <span>适合人群： 零基础小白、无互联网相关经验人员。</span>
+                  <span>{{videoDeatilsObj.ed_vo_Crowd}}</span>
                 </li>
                 <li>
                   <strong>详细介绍 :</strong>
-                  <span>√学员后续服务： 学习及售后的一系列问题欢迎加入我们的QQ群，群号：496038649qq√相关面授课程推</span>
+                  <span>{{videoDeatilsObj.ed_vo_Remark}}</span>
                 </li>
               </ul>
             </div>
@@ -82,23 +82,13 @@
             <div class="classMeun">
               <strong class="classType">课程目录</strong>
               <dl>
-                <dt>第1章节·EPM基础篇</dt>
-                <dd class="clearfix" v-for="item,index in 20">
-                  <strong>第1节·EPM基础篇-初识电商EPM(上)</strong>
+                <dd class="clearfix" v-for="item,index in videoAboutList">
+                  <strong>{{item.ed_vo_VedioName}}</strong>
                   <span></span>
                   <i></i>
-                  <em>24:06</em>
+                  <em>{{item.ed_vo_VedioTime ? item.ed_vo_VedioTime : '' | getTiem}}</em>
                   <b></b>
-                  <a href="JavaScript:;">播放视频</a>
-                </dd>
-                <dt>第2章节·EPM基础篇</dt>
-                <dd class="clearfix" v-for="item,index in 20">
-                  <strong>第1节·EPM基础篇-初识电商EPM(上)</strong>
-                  <span></span>
-                  <i></i>
-                  <em>24:06</em>
-                  <b></b>
-                  <a href="JavaScript:;">播放视频</a>
+                  <a href="JavaScript:;" @click="goPlayVideo(item)">播放视频</a>
                 </dd>
               </dl>
             </div>
@@ -115,22 +105,22 @@
                 </div>
               </div>
               <ul class="evaluateList">
-                <li class="clearfix" v-for="item,index in 3">
+                <li class="clearfix" v-for="item,index in videoCommentList">
                   <div class="studentBox">
-                    <div class="studentIcon"></div>
-                    <div class="studentName">纯粹</div>
+                    <div class="studentIcon" :style="{backgroundImage: 'url('+ item.ed_se_UserHead +')'}"></div>
+                    <div class="studentName">{{item.ed_se_UserName}}</div>
                   </div>
                   <div class="studentContent">
                     <div class="evaluateStar">
                       <el-rate
-                        v-model="starValue"
+                        v-model="item.ed_se_Score"
                         disabled
                         :colors="['#e8751a', '#e8751a', '#e8751a']"
                       >
                       </el-rate>
                     </div>
-                    <p>我从一个小白，到认识这个软件，一直能做些简单的图画，这些都是从腾讯课堂上学的，课程非常细心，讲的知识点也很容易让人明白理解。真</p>
-                    <span>2018-06-16</span>
+                    <p>{{item.ed_se_Comment}}</p>
+                    <span>{{item.ed_se_CreateTime | getUseTime}}</span>
                   </div>
                 </li>
               </ul>
@@ -139,6 +129,7 @@
             <div class="paging">
               <el-pagination
                 background
+                v-show="total"
                 :page-size="5"
                 layout="prev, pager, next"
                 @current-change="handleCurrentChange"
@@ -163,34 +154,85 @@
         </div>
       </div>
     </section>
-
   </div>
 </template>
 <script>
   import {mapGetters} from 'vuex'
 
   export default {
-    computed: mapGetters([]),
+    computed: mapGetters([
+      'videoDeatilsObj',
+      'videoAboutList',
+      'videoCommentList'
+    ]),
     data() {
       return {
         radio: '1',
         starValue: 4,
-        total: 1000,
+        total: 0,
+        videoId: '',
       }
+    },
+    created() {
+      this.videoId = this.$route.params.id;
+      this.initData();
+      this.initVideoComment();
     },
     methods: {
       initData() {
+        let SecondaryVodeDetails = {
+          "loginUserID": "huileyou",  //惠乐游用户ID
+          "loginUserPass": "123",  //惠乐游用户密码
+          "operateUserID": "",//操作员编码
+          "operateUserName": "",//操作员名称
+          "pcName": "",        //机器码
+          "ed_vo_ID": this.videoId, //视频编号
+        }
+        this.$store.dispatch('initVideoDeatils', SecondaryVodeDetails)
+          .then(() => {
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
       },
-      search() {
-        this.initData()
+      initVideoComment(num) {
+        let selectEdScoreInfo = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "page": num ? num : 1,
+          "rows": 5,
+          "ed_se_ID": "",//视频评分ID
+          "ed_se_VedioID": this.videoId,//视频编号
+          "ed_se_UserID": "",//用户编码
+          "ed_se_Score": "",//分数
+        }
+        this.$store.dispatch('initVideoComment', selectEdScoreInfo)
+          .then(total => {
+            this.total = Number(total);
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      handleCurrentChange(num) {
+        this.initVideoComment(num);
       },
       //去播放
-      goPlay(){
-        this.$router.push({name:'PlayVideo'});
+      goPlay(item) {
+        this.$router.push({name: 'PlayVideo', params: {id: item.ed_vo_ID}});
+      },
+      goPlayVideo(item) {
+        this.$router.push({name: 'PlayVideo', params: {id: item.ed_fs_VedioID}})
       }
+    },
+    mounted() {
     },
   }
 </script>
@@ -365,6 +407,7 @@
   }
 
   section {
+    padding-bottom: 70px;
     background-color: #f4f4f4;
   }
 
@@ -450,7 +493,7 @@
 
   .classMeun dl {
     font: 16px/3 "微软雅黑";
-    height: 600px;
+    max-height: 600px;
     overflow: auto;
   }
 
@@ -586,6 +629,9 @@
     height: 64px;
     background-color: #ccc;
     border-radius: 50%;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   .studentContent {
@@ -619,7 +665,7 @@
   }
 
   .paging {
-    margin-top:20px;
+    margin-top: 20px;
     text-align: center;
   }
 
@@ -666,6 +712,7 @@
     float: left;
     color: #00a131;
   }
+
   .recommendList div a {
     float: right;
     font: 13px/22px "微软雅黑";

@@ -178,6 +178,12 @@ export const getTicketStatus=val=>{
 function getNum(num) {
   return num<10?'0'+num:''+num
 }
+
+
+export const getTiem = (num) => {
+  return getNum(parseInt(num/1200))+':'+ getNum(parseInt(num/60)) +':'+ getNum(num%60)
+}
+
 //时间
 export const getUseTime = val=>{
   let date = new Date()
