@@ -6,7 +6,7 @@
         <router-link to="/AgenciesHome" class="goHomePageImage">
           <img src="../assets/img/huileyouLogo.jpg" width="230" height="60">
         </router-link>
-        <router-link to="/AgenciesHome" class="goHomePageWords">返回首页</router-link>
+        <router-link to="/" class="goHomePageWords">返回首页</router-link>
       </div>
       <!--错误内容-->
       <div class="errorContent"></div>

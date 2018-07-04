@@ -23,9 +23,8 @@
         <div class="loginBox" v-show="showLogin">
           <strong class="clearfix"><em></em><span>{{userName}}</span><i></i></strong>
           <div>
-            <!--<a href="javascript:;" @click="goPersonalCenter">个人中心</a>-->
-            <router-link to="PersonalCenter/UserInformation">个人中心</router-link>
-            <!--<router-link to="PersonalCenter/MyClass">查看我的课程</router-link>-->
+            <a href="javascript:;" @click="goPersonalCenter">个人中心</a>
+            <!--<router-link to="UserInformation">个人中心</router-link>-->
             <a href="JavaScript:;" @click="outLogin">退出</a>
           </div>
         </div>
@@ -123,11 +122,17 @@
       },
       outLogin(){
         sessionStorage.removeItem('userInfo');
-        this.$router.push({name: 'Home'});
-        location.reload();
+        window.close()
+        const {href} = this.$router.resolve({
+          name: 'Home',
+        });
+        window.open(href, '_blank')
       },
       goPersonalCenter(){
-        this.$router.push({name:'UserInformation'})
+        const {href} = this.$router.resolve({
+          name: 'UserInformation',
+        });
+        window.open(href, '_blank')
       }
     },
     mounted() {
