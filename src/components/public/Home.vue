@@ -6,7 +6,7 @@
       <div class="navBigBox">
         <div class="bigImageBox">
           <ul class="bigImageList clearfix" id="bigImageList" ref="bigImageList">
-            <li v-for="item,index in homePictureList"><img v-lazy="item.ed_re_SeriesImageURL"></li>
+            <li v-for="item,index in homePictureList" @click="imageChangeClass(item)"><img v-lazy="item.ed_re_SeriesImageURL"></li>
           </ul>
           <div class="imgNav" id="imgNav">
             <a href="javascript:;"
@@ -405,6 +405,9 @@
             })
           })
       },
+      imageChangeClass(item){
+        console.log(item.ed_re_PropertiesID)
+      }
     },
     mounted() {
 
