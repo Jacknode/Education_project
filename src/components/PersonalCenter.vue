@@ -3,25 +3,17 @@
     <div class="clearfix">
       <div class="leftNav">
         <ul>
-          <li>
-            <a href="javascript:;" class="active">基本信息</a>
-          </li>
-          <li>
-            <a href="javascript:;">我的课程</a>
-          </li>
-          <li>
-            <a href="javascript:;">设置昵称</a>
-          </li>
-          <li>
-            <a href="javascript:;">修改密码</a>
-          </li>
-          <li>
-            <a href="javascript:;">我的余额</a>
+          <li v-for="item,index in leftNav">
+            <a
+              :class="{active: activeIndex == index}"
+              href="javascript:;"
+              @click="switchCom(item,index)"
+            >{{item.label}}</a>
           </li>
         </ul>
       </div>
       <div class="userInformation">
-        <router-view name="User"></router-view>
+        <router-view name="Center"></router-view>
       </div>
     </div>
   </div>
@@ -32,13 +24,44 @@
   export default {
     computed: mapGetters([]),
     data() {
-      return {}
+      return {
+        leftNav: [
+          {
+            label: '基本信息',
+            value: 0,
+            routerLink: 'UserInformation'
+          },
+          {
+            label: '我的课程',
+            routerLink: 'MyClass'
+          },
+//          {
+//            label: '设置昵称',
+////            routerLink: 'UserInfromation'
+//          },
+          {
+            label: '修改密码',
+            routerLink: 'UpdatePassword'
+          },
+          {
+            label: '我的余额',
+            routerLink: 'MyBalance'
+          }
+        ],
+        activeIndex: 0,
+      }
+    },
+    created() {
+      if (sessionStorage.getItem('activeIndex')) {
+        this.activeIndex = sessionStorage.getItem('activeIndex');
+      }
+      this.$router.push({name: this.leftNav[this.activeIndex].routerLink})
     },
     methods: {
-      initData() {
-      },
-      search() {
-        this.initData()
+      switchCom(item, index) {
+        this.$router.push({name: item.routerLink})
+        this.activeIndex = index;
+        sessionStorage.setItem('activeIndex', this.activeIndex)
       }
     },
   }
@@ -84,7 +107,6 @@
     width: 950px;
     background-color: #fff;
   }
-
 
 
 </style>

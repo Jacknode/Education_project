@@ -4,22 +4,27 @@
       <!--视频播放-->
       <div class="playBox">
         <div class="titlePart clearfix">
-          <strong>课件1：电商运营实操在线系统网课 玩转2017淘宝新规</strong>
+          <strong>{{videoBox.ed_vo_Title}}</strong>
           <a href="javascript:;">&lt;返回课程主页</a>
         </div>
         <div class="videoPart clearfix">
           <div class="playVideoBox">
-            <video src="" width="880" height="500"></video>
-            <div class="videoIcon">
-              <img src="../assets/img/video.png" width="880" height="500">
-              <div></div>
+            <video ref="videoWrap" :src="videoBox.ed_vo_FileURL" width="880" height="500" controls="controls"></video>
+            <div class="videoIcon" v-show="showPlay">
+              <img v-lazy="videoBox.ed_vo_TomImageURL" width="880" height="500">
+              <div @click="playVideoBtn"></div>
             </div>
           </div>
           <div class="catalogVideo">
             <strong>目录</strong>
             <ul class="videoMenu">
-              <li class="clearfix" v-for="item,index in 60">
-                <span>01. 【视频】 电商运营实操在线系统网课   玩转2017淘宝新规</span>
+              <li
+                class="clearfix"
+                v-for="item,index in playVideoList"
+                :class="{active: videoIndex == index}"
+                @click="changeVideo(item,index)"
+              >
+                <span>{{item.ed_vo_Title}}</span>
                 <i></i>
               </li>
             </ul>
@@ -39,8 +44,7 @@
             <a href="javascript:;" class="active">本节介绍</a>
             <a href="javascript:;">资料下载</a>
           </nav>
-          <p>
-            《电商运营实操在线系统网课 玩转2017淘宝新规》由中公优就业电商研究院倾力打造，让您熟练掌握开 店技巧 ，打造黄金旺铺。通过《电商运营实操在线系统网课 玩转2017淘宝新规》由中公优就业电商研究院倾力打造，让您熟练掌握开 店技巧 ，打造黄金旺铺。通过</p>
+          <p>{{videoBox.ed_vo_Introduce}}</p>
           <div class="aboutClass">
             <strong>相关课程</strong>
             <div class="clearfix">
@@ -62,24 +66,25 @@
           </div>
         </div>
         <div class="commentStudent">
-          <strong>学员评价(236)</strong>
+          <strong>学员评价({{recommendDataList.length}})</strong>
           <ul class="commentList">
-            <li class="clearfix" v-for="item,index in 4">
+            <li class="noData" v-show="!recommendDataList.length">暂无评论</li>
+            <li class="clearfix" v-for="item,index in recommendDataList">
               <div class="studentIcon">
-                <div class="headerIcon"></div>
-                <span>纯粹</span>
+                <div class="headerIcon" :style="{backgroundImage: 'url('+ item.ed_se_UserHead +')'}"></div>
+                <span>{{item.ed_se_UserName}}</span>
               </div>
               <div class="commentContent">
                 <div class="starBox">
                   <el-rate
-                    v-model="videoStar"
+                    v-model="item.ed_se_Score"
                     disabled
                     disabled-void-color="#999999"
                     :colors="['#e8751a', '#e8751a', '#e8751a']"
                     score-template="{value}">
                   </el-rate>
                 </div>
-                <p>我从一个小白，到认识这个软件，一直能做些简单的图画，这些都是</p>
+                <p>{{item.ed_se_Comment}}</p>
               </div>
             </li>
           </ul>
@@ -98,10 +103,10 @@
 
             </div>
             <div class="commentCon clearfix">
-              <textarea placeholder="我也说一句..."></textarea>
-              <button>发表</button>
+              <textarea placeholder="我也说一句..." v-model="commentContent"></textarea>
+              <button @click="addRecommend">发表</button>
             </div>
-            <el-checkbox v-model="checked">匿名评价</el-checkbox>
+            <!--<el-checkbox v-model="checked">匿名评价</el-checkbox>-->
           </div>
 
         </div>
@@ -114,20 +119,126 @@
   import {mapGetters} from 'vuex'
 
   export default {
-    computed: mapGetters([]),
+    computed: mapGetters([
+      'playVideoList',
+      'recommendDataList'
+    ]),
     data() {
       return {
-        checked: false,
-        videoStar: 4,
-        choiceValue: null,
+//        checked: false,
+        choiceValue: 0,
+        videoId: 0,
+        videoBox: {},
+        showPlay: true,
+        videoIndex: 0,
+        userInfo: {},
+        commentContent: '',
       }
     },
+    created() {
+      this.videoId = this.$route.params.id;
+      this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+      this.initData();
+      this.initRecommend();
+    },
     methods: {
+      //初始化视频列表
       initData() {
+        let selectEdVedioInfo = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "ed_vo_ID": this.videoId,//视频编号
+        };
+        this.$store.dispatch('initPlayVideo', selectEdVedioInfo)
+          .then(() => {
+            if (!this.playVideoList.length) {
+              const {href} = this.$router.resolve({
+                name: '404',
+              });
+              window.open(href, '_blank')
+              this.$router.push({name: 'Home'})
+              return
+            }
+            this.videoBox = this.playVideoList[0];
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
       },
-      search() {
-        this.initData()
+      //点击播放视频
+      playVideoBtn() {
+        this.showPlay = false;
+        this.$refs.videoWrap.play();
+      },
+      //选择视频播放
+      changeVideo(item, index) {
+        this.videoBox = item;
+        this.videoIndex = index;
+        this.showPlay = true;
+      },
+      //初始化评论数据
+      initRecommend() {
+        let selectPointGoodInfo = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "page": "1",
+          "rows": "10",
+          "ed_se_ID": "",//视频评分ID
+          "ed_se_VedioID": this.videoId,//视频编号
+          "ed_se_UserID": "",//用户编码
+          "ed_se_Score": "",//分数
+        }
+        this.$store.dispatch('initRecommend', selectPointGoodInfo)
+          .then(() => {
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
+      },
+      //添加评论
+      addRecommend() {
+        let insertEdScoreInfo = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "data": {
+            "ed_se_VedioID": this.videoId,//视频编号
+            "ed_se_UserID": this.userInfo.sm_ui_ID,//用户编码
+            "ed_se_Score": this.choiceValue,//分数
+            "ed_se_Comment": this.commentContent,//评论内容
+            "ed_se_UserHead": this.userInfo.sm_ui_HeadImage,//用户头像
+            "ed_se_UserName": this.userInfo.sm_ui_Name,//用户名称
+          }
+        };
+        this.$store.dispatch('addRecommend', insertEdScoreInfo)
+          .then(suc => {
+            this.$notify({
+              message: suc,
+              type: 'success'
+            })
+            this.initRecommend();
+            this.commentContent = '';
+            this.choiceValue = 0;
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
       }
+
     },
     mounted() {
       //相关课程轮播
@@ -157,24 +268,32 @@
       };
 //      下一页
       nextIcon.onclick = () => {
-        num++;
-        if (num * 804 >= withData) {
+        if (num * 804 >= withData - 804) {
           this.$notify({
             message: '没有更多视频了!!',
             type: 'error'
           })
           return
         } else {
+          num++;
           classList.style.transform = 'translateX(-' + num * 804 + 'px)';
         }
       }
       //相关课程轮播结束
-
+      document.addEventListener('keydown', (e) => {
+        if (e.keyCode == 13) {
+          this.addRecommend();
+        }
+      })
 
     }
   }
 </script>
 <style scoped>
+  .noData {
+    color: #ccc;
+    text-align: center;
+  }
 
   .playWrap {
     width: 100%;
@@ -217,6 +336,11 @@
     left: 0;
   }
 
+  .videoIcon img {
+    position: relative;
+    z-index: 1;
+  }
+
   .videoIcon > div {
     position: absolute;
     top: 50%;
@@ -225,7 +349,13 @@
     width: 113px;
     height: 113px;
     background: url("../assets/img/Icon.png") no-repeat -60px -129px;
+    z-index: 9998;
   }
+
+  /*.videoIcon > div:hover {*/
+  /*cursor: pointer;*/
+  /*display: block;*/
+  /*}*/
 
   .catalogVideo {
     float: left;
@@ -262,7 +392,6 @@
   .videoMenu span {
     float: left;
     width: 224px;
-    text-align: center;
   }
 
   .videoMenu i {
@@ -495,6 +624,9 @@
     -moz-border-radius: 50%;
     border-radius: 50%;
     margin-bottom: 6px;
+    -webkit-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 
   .studentIcon > span {

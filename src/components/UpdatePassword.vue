@@ -4,21 +4,21 @@
     <ul class="passwordBox">
       <li class="clearfix">
         <strong>原密码 :</strong>
-        <input type="password">
+        <input type="password" v-model="oldPassword">
         <i>*</i>
       </li>
       <li class="clearfix">
         <strong>新密码 :</strong>
-        <input type="password">
+        <input type="password" v-model="newPassword">
         <i>*</i>
       </li>
       <li class="clearfix">
         <strong>确认新密码 :</strong>
-        <input type="password">
+        <input type="password" v-model="repeatPassword">
         <i>*</i>
       </li>
       <li>
-        <button>保存</button>
+        <button @click="update">保存</button>
       </li>
     </ul>
   </div>
@@ -29,13 +29,56 @@
   export default {
     computed: mapGetters([]),
     data() {
-      return {}
+      return {
+        oldPassword: '',
+        newPassword: '',
+        repeatPassword: '',
+        userInfo: {},
+      }
+    },
+    created() {
+      this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
     },
     methods: {
-      initData() {
-      },
-      search() {
-        this.initData()
+      update() {
+        if (this.repeatPassword != this.newPassword) {
+          this.$notify({
+            message: '两次输入的密码不一致!!',
+            type: 'error'
+          })
+          return
+        }
+        let UpdatePassword = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "userCode": this.userInfo.sm_ui_UserCode,//当前用户的账号
+          "oldPassword": this.oldPassword,//原来密码
+          "newPassword": this.newPassword,//新密码
+        }
+        this.$store.dispatch('updateLoginPassword', UpdatePassword)
+          .then(suc => {
+            this.$notify({
+              message: suc,
+              type: 'success'
+            })
+            this.oldPassword = '';
+            this.newPassword = '';
+            this.repeatPassword = '';
+            sessionStorage.removeItem('userInfo');
+            this.$router.push({name: 'Login'})
+            this.$notify({
+              message: '请重新登录!!',
+              type: 'success'
+            })
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
       }
     },
   }
@@ -72,13 +115,13 @@
   }
 
   .passwordBox button {
-    margin-top:18px;
-    margin-left:160px;
+    margin-top: 18px;
+    margin-left: 160px;
     font: 14px/30px "微软雅黑";
     width: 100px;
     text-align: center;
     background-color: #0461b1;
-    border:none;
+    border: none;
     color: #fff;
   }
 

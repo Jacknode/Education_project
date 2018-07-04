@@ -15,17 +15,26 @@
           <i></i>
           <span>四川</span>
         </div>
-        <div class="loginAndRegister">
-          <router-link to="/Login" class="login">登录</router-link>
+        <div class="loginAndRegister" v-show="!showLogin">
+          <a href="javascript:;" class="login" @click="goLogin">登录</a>
           <span></span>
           <router-link to="/Register" class="register">注册</router-link>
+        </div>
+        <div class="loginBox" v-show="showLogin">
+          <strong class="clearfix"><em></em><span>{{userName}}</span><i></i></strong>
+          <div>
+            <!--<a href="javascript:;" @click="goPersonalCenter">个人中心</a>-->
+            <router-link to="PersonalCenter/UserInformation">个人中心</router-link>
+            <!--<router-link to="PersonalCenter/MyClass">查看我的课程</router-link>-->
+            <a href="JavaScript:;" @click="outLogin">退出</a>
+          </div>
         </div>
       </div>
       <!--上导航-->
       <div class="allNavTop">
         <div class="allNavTopContent clearfix">
           <div class="allNavRight">
-            <a href="javascript:;" class="active">首页</a>
+            <router-link to="/Home" class="active">首页</router-link>
             <a href="javascript:;">我的课程</a>
             <a href="javascript:;">公开课</a>
             <a href="javascript:;">系统课程</a>
@@ -88,13 +97,41 @@
 
   export default {
     name: '',
+    computed: mapGetters([
+    ]),
     data() {
-      return {}
+      return {
+        userName: '',
+        userInfo: {},
+        showLogin: false,
+      }
     },
-    computed: mapGetters([]),
     created() {
+      if (sessionStorage.getItem('userInfo')) {
+        this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        this.userName = this.userInfo.sm_ui_Name;
+        this.showLogin = true;
+      }
+
     },
-    methods: {},
+    methods: {
+      goLogin() {
+        const {href} = this.$router.resolve({
+          name: 'Login',
+        });
+        window.open(href, '_blank')
+      },
+      outLogin(){
+        sessionStorage.removeItem('userInfo');
+        this.$router.push({name: 'Home'});
+        location.reload();
+      },
+      goPersonalCenter(){
+        this.$router.push({name:'UserInformation'})
+      }
+    },
+    mounted() {
+    }
   }
 </script>
 <style scoped>
@@ -351,6 +388,72 @@
   .footerBottom > span {
     margin: 0 9px;
     font: 12px/2 "微软雅黑";
+  }
+
+  .loginBox {
+    font: 14px/2 "微软雅黑";
+    margin-top: 12px;
+    position: relative;
+  }
+
+  .loginBox > strong > * {
+    float: left;
+  }
+
+  .loginBox > strong:hover {
+    cursor: pointer;
+  }
+
+  .loginBox > strong:hover + div {
+    display: block;
+  }
+
+  .loginBox span {
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .loginBox em {
+    width: 19px;
+    height: 15px;
+    background: url(../../assets/img/Icon.png) no-repeat 0 -180px;;
+    margin: 8px 13px 0 0;
+  }
+
+  .loginBox i {
+    border: 5px solid transparent;
+    border-width: 7px 3px;
+    border-top-color: #999;
+    margin: 10px 0 0 5px;
+  }
+
+  .loginBox > div {
+    position: absolute;
+    top: 28px;
+    left: 0;
+    min-width: 200px;
+    padding: 2px 0;
+    background-color: #fff;
+    box-shadow: 0 0 10px #ccc;
+    display: none;
+    z-index: 9;
+  }
+
+  .loginBox > div:hover {
+    display: block;
+  }
+
+  .loginBox > div > a {
+    display: block;
+    padding: 2px 20px;
+    color: #333;
+  }
+
+  .loginBox > div > a:hover {
+    background-color: #0461b1;
+    color: #fff;
   }
 
 

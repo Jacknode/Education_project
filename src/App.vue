@@ -36,7 +36,7 @@
     width: 100%;
     text-align: center;
     color: #409eff;
-    position: absolute;
+    position: fixed;
     z-index: 9999;
     top: 50%;
   }
@@ -50,7 +50,7 @@
     animation: rotating 2s linear infinite;
   }
   .loadingMask .loadingMaskBox {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     bottom: 0;

@@ -169,7 +169,7 @@
   }
 
   .balanceDetails dd:hover {
-    background-color: #f4f4f4;
+    background-color: #f1f1f1;
   }
 
   .balanceDetails .left {

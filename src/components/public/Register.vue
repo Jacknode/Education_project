@@ -9,7 +9,7 @@
         </div>
         <div class="goHome">
           <span>已有账号,</span>
-          <a href="javascript:;">马上登录</a>
+          <a href="javascript:;" class="login" @click="goLogin">登录</a>
           <em></em>
           <router-link to="Home">返回首页</router-link>
         </div>
@@ -18,25 +18,31 @@
         <h2>注册会员</h2>
         <div>
           <div class="formBox">
-            <input placeholder="手机号"/>
-            <div id="slider">
-              <span unselectable="on">请按住滑块，拖动到最右侧</span>
-              <div></div>
+            <input placeholder="请输入手机号" v-model="telePhone"/>
+            <div class="messageBox clearfix">
+              <input type="text" placeholder="请输入验证码" v-model="messageNum">
+              <button @click="sendMessage">{{outSend}}</button>
             </div>
+            <input placeholder="请输入密码" type="password" v-model="userPassworld"/>
+
+            <!--<div id="slider">-->
+            <!--<span unselectable="on">请按住滑块，拖动到最右侧</span>-->
+            <!--<div></div>-->
+            <!--</div>-->
           </div>
           <div class="userFont">
             <el-checkbox v-model="checked"></el-checkbox>
-            <span>我已阅读并接受用户协议</span>
+            <span unselectable="on">我已阅读并接受用户协议</span>
           </div>
           <div class="registerSub">
-            <button>注册</button>
+            <button @click="registerSubmit">注册</button>
           </div>
-          <div class="otherRegister clearfix">
-            <strong>使用社交账号注册</strong>
-            <a href="javascript:;" class="weChat"></a>
-            <a href="javascript:;" class="microBlog"></a>
-            <a href="javascript:;" class="QQCode"></a>
-          </div>
+          <!--<div class="otherRegister clearfix">-->
+          <!--<strong>使用社交账号注册</strong>-->
+          <!--<a href="javascript:;" class="weChat"></a>-->
+          <!--<a href="javascript:;" class="microBlog"></a>-->
+          <!--<a href="javascript:;" class="QQCode"></a>-->
+          <!--</div>-->
         </div>
       </section>
       <footer>
@@ -44,55 +50,126 @@
         href="javascript:;">课堂服务协议</a><span>|</span><a href="javascript:;">站点地图</a><span>|</span><a href="javascript:;">侵权投诉</a><span>|</span><a
         href="javascript:;">问题反馈</a><span>|</span><a href="javascript:;">帮助</a>
       </footer>
+
     </div>
   </div>
 </template>
 <script>
   import {mapGetters} from 'vuex'
+  import {isPhone} from '@/assets/js/public'
 
   export default {
     computed: mapGetters([]),
     data() {
       return {
         checked: true,
+        telePhone: '',
+        userPassworld: '',
+        messageNum: '',
+        outSend: '发送短信',
+        num: 60,
+        isTrue: false,
       }
     },
     methods: {
-      initData(){
-        console.log(1)
-      }
-    },
-    mounted() {
-      //拖动滑块
-      let slider = document.getElementById('slider');
-      let sliderC = slider.children[1];
-      let sliderCW = sliderC.offsetWidth;
-      let sliderLeft = slider.offsetLeft;
-      let sliderRight = slider.offsetWidth - sliderCW;
-      let sliderCLeft = 0;
-      sliderC.onmousedown = (e) => {
-        let X = e.offsetX;
-        document.onmousemove = (e) => {
-          let sliderCL = e.clientX;
-          sliderCLeft = sliderCL - sliderLeft - X;
-          if (sliderCLeft < 0) {
-            sliderCLeft = 0;
-          }
-          if (sliderCLeft > sliderRight) {
-            sliderCLeft = sliderRight;
-          }
-          sliderC.style.left = sliderCLeft + 'px'
+      //注册发送短信
+      sendRegisterMessage() {
+        if (!isPhone(this.telePhone)) {
+          this.$notify({
+            message: '手机号格式不正确!!',
+            type: 'error'
+          })
+          return
         }
-      }
-      sliderC.onmouseup = document.onmouseup = () => {
-        document.onmousemove = null;
-        if( sliderCLeft == sliderRight ){
-
+        let userSendMessage = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "phone": this.telePhone,//用户编码
+          "sendType": "0",//0注册发送短信 1 找回密码发送短信 2 动态密码
         }
-      }
-
-      //拖动滑块结束
-
+        return this.$store.dispatch('sendRegisterMessage', userSendMessage)
+      },
+      sendMessage() {
+        if (!isPhone(this.telePhone)) {
+          this.$notify({
+            message: '手机号格式不正确!!',
+            type: 'error'
+          })
+          return
+        }
+        if (this.isTrue) {
+          return
+        }
+        this.isTrue = true;
+        let timer = setInterval(() => {
+          this.num--;
+          this.outSend = '重新发送(' + this.num + 's)'
+          if (this.num <= 0) {
+            this.outSend = '重新发送';
+            this.isTrue = false;
+            this.num = 60;
+            clearInterval(timer);
+          }
+        }, 1000)
+        this.sendRegisterMessage()
+          .then(suc => {
+            this.$notify({
+              message: suc,
+              type: 'success'
+            })
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+            clearInterval(timer)
+          })
+      },
+      //注册提交
+      registerSubmit() {
+        if (!isPhone(this.telePhone) || !this.userPassworld || !this.messageNum) {
+          this.$notify({
+            message: '请将注册信息填写完整并核对手机号是否正确!!',
+            type: 'error'
+          })
+          return
+        }
+        let userRegister = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "phone": this.telePhone,
+          "extensionID": "",
+          "password": this.userPassworld,
+          "validateNo": this.messageNum
+        }
+        this.$store.dispatch('registerSubmit',userRegister)
+          .then(suc => {
+            this.$notify({
+              message: suc,
+              type: 'success'
+            })
+            setTimeout(()=>{
+              const {href} = this.$router.resolve({
+                name: 'Login',
+              });
+              window.open(href, '_blank')
+            },500)
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
+      },
+      goLogin() {
+        const {href} = this.$router.resolve({
+          name: 'Login',
+        });
+        window.open(href, '_blank')
+      },
     },
   }
 </script>
@@ -183,7 +260,6 @@
   }
 
   .formBox > div {
-    background-color: #e8e8e8;
     height: 34px;
     font: 12px/34px "微软雅黑";
     color: #808080;
@@ -191,7 +267,8 @@
     position: relative;
   }
 
-  .formBox > div > span {
+  .formBox > div > span,
+  .userFont > span {
     -moz-user-select: none;
     -webkit-user-select: none;
   }
@@ -210,7 +287,7 @@
   }
 
   .userFont > span {
-    padding-left: 10px;
+    margin-left: 10px;
     color: #999;
   }
 
@@ -278,6 +355,28 @@
 
   footer > span {
     margin: 0 5px;
+  }
+
+  .messageBox > input {
+    float: left;
+    width: 50%;
+    background-color: #f4f4f4;
+    color: #999999;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+  }
+
+  .messageBox > button {
+    float: right;
+    width: 40%;
+    font: 12px/40px "微软雅黑";
+    border: none;
+    background-color: #f4f4f4;
+    color: #999999;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
   }
 
 </style>
