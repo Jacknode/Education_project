@@ -117,6 +117,6 @@ export default [
   {
     path: '*',
     hidden: true,
-    redirect: {name: 'Home'}
+    redirect: {name: '404'}
   },
 ]
