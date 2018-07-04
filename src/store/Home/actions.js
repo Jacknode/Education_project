@@ -165,9 +165,9 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initVideoDetails',data.totalRows)
+            commit('initVideoDetails', data.totalRows)
             relove();
-          }else {
+          } else {
             reject(data.resultcontent);
           }
         })
@@ -184,9 +184,9 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initTypeVideo',data.data)
+            commit('initTypeVideo', data.data)
             relove(data.totalRows);
-          }else {
+          } else {
             reject(data.resultcontent);
           }
         })
@@ -203,10 +203,10 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initVideoDeatils',data.totalRows[0]);
-            commit('initVideoAbout',data.FilmSeries);
+            commit('initVideoDeatils', data.totalRows[0]);
+            commit('initVideoAbout', data.FilmSeries);
             relove();
-          }else {
+          } else {
             reject(data.resultcontent);
           }
         })
@@ -223,120 +223,14 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initVideoComment',data.data);
+            commit('initVideoComment', data.data);
             relove(data.totalrows);
-          }else {
+          } else {
             reject(data.resultcontent);
           }
         })
     })
   },
-  //初始化用户信息
-  initUserInformation({commit}, data) {
-    return new Promise(function (relove, reject) {
-      axios.post(getNewStr + '/UserInfo/Select', JSON.stringify(data), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
-        .then(data => {
-          var data = data.data;
-          if (Number(data.resultcode) == 200) {
-            commit('initUserInformation',data.data[0]);
-            relove();
-          }else {
-            reject(data.resultcontent);
-          }
-        })
-    })
-  },
-  //初始化职业数据
-  initOccupation({commit}, data) {
-    return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/Job/SelectGroupJob', data)
-        .then(data => {
-          var data = JSON.parse(data);
-          if (Number(data.resultcode) == 200) {
-            commit('initOccupation',data.data);
-            relove();
-          }else {
-            reject(data.resultcontent);
-          }
-        })
-    })
-  },
-  //初始化学历
-  initEducation({commit}, data) {
-    return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/Job/Select', data)
-        .then(data => {
-          var data = JSON.parse(data);
-          if (Number(data.resultcode) == 200) {
-            commit('initEducation',data.data);
-            relove();
-          }else {
-            reject(data.resultcontent);
-          }
-        })
-    })
-  },
-  //初始化省
-  initProvince({commit}, data) {
-    return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/AreaFull/SelectProvice', data)
-        .then(data => {
-          var data = JSON.parse(data);
-          if (Number(data.resultcode) == 200) {
-            commit('initProvince',data.data);
-            relove();
-          }else {
-            reject(data.resultcontent);
-          }
-        })
-    })
-  },
-  //初始化城市列表
-  initCity({commit}, data) {
-    return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/AreaFull/SelectProvice', data)
-        .then(data => {
-          var data = JSON.parse(data);
-          if (Number(data.resultcode) == 200) {
-            commit('initCity',data.data);
-            relove();
-          }else {
-            reject(data.resultcontent);
-          }
-        })
-    })
-  },
-  //修改用户信息提交
-  updateUserInfoSubmit({commit}, data) {
-    return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/UserInfo/Update', data)
-        .then(data => {
-          var data = JSON.parse(data);
-          if (Number(data.resultcode) == 200) {
-            relove(data.resultcontent);
-          }else {
-            reject(data.resultcontent);
-          }
-        })
-    })
-  },
-  //修改登录密码
-  updateLoginPassword({commit}, data) {
-    return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/UserInfo/UpdatePassword', data)
-        .then(data => {
-          var data = JSON.parse(data);
-          if (Number(data.resultcode) == 200) {
-            relove(data.resultcontent);
-          }else {
-            reject(data.resultcontent);
-          }
-        })
-    })
-  },
+
 
 }

@@ -24,7 +24,6 @@
           <strong class="clearfix"><em></em><span>{{userName}}</span><i></i></strong>
           <div>
             <a href="javascript:;" @click="goPersonalCenter">个人中心</a>
-            <!--<router-link to="UserInformation">个人中心</router-link>-->
             <a href="JavaScript:;" @click="outLogin">退出</a>
           </div>
         </div>
@@ -33,7 +32,7 @@
       <div class="allNavTop">
         <div class="allNavTopContent clearfix">
           <div class="allNavRight">
-            <router-link to="/Home" class="active">首页</router-link>
+            <router-link to="/" class="active">首页</router-link>
             <a href="javascript:;">我的课程</a>
             <a href="javascript:;">公开课</a>
             <a href="javascript:;">系统课程</a>
@@ -93,19 +92,30 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
+  import {Decrypt} from '@/assets/js/crypto'
 
   export default {
     name: '',
-    computed: mapGetters([
-    ]),
+    computed: mapGetters([]),
     data() {
       return {
         userName: '',
         userInfo: {},
         showLogin: false,
+        userID: '',
+        password: ''
       }
     },
     created() {
+      document.title="教育网站"
+      if (localStorage.getItem('userName') && localStorage.getItem('userPassword')) {
+        this.userID = Decrypt(localStorage.getItem('userName'))
+        this.password = Decrypt(localStorage.getItem('userPassword'))
+      }
+      if (!sessionStorage.getItem('userInfo')) {
+        this.loginSubmit();
+      }
+
       if (sessionStorage.getItem('userInfo')) {
         this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         this.userName = this.userInfo.sm_ui_Name;
@@ -120,7 +130,7 @@
         });
         window.open(href, '_blank')
       },
-      outLogin(){
+      outLogin() {
         sessionStorage.removeItem('userInfo');
         window.close()
         const {href} = this.$router.resolve({
@@ -128,12 +138,40 @@
         });
         window.open(href, '_blank')
       },
-      goPersonalCenter(){
+      goPersonalCenter() {
         const {href} = this.$router.resolve({
           name: 'UserInformation',
         });
         window.open(href, '_blank')
-      }
+      },
+      //登录提交
+      loginSubmit() {
+        let userLogin = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "userID": this.userID,//用户编码
+          "password": this.password//密码
+        }
+        this.$store.dispatch('loginSubmit', userLogin)
+          .then(data => {
+            this.$notify({
+              message: data.resultcontent,
+              type: 'success'
+            })
+            this.userInfo = data.data;
+            this.userName = this.userInfo.sm_ui_Name;
+            this.showLogin = true;
+            sessionStorage.setItem('userInfo', JSON.stringify(data.data))
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
+      },
     },
     mounted() {
     }

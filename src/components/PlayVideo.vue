@@ -136,7 +136,7 @@
       }
     },
     created() {
-      this.videoId = this.$route.params.id;
+      this.videoId = this.$route.query.id;
       this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
       this.initData();
       this.initRecommend();

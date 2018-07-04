@@ -19,9 +19,4 @@ export default {
   videoDeatilsObj: {},//视频详情
   videoAboutList: [],//关于视频
   videoCommentList: [],//当前视频评论
-  userInformationObj: {},//当前登录的用户信息
-  occupationList: [],//职业列表
-  educationList: [],//学历列表
-  provinceList: [],//省列表
-  cityList: [],//城市列表
 }

@@ -16,9 +16,5 @@ export default {
   videoDeatilsObj: state => state.videoDeatilsObj,
   videoAboutList: state => state.videoAboutList,
   videoCommentList: state => state.videoCommentList,
-  userInformationObj: state => state.userInformationObj,
-  occupationList: state => state.occupationList,
-  educationList: state => state.educationList,
-  provinceList: state => state.provinceList,
-  cityList: state => state.cityList,
+
 }

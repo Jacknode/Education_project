@@ -201,7 +201,7 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
-  import {getTiem} from '@/assets/js/public'
+  import {Decrypt} from '@/assets/js/crypto'
 
   export default {
     name: '',
@@ -229,6 +229,11 @@
       'homeNavList'
     ]),
     created() {
+      if (localStorage.getItem('userName') && localStorage.getItem('userPassword')) {
+        this.userID = Decrypt(localStorage.getItem('userName'))
+        this.password = Decrypt(localStorage.getItem('userPassword'))
+      }
+      this.loginSubmit();
       if (sessionStorage.getItem('userInfo')) {
         this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         this.showLogin = true;
@@ -337,23 +342,32 @@
       },
       //去播放视频
       goPlayVideo(item) {
-        this.$router.push({name: 'VideoSearch', params: {id: item.ed_re_ID}})
+        const {href} = this.$router.resolve({
+          name: 'VideoSearch',
+          query: {id:item.ed_re_ID}
+        });
+        window.open(href, '_blank')
       },
       //去播放视频
       goPlaySeriesVideo(item) {
-        this.$router.push({name: 'VideoSearch', params: {id: item.ed_vo_ID}})
+        const {href} = this.$router.resolve({
+          name: 'VideoSearch',
+          query: {id:item.ed_vo_ID}
+        });
+        window.open(href, '_blank')
       },
       //带子集的查询
       goSearch(item) {
-        this.$router.push({
+        const {href} = this.$router.resolve({
           name: 'VideoDetails',
-          params: {
+          query: {
             id: this.allList.value,
             name: this.allList.label,
             cid: item.value,
             cname: item.label
           }
-        })
+        });
+        window.open(href, '_blank')
       },
       //退出登录
       outLogin() {
@@ -362,8 +376,35 @@
       },
       //去个人中心
       goPersonalCenter() {
-        this.$router.push({name: 'UserInformation'})
-      }
+        const {href} = this.$router.resolve({
+          name: 'UserInformation'
+        });
+        window.open(href, '_blank')
+      },
+      //登录提交
+      loginSubmit() {
+        let userLogin = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "userID": this.userID,//用户编码
+          "password": this.password//密码
+        }
+        this.$store.dispatch('loginSubmit', userLogin)
+          .then(data => {
+            this.userInfo = data.data;
+            this.showLogin = true;
+            this.userName = this.userInfo.sm_ui_Name;
+            this.userImage = this.userInfo.sm_ui_HeadImage;
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          })
+      },
     },
     mounted() {
 

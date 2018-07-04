@@ -7,7 +7,7 @@
       </div>
       <ul class="dataList">
         <li class="clearfix" v-for="item,index in 3">
-          <img src="../assets/img/video.png" width="160" height="110">
+          <img src="../../assets/img/video.png" width="160" height="110">
           <div class="classInfo">
             <strong>高考语文高分复习指导</strong>
             <span>1课时</span>

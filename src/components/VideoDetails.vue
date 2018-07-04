@@ -4,7 +4,7 @@
       <div id="wrapBox">
         <nav class="clearfix">
           <a href="javascript:;">{{typeName}}</a>
-          <span>&gt;</span>
+          <span v-show="typeId">&gt;</span>
           <a href="javascript:;">{{childrenName}}</a>
         </nav>
         <dl class="classType clearfix">
@@ -75,23 +75,26 @@
       }
     },
     created() {
-      this.typeId = this.$route.params.id;
-      this.typeName = this.$route.params.name;
-      this.typeCId = this.$route.params.cid;
-      this.childrenName = this.$route.params.cname;
+      this.typeId = this.$route.query.id;
+      this.typeName = this.$route.query.name;
+      this.typeCId = this.$route.query.cid;
+      this.childrenName = this.$route.query.cname;
       this.initData();
       this.initTypeVideo();
     },
     methods: {
       //查询类型
       initData() {
+        if( !this.typeId ){
+          return
+        }
         let SecondaryPage = {
           "loginUserID": "huileyou",  //惠乐游用户ID
           "loginUserPass": "123",  //惠乐游用户密码
           "operateUserID": "",//操作员编码
           "operateUserName": "",//操作员名称
           "pcName": "",        //机器码
-          "ed_vt_ID": this.typeId, //类型
+          "ed_vt_ID": this.typeId //类型
         };
         this.$store.dispatch('initVideoDetails', SecondaryPage)
           .then(() => {
@@ -117,11 +120,11 @@
           "operateUserName": "",//操作员名称
           "pcName": "",        //机器码
           "ed_vt_ID": this.typeCId, //类型
-          "page": num?num:1,//页码
+          "page": num ? num : 1,//页码
           "rows": 12//条数
         };
         this.$store.dispatch('initTypeVideo', SecondaryVode)
-          .then(total=>{
+          .then(total => {
             this.total = Number(total)
           })
       },
@@ -135,8 +138,8 @@
         this.typeCId = item.ed_te_ID;
         this.initTypeVideo();
       },
-      goVideoSearch(item){
-        this.$router.push({name:'VideoSearch',params:{id:item.ed_vo_ID}})
+      goVideoSearch(item) {
+        this.$router.push({name: 'VideoSearch', params: {id: item.ed_vo_ID}})
       },
     },
   }

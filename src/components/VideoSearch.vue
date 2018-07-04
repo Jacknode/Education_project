@@ -34,7 +34,7 @@
             </div>
             <div class="classTime">
               <strong>课程安排 :</strong>
-              <span> {{videoAboutList.length + 1}}课时</span>
+              <span> {{videoAboutList.length}}课时</span>
             </div>
             <div class="aboutMe clearfix">
               <button>我要报名</button>
@@ -174,7 +174,7 @@
       }
     },
     created() {
-      this.videoId = this.$route.params.id;
+      this.videoId = this.$route.query.id;
       this.initData();
       this.initVideoComment();
     },
@@ -226,10 +226,22 @@
       },
       //去播放
       goPlay(item) {
-        this.$router.push({name: 'PlayVideo', params: {id: item.ed_vo_ID}});
+        const {href} = this.$router.resolve({
+          name: 'PlayVideo',
+          query: {
+            id: item.ed_vo_ID
+          }
+        });
+        window.open(href, '_blank')
       },
       goPlayVideo(item) {
-        this.$router.push({name: 'PlayVideo', params: {id: item.ed_fs_VedioID}})
+        const {href} = this.$router.resolve({
+          name: 'PlayVideo',
+          query: {
+            id: item.ed_fs_VedioID
+          }
+        });
+        window.open(href, '_blank')
       }
     },
     mounted() {

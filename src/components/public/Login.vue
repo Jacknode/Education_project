@@ -33,7 +33,7 @@
           </div>
           <div class="loginTo clearfix">
             <strong>
-              <!--<el-checkbox v-model="checked">下次自动登录</el-checkbox>-->
+              <el-checkbox v-model="checked">下次自动登录</el-checkbox>
             </strong>
             <span>
             <!--<a href="javascript:;">忘记密码</a>-->
@@ -62,12 +62,13 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
+  import {Encrypt} from '@/assets/js/crypto'
 
   export default {
     computed: mapGetters([]),
     data() {
       return {
-        checked: false,
+        checked: true,
         userID: '',
         password: '',
         loginType: [
@@ -98,6 +99,15 @@
             type: 'error'
           })
           return
+        }
+        if (this.checked) {
+          localStorage.setItem('userName', Encrypt(this.userID));
+          localStorage.setItem('userPassword', Encrypt(this.password));
+        }else{
+          if( localStorage.getItem('userName') && localStorage.getItem('userPassword') ){
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userPassword');
+          }
         }
         let userLogin = {
           "loginUserID": "huileyou",
@@ -339,6 +349,11 @@
     border: none;
   }
 
+  .loginForm > input:last-of-type:hover {
+    color: #fff;
+    background-color: #409ECF;
+  }
+
   .loginTo {
     font: 14px/2 "微软雅黑";
     margin: 16px 0;
@@ -388,6 +403,10 @@
 
   .messageLogin > button {
     border: none;
+  }
+
+  .messageLogin > button:hover {
+    color: #fff;
   }
 
   .messageNum {

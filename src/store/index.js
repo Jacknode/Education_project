@@ -7,6 +7,7 @@ import Vuex from 'vuex'
 // import mutations from './Agencies/mutations'
 
 import home from './Home'
+import personal from './Personal'
 
 Vue.use(Vuex);
 const debug = process.env.NODE_ENV !== 'production'
@@ -14,7 +15,8 @@ const debug = process.env.NODE_ENV !== 'production'
 
 export default new Vuex.Store({
   modules:{
-    home
+    home,
+    personal
   },
   strict: debug,
 })

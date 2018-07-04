@@ -21,8 +21,8 @@ export default [
       {
         path: 'personalCenter',
         components: {
-          default: (resolve) => require(['@/components/PersonalCenter'], resolve),
-          User: (resolve) => require(['@/components/PersonalCenter'], resolve),
+          default: (resolve) => require(['@/components/Personal/PersonalCenter'], resolve),
+          User: (resolve) => require(['@/components/Personal/PersonalCenter'], resolve),
         },
         name: 'PersonalCenter',
         children:[
@@ -30,8 +30,8 @@ export default [
           {
             path: 'userInformation',
             components: {
-              default: (resolve) => require(['@/components/UserInformation'], resolve),
-              Center: (resolve) => require(['@/components/UserInformation'], resolve),
+              default: (resolve) => require(['@/components/Personal/UserInformation'], resolve),
+              Center: (resolve) => require(['@/components/Personal/UserInformation'], resolve),
             },
             name: 'UserInformation'
           },
@@ -39,8 +39,8 @@ export default [
           {
             path: 'myClass',
             components: {
-              default: (resolve) => require(['@/components/MyClass'], resolve),
-              Center: (resolve) => require(['@/components/MyClass'], resolve),
+              default: (resolve) => require(['@/components/Personal/MyClass'], resolve),
+              Center: (resolve) => require(['@/components/Personal/MyClass'], resolve),
             },
             name: 'MyClass'
           },
@@ -48,8 +48,8 @@ export default [
           {
             path: 'updatePassword',
             components: {
-              default: (resolve) => require(['@/components/UpdatePassword'], resolve),
-              Center: (resolve) => require(['@/components/UpdatePassword'], resolve),
+              default: (resolve) => require(['@/components/Personal/UpdatePassword'], resolve),
+              Center: (resolve) => require(['@/components/Personal/UpdatePassword'], resolve),
             },
             name: 'UpdatePassword'
           },
@@ -57,8 +57,8 @@ export default [
           {
             path: 'myBalance',
             components: {
-              default: (resolve) => require(['@/components/MyBalance'], resolve),
-              Center: (resolve) => require(['@/components/MyBalance'], resolve),
+              default: (resolve) => require(['@/components/Personal/MyBalance'], resolve),
+              Center: (resolve) => require(['@/components/Personal/MyBalance'], resolve),
             },
             name: 'MyBalance'
           },
@@ -66,7 +66,7 @@ export default [
       },
       //查看视频
       {
-        path: 'videoSearch/:id',
+        path: 'videoSearch',
         components: {
           default: (resolve) => require(['@/components/VideoSearch'], resolve),
           User: (resolve) => require(['@/components/VideoSearch'], resolve),
@@ -75,7 +75,7 @@ export default [
       },
       //播放视频
       {
-        path: 'playVideo/:id',
+        path: 'playVideo',
         components: {
           default: (resolve) => require(['@/components/PlayVideo'], resolve),
           User: (resolve) => require(['@/components/PlayVideo'], resolve),
@@ -84,7 +84,7 @@ export default [
       },
       //视频详情页
       {
-        path: 'videoDetails/:id/:name/:cid/:cname',
+        path: 'videoDetails',
         components: {
           default: (resolve) => require(['@/components/VideoDetails'], resolve),
           User: (resolve) => require(['@/components/VideoDetails'], resolve),

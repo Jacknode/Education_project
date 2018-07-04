@@ -50,21 +50,7 @@ export default {
   initVideoComment(state, data) {
     state.videoCommentList = data;
   },
-  initUserInformation(state, obj) {
-    state.userInformationObj = obj;
-  },
-  initOccupation(state, data) {
-    state.occupationList = data;
-  },
-  initEducation(state, data) {
-    state.educationList = data;
-  },
-  initProvince(state, data) {
-    state.provinceList = data;
-  },
-  initCity(state, data) {
-    state.cityList = data;
-  }
+
 
 
 }

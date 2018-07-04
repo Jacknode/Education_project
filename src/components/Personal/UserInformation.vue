@@ -416,7 +416,7 @@
     position: absolute;
     left: 45px;
     top: 0px;
-    background: url("../assets/img/Icon.png") no-repeat -173px -413px;
+    background: url("../../assets/img/Icon.png") no-repeat -173px -413px;
   }
 
   .emailBinding > i {
@@ -425,7 +425,7 @@
     position: absolute;
     left: 24px;
     top: 0px;
-    background: url("../assets/img/Icon.png") no-repeat -173px -502px;
+    background: url("../../assets/img/Icon.png") no-repeat -173px -502px;
   }
 
   .information {
