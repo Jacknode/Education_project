@@ -203,7 +203,7 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initVideoDeatils', data.totalRows[0]);
+            commit('initVideoDeatils', data.totalRows[0]?data.totalRows[0]:{});
             commit('initVideoAbout', data.FilmSeries);
             relove();
           } else {

@@ -41,6 +41,7 @@
           :page-size="5"
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
+          v-show="total"
           :total="total">
         </el-pagination>
       </div>

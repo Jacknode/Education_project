@@ -111,9 +111,10 @@
       if (localStorage.getItem('userName') && localStorage.getItem('userPassword')) {
         this.userID = Decrypt(localStorage.getItem('userName'))
         this.password = Decrypt(localStorage.getItem('userPassword'))
+        this.loginSubmit();
       }
       if (!sessionStorage.getItem('userInfo')) {
-        this.loginSubmit();
+
       }
 
       if (sessionStorage.getItem('userInfo')) {
@@ -157,10 +158,10 @@
         }
         this.$store.dispatch('loginSubmit', userLogin)
           .then(data => {
-            this.$notify({
-              message: data.resultcontent,
-              type: 'success'
-            })
+//            this.$notify({
+//              message: data.resultcontent,
+//              type: 'success'
+//            })
             this.userInfo = data.data;
             this.userName = this.userInfo.sm_ui_Name;
             this.showLogin = true;

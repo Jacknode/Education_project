@@ -232,8 +232,8 @@
       if (localStorage.getItem('userName') && localStorage.getItem('userPassword')) {
         this.userID = Decrypt(localStorage.getItem('userName'))
         this.password = Decrypt(localStorage.getItem('userPassword'))
+        this.loginSubmit();
       }
-      this.loginSubmit();
       if (sessionStorage.getItem('userInfo')) {
         this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         this.showLogin = true;
@@ -372,6 +372,8 @@
       //退出登录
       outLogin() {
         sessionStorage.removeItem('userInfo');
+        localStorage.removeItem('userName')
+        localStorage.removeItem('userPassword')
         window.location.reload()
       },
       //去个人中心
