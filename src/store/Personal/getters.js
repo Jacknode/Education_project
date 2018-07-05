@@ -7,5 +7,5 @@ export default {
   moneyObj: state => state.moneyObj,
   moneyBadDetailsList: state => state.moneyBadDetailsList,
   integralList: state => state.integralList,
-
+  courseRecommendList: state => state.courseRecommendList,
 }

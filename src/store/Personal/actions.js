@@ -160,6 +160,25 @@ export default {
           }
         })
     })
-  }
+  },
+  //初始化课程推荐
+  courseRecommendAction({commit},data){
+    return new Promise(function (relove, reject) {
+      axios.post(getNewStr + '/Recommend/Select', JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+        .then(data => {
+          var data = data.data;
+          if (Number(data.resultcode) == 200) {
+            commit('courseRecommendAction', data.data)
+            relove(data.totalrows);
+          } else {
+            reject(data.resultcontent);
+          }
+        })
+    })
+  },
 
 }

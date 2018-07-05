@@ -142,11 +142,11 @@
         <div class="secRecommend">
           <strong>课程推荐</strong>
           <ul class="recommendList">
-            <li v-for="item,index in 4">
-              <img src="../assets/img/video.png" width="230" height="160">
-              <strong>高考语文高分复习指导</strong>
+            <li v-for="item in courseRecommendList">
+              <img src="" v-show="item.ed_re_SeriesImageURL" v-lazy="item.ed_re_SeriesImageURL" width="230" height="160">
+              <strong>{{item.ed_re_Name}}</strong>
               <div class="clearfix">
-                <span>免费</span>
+                <span>{{item.ed_vo_Price}}</span>
                 <a href="javascript:;">开始学习</a>
               </div>
             </li>
@@ -163,6 +163,7 @@
     computed: mapGetters([
       'videoDeatilsObj',
       'videoAboutList',
+      'courseRecommendList',//课程推荐列表
       'videoCommentList'
     ]),
     data() {
@@ -177,8 +178,35 @@
       this.videoId = this.$route.query.id;
       this.initData();
       this.initVideoComment();
+      //课程推荐查询
+      this.initCourseRecommend();
     },
     methods: {
+      //课程推荐查询
+      initCourseRecommend(){
+        let courseRecommendOption={
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "page": "1",
+          "rows": "10",
+          "ed_re_ID": "",//推荐编码
+          "ed_re_PropertiesID": "",//被推荐的编码
+          "ed_re_SeriesImageURL": "",//推荐图片
+          "ed_re_Name": "",//推荐名称
+          "ed_re_Difference": "",//推荐的是视频还是系列（0视频，1系列）
+        };
+        this.$store.dispatch('courseRecommendAction',courseRecommendOption)
+          .then(() => {
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          });
+      },
       initData() {
         let SecondaryVodeDetails = {
           "loginUserID": "huileyou",  //惠乐游用户ID

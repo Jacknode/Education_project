@@ -7,4 +7,5 @@ export default {
   moneyObj: {},//钱包信息
   moneyBadDetailsList: [],//钱包消费明细
   integralList: [],//积分列表
+  courseRecommendList:[],//课程推荐列表
 }

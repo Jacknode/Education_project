@@ -22,5 +22,9 @@ export default {
   },
   initIntegral(state, data) {
     state.integralList = data;
+  } ,
+  courseRecommendAction(state, data) {
+    state.courseRecommendList = data;
   }
+
 }
