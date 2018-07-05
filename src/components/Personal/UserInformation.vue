@@ -507,6 +507,6 @@
   }
 
   .updateInformation > .showTopPic > span{
-    max-width: 167px;
+    max-width: 163px;
   }
 </style>
