@@ -6,6 +6,7 @@
         <div class="titlePart clearfix">
           <strong>{{videoBox.ed_vo_Title}}</strong>
           <a href="javascript:;">&lt;返回课程主页</a>
+          <!--<router-link to="VideoSearch"&lt;>返回课程主页</router-link>-->
         </div>
         <div class="videoPart clearfix">
           <div class="playVideoBox">
@@ -51,7 +52,7 @@
               <div class="leftLast" id="lastIcon"><i></i></div>
               <div class="classList">
                 <ul class="clearfix" id="classList">
-                  <li v-for="item,index in 10">
+                  <li v-for="item,index in 3">
                     <img src="../assets/img/video.png" width="230" height="160">
                     <strong>高考语文高分复习指导</strong>
                     <div class="clearfix">

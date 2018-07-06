@@ -142,7 +142,7 @@
         <div class="secRecommend">
           <strong>课程推荐</strong>
           <ul class="recommendList">
-            <li v-for="item in courseRecommendList">
+            <li v-for="item in courseRecommendList"  @click="goPlayVideo(item)">
               <img src="" v-show="item.ed_re_SeriesImageURL" v-lazy="item.ed_re_SeriesImageURL" width="230" height="160">
               <strong>{{item.ed_re_Name}}</strong>
               <div class="clearfix">
@@ -182,6 +182,14 @@
       this.initCourseRecommend();
     },
     methods: {
+      //去播放视频
+      goPlayVideo(item) {
+        const {href} = this.$router.resolve({
+          name: 'VideoSearch',
+          query: {id:item.ed_re_ID}
+        });
+        window.open(href, '_blank')
+      },
       //课程推荐查询
       initCourseRecommend(){
         let courseRecommendOption={

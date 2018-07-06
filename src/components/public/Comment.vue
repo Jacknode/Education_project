@@ -3,8 +3,8 @@
     <header>
       <div id="headerContent" class="clearfix">
         <div class="headerLogo">
-          <img src="">
-          LOGO
+          <img src="../../assets/img/logo.jpg" style="width: 216px;height:56px">
+          <!--LOGO-->
         </div>
         <div class="headerSearch">
           <div class="headerSearchIcon"></div>
