@@ -21,7 +21,17 @@
     name: 'app',
     computed:mapGetters([
       'isLoading'
-    ])
+    ]),
+    mounted(){
+      if(returnCitySN.cname.indexOf('省')){
+        let n = returnCitySN.cname.indexOf('省')+1;
+        let obj = {
+          province:returnCitySN.cname.substring(0,n),
+          city:returnCitySN.cname.substring(n)
+        }
+        sessionStorage.setItem('addComp',JSON.stringify(obj))
+      }
+    }
   }
 </script>
 
