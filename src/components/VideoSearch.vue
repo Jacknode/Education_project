@@ -281,6 +281,10 @@
       }
     },
     mounted() {
+      let title = JSON.parse(sessionStorage.getItem('jumpTitle')).ed_re_Name;
+      if(title){
+        document.title = title;
+      };
     },
   }
 </script>

@@ -13,7 +13,7 @@
         </div>
         <div class="positionPlace">
           <i></i>
-          <span>四川</span>
+          <span>{{currentLocaltion}}</span>
         </div>
         <div class="loginAndRegister" v-show="!showLogin">
           <a href="javascript:;" class="login" @click="goLogin">登录</a>
@@ -103,7 +103,8 @@
         userInfo: {},
         showLogin: false,
         userID: '',
-        password: ''
+        password: '',
+        currentLocaltion:"",//当前位置
       }
     },
     created() {
@@ -122,9 +123,15 @@
         this.userName = this.userInfo.sm_ui_Name;
         this.showLogin = true;
       }
-
+      //获取当前位置
+      this.getCurrentLocation();
     },
     methods: {
+      //获取当前位置
+      getCurrentLocation(){
+        console.log(sessionStorage.getItem('addComp'))
+        this.currentLocaltion=JSON.parse(sessionStorage.getItem('addComp')).province+','+JSON.parse(sessionStorage.getItem('addComp')).city;
+      },
       goLogin() {
         const {href} = this.$router.resolve({
           name: 'Login',
@@ -175,6 +182,7 @@
       },
     },
     mounted() {
+
     }
   }
 </script>
