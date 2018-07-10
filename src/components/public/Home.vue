@@ -157,8 +157,8 @@
             <img v-lazy="item.ed_re_SeriesImageURL" width="260" height="190">
             <strong>{{item.ed_re_Name}}</strong>
             <div class="clearfix">
-              <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
-              <span v-if="item.ed_vo_Price != 0" style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
+              <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
+              <span v-else style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
               <a href="javascript:;">我要报名</a>
             </div>
           </li>
@@ -185,8 +185,8 @@
             <img v-lazy="item.ed_vo_ImageURL" width="260" height="190">
             <strong>{{item.ed_vo_Title}}</strong>
             <div class="clearfix">
-              <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
-              <span v-if="item.ed_vo_Price != 0" style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
+              <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
+              <span v-else style="color: #f43232;">{{'￥'}}{{item.ed_vo_Price!=0&&item.ed_vo_Price?item.ed_vo_Price:'0'}}</span>
               <a href="javascript:;">我要报名</a>
             </div>
           </li>
