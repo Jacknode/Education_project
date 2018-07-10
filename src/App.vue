@@ -23,6 +23,7 @@
       'isLoading'
     ]),
     mounted(){
+      //获取当前位置
       if(returnCitySN.cname.indexOf('省')){
         let n = returnCitySN.cname.indexOf('省')+1;
         let obj = {

@@ -346,7 +346,11 @@
           name: 'VideoSearch',
           query: {id:item.ed_re_ID}
         });
-        window.open(href, '_blank')
+        window.open(href, '_blank');
+        //存储title
+        let jumpTitle=item;
+
+        sessionStorage.setItem('jumpTitle',JSON.stringify(jumpTitle));
       },
       //去播放视频
       goPlaySeriesVideo(item) {
@@ -412,7 +416,9 @@
       }
     },
     mounted() {
-
+//        console.log(this.homeVideoList)
+        let jumpTitle='';
+        sessionStorage.setItem('jumpTitle',jumpTitle);
     },
   }
 </script>
