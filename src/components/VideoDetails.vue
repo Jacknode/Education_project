@@ -3,18 +3,20 @@
     <div id="wrap">
       <div id="wrapBox">
         <nav class="clearfix">
-          <a href="javascript:;">{{typeName}}</a>
-          <span v-show="typeId">&gt;</span>
-          <a href="javascript:;">{{childrenName}}</a>
+          <a href="javascript:;" @click="searchAll">{{'全部课程'}}</a>
+          <a href="javascript:;" v-for="item in childrenList" @click="searchChildrenList(item.ed_te_ID)"><span>&gt;</span>{{item.ed_te_Name}}</a>
         </nav>
-        <dl class="classType clearfix">
+        <dl class="classType clearfix" v-loading="isloading">
           <dt>课程分类</dt>
           <dd
+
             v-for="item,index in videoDetailsList"
+            v-if="videoDetailsList.length"
             @click="changeClassType(item,index)"
-            :class="{active: activeIndex == index}"
+            :class="{active: item.ed_te_ID==''}"
           >{{item.ed_te_Name}}
           </dd>
+          <dd v-if="!videoDetailsList.length" class="lastClass">暂无课程分类</dd>
         </dl>
         <ul class="screenCondition clearfix">
           <li><a href="javascript:;">综合排序</a></li>
@@ -27,14 +29,14 @@
           <li><a href="javascript:;">免费</a></li>
           <li><a href="javascript:;">付费</a></li>
         </ul>
-        <ul class="classList clearfix">
+        <ul class="classList clearfix" v-loading="listLoading">
           <li class="prompt" v-show="!typeVideoList.length">暂无相关视频</li>
           <li v-for="item,index in typeVideoList" @click="goVideoSearch(item)">
-            <img v-lazy="item.ed_vo_ImageURL" width=" 260px" height="193">
-            <strong>{{item.ed_vo_Title}}</strong>
+            <img v-lazy="item.ed_ss_SeriesImageURL" width="260" height="193">
+            <strong>{{item.ed_ss_Name}}</strong>
             <div class="clearfix">
               <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
-              <span v-if="item.ed_vo_Price != 0">￥{{item.ed_vo_Price}}</span>
+              <span v-if="item.ed_vo_Price != 0">￥{{item.ed_ss_Price}}</span>
               <a href="javascript:;">我要报名</a>
             </div>
           </li>
@@ -65,6 +67,9 @@
     ]),
     data() {
       return {
+        isloading:false,
+        listLoading:false,
+        childrenList:[],
         total: 1000,
         typeId: '',
         typeName: '',
@@ -80,29 +85,56 @@
       this.typeCId = this.$route.query.cid;
       this.childrenName = this.$route.query.cname;
       this.initData();
-      this.initTypeVideo();
+      this.initTypeVideo(1,this.$route.query.keyword);
     },
     methods: {
+
+      searchAll(){
+        this.childrenList = [];
+        this.initData(0)
+      },
+      searchChildrenList(id){
+        this.childrenList = this.childrenList.filter(item=>{
+          if(item.ed_te_ID==id){
+            return true
+          }
+          return false
+        })
+        this.typeCId = id;
+
+        this.initData(id);
+        this.initTypeVideo(1)
+      },
       //查询类型
-      initData() {
-        if( !this.typeId ){
-          return
-        }
+      initData(id) {
+//        if( !this.typeId ){
+//          return
+//        }
         let SecondaryPage = {
           "loginUserID": "huileyou",  //惠乐游用户ID
           "loginUserPass": "123",  //惠乐游用户密码
           "operateUserID": "",//操作员编码
           "operateUserName": "",//操作员名称
           "pcName": "",        //机器码
-          "ed_vt_ID": this.typeId //类型
+          "ed_vt_ID": this.typeId?this.typeId:'' //类型
         };
+        if(id||id==0){
+          SecondaryPage.ed_vt_ID = id;
+        }
+        this.isloading = true;
         this.$store.dispatch('initVideoDetails', SecondaryPage)
           .then(() => {
+          this.isloading = false;
             for (let i = 0; i < this.videoDetailsList.length; i++) {
               if (this.videoDetailsList[i].ed_te_ID == this.typeCId) {
-                this.childrenName = this.videoDetailsList[i].ed_te_Name;
+//                this.childrenName = this.videoDetailsList[i].ed_te_Name;
                 this.activeIndex = i;
               }
+            }
+            if(!this.videoDetailsList.length){
+//              this.childrenList = [];
+////              this.initData()
+//              window.location.reload()
             }
           }, err => {
             this.$notify({
@@ -112,19 +144,26 @@
           })
       },
       //查询类型对应得视频
-      initTypeVideo(num) {
+      initTypeVideo(num,name) {
         let SecondaryVode = {
           "loginUserID": "huileyou",  //惠乐游用户ID
           "loginUserPass": "123",  //惠乐游用户密码
           "operateUserID": "",//操作员编码
           "operateUserName": "",//操作员名称
           "pcName": "",        //机器码
-          "ed_vt_ID": this.typeCId, //类型
-          "page": num ? num : 1,//页码
-          "rows": 12//条数
+          "ed_vt_ID": this.typeCId?this.typeCId:'', //类型
+          Name:name?name:''
+//          "page": num ? num : 1,//页码
+//          "rows": 12//条数
         };
+        this.listLoading = true;
+        if(num){
+          SecondaryVode.page = num
+          SecondaryVode.rows = 12
+        }
         this.$store.dispatch('initTypeVideo', SecondaryVode)
           .then(total => {
+            this.listLoading = false;
             this.total = Number(total)
           })
       },
@@ -134,12 +173,44 @@
       },
       changeClassType(item, index) {
         this.activeIndex = index;
-        this.childrenName = item.ed_te_Name;
+//        this.childrenList.filter(v=>{
+//          if(v.)
+//        })
+//        const filterNonUnique = arr => arr.filter(i => arr.indexOf(i.ed_te_ParentID) === arr.lastIndexOf(i.ed_te_ParentID))
+
+
+//        const reducedFilter = (data, keys, fn) =>
+//          data.filter(fn).map(el =>
+//            keys.reduce((acc, key) => {
+//              acc[key] = el[key];
+//              return acc;
+//            }, {})
+//          );
+//        console.log(filterNonUnique(this.childrenList))
+        this.childrenList.push(item)
+        let arr = this.childrenList;
+        for(var i=0;i<arr.length;i++){
+          if(arr[i].ed_te_ParentID==item.ed_te_ParentID){
+//            this.childrenList = [];
+            this.childrenList.push(item)
+            break
+          }
+        }
+        this.childrenList = Array.from(new Set(this.childrenList))
+//        this.childrenName = item.ed_te_Name;
         this.typeCId = item.ed_te_ID;
-        this.initTypeVideo();
+        this.typeId = item.ed_te_ID;
+        if(item.ed_te_ID==''){
+          this.childrenList = []
+        }
+        this.initData()
+
+        this.initTypeVideo(1);
       },
       goVideoSearch(item) {
-        this.$router.push({name: 'VideoSearch', params: {id: item.ed_vo_ID}})
+//        console.log(item)
+//        return
+        this.$router.push({name: 'VideoSearch', query: {id: item.ed_ss_ID}})
       },
     },
   }
@@ -157,14 +228,17 @@
 
   nav {
     font: 14px/40px "微软雅黑";
-    color: #454545;
+    /*color: #454545;*/
   }
 
   nav > a {
     float: left;
     color: #808080;
   }
-
+  nav > a >span{
+    margin: 0 10px;
+    color: #454545;
+  }
   nav > span {
     float: left;
     margin: 0 10px;
@@ -191,6 +265,12 @@
     float: left;
     margin: 0 16px;
     font: 13px/48px "微软雅黑";
+  }
+  .lastClass:hover{
+    color: #aaa;
+  }
+  .lastClass{
+    color: #aaa;
   }
 
   .classType > dd:hover,

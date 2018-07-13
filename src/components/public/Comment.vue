@@ -8,8 +8,8 @@
         </div>
         <div class="headerSearch">
           <div class="headerSearchIcon"></div>
-          <input type="text">
-          <a href="javascript:;">搜索</a>
+          <input type="text" v-model="searchValue">
+          <a href="javascript:;" @click="search">搜索</a>
         </div>
         <div class="positionPlace">
           <i></i>
@@ -32,10 +32,16 @@
       <div class="allNavTop">
         <div class="allNavTopContent clearfix">
           <div class="allNavRight">
-            <router-link to="/" class="active">首页</router-link>
-            <a href="javascript:;">我的课程</a>
-            <a href="javascript:;">公开课</a>
-            <a href="javascript:;">系统课程</a>
+            <!--<router-link to="/" class="active">首页</router-link>-->
+            <!--<a href="javascript:;" @click="goPersonalCenter">我的课程</a>-->
+            <!--<a href="javascript:;">我的课程</a>-->
+
+           <ul>
+             <li  @click="toBack(index)"   v-for="item,index in urlList"  :class="{active:index==n}">
+               <router-link :to="item.to" :key="index">{{item.name}}</router-link>
+             </li>
+           </ul>
+
           </div>
         </div>
       </div>
@@ -99,8 +105,20 @@
     computed: mapGetters([]),
     data() {
       return {
+        n:0,
+        urlList:[
+          {
+            name:'首页',
+            to:'/'
+          },
+          {
+            name:'我的课程',
+            to:'/Comment/personalCenter/userInformation'
+          }
+        ],
         userName: '',
         userInfo: {},
+        searchValue:'',//搜索
         showLogin: false,
         userID: '',
         password: '',
@@ -114,10 +132,6 @@
         this.password = Decrypt(localStorage.getItem('userPassword'))
         this.loginSubmit();
       }
-      if (!sessionStorage.getItem('userInfo')) {
-
-      }
-
       if (sessionStorage.getItem('userInfo')) {
         this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
         this.userName = this.userInfo.sm_ui_Name;
@@ -127,9 +141,24 @@
       this.getCurrentLocation();
     },
     methods: {
+      toTab(index){
+        let commentNavNum = JSON.parse(sessionStorage.getItem('indexNumber'));
+        sessionStorage.setItem('commentNavNum', index);
+        this.n = JSON.parse(sessionStorage.getItem('commentNavNum'));
+      },
+      toBack(index){
+        this.toTab(index)
+      },
+      //搜索
+      search(){
+        const {href} = this.$router.resolve({
+          name: 'VideoDetails',
+          query:{keyword:this.searchValue,id:0}
+        });
+        window.open(href, '_blank')
+      },
       //获取当前位置
       getCurrentLocation(){
-        console.log(sessionStorage.getItem('addComp'))
         this.currentLocaltion=JSON.parse(sessionStorage.getItem('addComp')).province+','+JSON.parse(sessionStorage.getItem('addComp')).city;
       },
       goLogin() {
@@ -307,22 +336,25 @@
     margin-right: 50px;
   }
 
-  .allNavRight > a {
+  .allNavRight ul li {
     float: left;
     padding: 0 35px;
     color: #fff;
   }
 
-  .allNavRight > a:hover {
+  .allNavRight  ul li:hover {
     background-color: #0059bd;
     border-bottom: 2px solid #efefef;
     height: 45px;
   }
 
-  .allNavRight > a.active {
+  .allNavRight  ul li.active {
     background-color: #0059bd;
     border-bottom: 2px solid #efefef;
     height: 45px;
+  }
+  .allNavRight ul li>a{
+    color: #fff;
   }
 
   /*头部结束*/

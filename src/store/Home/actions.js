@@ -157,15 +157,23 @@ export default {
   //初始化教育详情页
   initVideoDetails({commit}, data) {
     return new Promise(function (relove, reject) {
-      axios.post(getNewStr + '/HomeShow/SecondaryPage', JSON.stringify(data), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
+      postPromise(getNewStr + '/HomeShow/SecondaryPage', data)
+      // axios.post(getNewStr + '/HomeShow/SecondaryPage', JSON.stringify(data), {
+      //   headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded'
+      //   }
+      // })
         .then(data => {
-          var data = data.data;
+          var data = JSON.parse(data)
           if (Number(data.resultcode) == 200) {
-            commit('initVideoDetails', data.totalRows)
+            let arr = data.totalRows;
+            if(arr.length){
+              arr.unshift({
+                ed_te_ID:'',
+                ed_te_Name:'全部'
+              })
+            }
+            commit('initVideoDetails', arr)
             relove();
           } else {
             reject(data.resultcontent);
@@ -176,13 +184,14 @@ export default {
   //初始化教育详情视频
   initTypeVideo({commit}, data) {
     return new Promise(function (relove, reject) {
-      axios.post(getNewStr + '/HomeShow/SecondaryVode', JSON.stringify(data), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
+      postPromise(getNewStr + '/HomeShow/SecondaryVode', data)
+      // axios.post(getNewStr + '/HomeShow/SecondaryVode', JSON.stringify(data), {
+      //   headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded'
+      //   }
+      // })
         .then(data => {
-          var data = data.data;
+          var data = JSON.parse(data)
           if (Number(data.resultcode) == 200) {
             commit('initTypeVideo', data.data)
             relove(data.totalRows);
@@ -203,7 +212,7 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initVideoDeatils', data.totalRows[0]?data.totalRows[0]:{});
+            commit('initVideoDeatils', data.date[0]?data.date[0]:{});
             commit('initVideoAbout', data.FilmSeries);
             relove();
           } else {
