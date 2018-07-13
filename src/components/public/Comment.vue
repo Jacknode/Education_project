@@ -55,22 +55,22 @@
           <div class="footerLeft">
             <dl>
               <dt>新手指南</dt>
-              <dd><a href="javascript:;">如何注册</a></dd>
-              <dd><a href="javascript:;">如何选课</a></dd>
-              <dd><a href="javascript:;">如何听课</a></dd>
-              <dd><a href="javascript:;">如何听录播</a></dd>
-              <dd><a href="javascript:;">如何下载资料</a></dd>
+              <dd><router-link to="/404">如何注册</router-link></dd>
+              <dd><router-link to="/404">如何选课</router-link></dd>
+              <dd><router-link to="/404">如何听课</router-link></dd>
+              <dd><router-link to="/404">如何听录播</router-link></dd>
+              <dd><router-link to="/404">如何下载资料</router-link></dd>
             </dl>
             <dl>
               <dt>关于课程</dt>
-              <dd><a href="javascript:;">课程有效期</a></dd>
-              <dd><a href="javascript:;">课程退费</a></dd>
-              <dd><a href="javascript:;">如何兑换</a></dd>
+              <dd><router-link to="/404">课程有效期</router-link></dd>
+              <dd><router-link to="/404">课程退费</router-link></dd>
+              <dd><router-link to="/404">如何兑换</router-link></dd>
             </dl>
             <dl>
               <dt>常见问题</dt>
-              <dd><a href="javascript:;">收不到验证码</a></dd>
-              <dd><a href="javascript:;">账号问题</a></dd>
+              <dd><router-link to="/404">收不到验证码</router-link></dd>
+              <dd><router-link to="/404">账号问题</router-link></dd>
             </dl>
           </div>
           <span class="footerBorder"></span>
@@ -78,8 +78,8 @@
             <dl class="telWe">
               <dt>联系我们</dt>
               <dd class="phone clearfix"><i></i><strong>TEL : 0830-3632161</strong></dd>
-              <dd class="weChat clearfix"><i></i><a href="javascript:;">微信客服</a></dd>
-              <dd class="QQservice clearfix"><i></i><a href="javascript:;">QQ客服</a></dd>
+              <dd class="weChat clearfix"><i></i><router-link to="/404">微信客服</router-link></dd>
+              <dd class="QQservice clearfix"><i></i><router-link to="/404">QQ客服</router-link></dd>
             </dl>
             <dl class="aboutWe">
               <dt>关于我们</dt>
@@ -87,10 +87,13 @@
           </div>
         </div>
         <div class="footerBottom">
-          <strong>Copyright © 2018 Tencent. All Rights Reserved. 版权所有</strong><span>|</span><a
-          href="javascript:;">课堂服务协议</a><span>|</span><a href="javascript:;">站点地图</a><span>|</span><a
-          href="javascript:;">侵权投诉</a><span>|</span><a
-          href="javascript:;">问题反馈</a><span>|</span><a href="javascript:;">帮助</a>
+          <strong>Copyright © 2018 Tencent. All Rights Reserved. 版权所有</strong><span>|</span>
+          <router-link to="/404">课堂服务协议</router-link><span>|</span>
+          <router-link to="/404">站点地图</router-link><span>|</span>
+          <router-link to="/404">侵权投诉</router-link><span>|</span>
+          <router-link to="/404">问题反馈</router-link><span>|</span>
+          <router-link to="/404">问题反馈</router-link><span>|</span>
+          <router-link to="/404">帮助</router-link>
         </div>
       </div>
     </footer>

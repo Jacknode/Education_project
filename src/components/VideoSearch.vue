@@ -37,7 +37,7 @@
               <span> {{videoAboutList.length}}课时</span>
             </div>
             <div class="aboutMe clearfix">
-              <button>我要报名</button>
+              <button @click="apply(videoDeatilsObj.ed_vo_ID)">我要报名</button>
               <button>咨询课程</button>
             </div>
           </div>
@@ -148,6 +148,7 @@
               <div class="clearfix">
                 <span>{{item.ed_vo_Price}}</span>
                 <a href="javascript:;">开始学习</a>
+                <!--<router-link to="/components/OrderDetails">开始学习</router-link>-->
               </div>
             </li>
           </ul>
@@ -215,6 +216,11 @@
             })
           });
       },
+      apply(id){
+        let strId = id+'';
+        sessionStorage.setItem('webId', strId)
+        this.$router.push({name:'OrderDetails'})
+      },
       initData() {
         let SecondaryVodeDetails = {
           "loginUserID": "huileyou",  //惠乐游用户ID
@@ -223,7 +229,7 @@
           "operateUserName": "",//操作员名称
           "pcName": "",        //机器码
           "ed_vo_ID": this.videoId, //视频编号
-        }
+        };
         this.$store.dispatch('initVideoDeatils', SecondaryVodeDetails)
           .then(() => {
           }, err => {

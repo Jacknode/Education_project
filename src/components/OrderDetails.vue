@@ -14,8 +14,9 @@
             <strong>课程清单</strong>
             <ul class="payList">
               <li class="clearfix">
-                <strong>电商运营实操在线系统网课 玩转2017淘宝新规</strong>
-                <span> ¥1800.00</span>
+                <strong>{{addOption.data.ed_ss_IDName}}</strong>
+                <!--<span> ¥1800.00</span>-->
+                <span>{{addOption.data.ed_oi_Price}}</span>
               </li>
             </ul>
             <div class="payDetails clearfix">
@@ -25,7 +26,8 @@
               <div class="payMoneyDetails clearfix">
                 <div>
                   <strong>1个课程 :</strong>
-                  <span> ¥1800.00</span>
+                  <!--<span> ¥1800.00</span>-->
+                  <span>{{addOption.data.ed_oi_Price}}</span>
                 </div>
                 <div>
                   <strong>优惠 :</strong>
@@ -33,15 +35,16 @@
                 </div>
                 <div>
                   <strong>应付金额 :</strong>
-                  <span> ¥1800.00</span>
+                  <!--<span> ¥1800.00</span>-->
+                  <span>{{addOption.data.ed_oi_Price}}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="orderSubmit">
-          <div><span>当前账号为：</span><strong>18380900462</strong><em>下单后订单将与该账号绑定</em></div>
-          <a href="javascript:;">提交订单</a>
+          <div><span>当前账号为：</span><strong>{{addOption.data.ed_oi_AgentID}}</strong><em>下单后订单将与该账号绑定</em></div>
+          <a href="javascript:;" @click="submitOrder">提交订单</a>
         </div>
       </div>
     </div>
@@ -49,18 +52,81 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
-
+  import {getNewStr,postPromise} from '@/assets/js/public'
   export default {
     computed: mapGetters([]),
     data() {
-      return {}
+      return {
+        option:{
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "page": "1",
+          "rows": "10",
+          "ed_ss_ID": "",//系列编号
+          "ed_oi_UserID": "",//用户编码
+          "ed_oi_PayState": "",//支付状态（0未支付，1已支付)
+          "ed_oi_Confirm": "0",      //是否确认订单   （0未确认 ， 1已确认）
+        },
+        addOption:{
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "data": {
+            "ed_ss_ID": "",                  //添加订单的课程编码
+            "ed_ss_IDName": "中国",        //添加订单的产品名称
+            "ed_oi_UserIF": "1",          //用户编码
+            "ed_oi_AgentID": "1",        //供应商编码
+            "ed_oi_Price": "199",             //订单价格
+            // "ed_oi_Difference": "1",     //视频和系列的区分（0视频，1系列）
+            }
+        },
+      }
     },
     methods: {
       initData() {
       },
       search() {
         this.initData()
-      }
+      },
+      //查询订单
+      searchOrder(){
+        postPromise(getNewStr + '/EdOrderInfo/SelectS', this.option)
+          .then(data => {
+            var data = JSON.parse(data);
+            this.option=data.data[0];
+            console.log("option:",this.option)
+            if (Number(data.resultcode) == 200) {
+              alert(data.resultcontent)
+            } else {
+              alert(data.resultcontent)
+            }
+          })
+      },
+      //提交订单
+      submitOrder(){
+        postPromise(getNewStr + '/EdOrderInfo/Insert', this.addOption)
+          .then(data => {
+            var data = JSON.parse(data);
+            if (Number(data.resultcode) == 200) {
+              alert(data.resultcontent)
+//              this.$router.push({name:'Home'})
+            } else {
+              alert(data.resultcontent)
+            }
+          })
+      },
+    },
+    created(){
+      this.searchOrder();
+    },
+    mounted(){
+      var webId = sessionStorage.getItem('webId');
+      alert(webId)
     },
   }
 </script>
