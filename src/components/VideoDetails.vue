@@ -75,12 +75,14 @@
         typeName: '',
         typeCId: '',
         childrenName: '',
+        seriesId: '',
         activeIndex: 0,
         total: 0,
       }
     },
     created() {
       this.typeId = this.$route.query.id;
+      this.seriesId = this.$route.query.seriesId;
       this.typeName = this.$route.query.name;
       this.typeCId = this.$route.query.cid;
       this.childrenName = this.$route.query.cname;
@@ -101,7 +103,6 @@
           return false
         })
         this.typeCId = id;
-
         this.initData(id);
         this.initTypeVideo(1)
       },

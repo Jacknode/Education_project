@@ -28,10 +28,8 @@
             >
               <i></i>
               <strong>{{item.label}}</strong>
-              <a href="javascript:;"
-                 @click.stop="goSearch(item.children[0])">{{item.children[0] ? item.children[0].label : ''}}</a>
-              <a href="javascript:;"
-                 @click.stop="goSearch(item.children[1])">{{item.children[1] ? item.children[1].label : ''}}</a>
+              <a href="javascript:;" @click.stop="goSearch(item.children[0])">{{item.children[0] ? item.children[0].label : ''}}</a>
+              <a href="javascript:;" @click.stop="goSearch(item.children[1])">{{item.children[1] ? item.children[1].label : ''}}</a>
               <span></span>
             </li>
           </ul>
@@ -120,7 +118,7 @@
         <!--推荐详情-->
         <div class="RecommendDetail">
           <div class="RecommendMore">
-            <strong>课程推荐</strong>
+            <strong>视频推荐</strong>
             <router-link to="VideoSearch">更多&gt;&gt;</router-link>
           </div>
           <!--推荐内容-->

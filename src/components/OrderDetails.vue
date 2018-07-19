@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="orderSubmit">
-          <div><span>当前账号为：</span><strong>{{addOption.data.ed_oi_AgentID}}</strong><em>下单后订单将与该账号绑定</em></div>
+          <div><span>当前账号为：</span><strong>{{supplierId}}</strong><em>下单后订单将与该账号绑定</em></div>
           <a href="javascript:;" @click="submitOrder">提交订单</a>
         </div>
       </div>
@@ -57,19 +57,16 @@
     computed: mapGetters([]),
     data() {
       return {
-        option:{
-          "loginUserID": "huileyou",
-          "loginUserPass": "123",
-          "operateUserID": "",
-          "operateUserName": "",
-          "pcName": "",
-          "page": "1",
-          "rows": "10",
-          "ed_ss_ID": "",//系列编号
-          "ed_oi_UserID": "",//用户编码
-          "ed_oi_PayState": "",//支付状态（0未支付，1已支付)
-          "ed_oi_Confirm": "0",      //是否确认订单   （0未确认 ， 1已确认）
-        },
+        //供应商编码
+        supplierId:'',
+        //用户信息
+        userInfo:'',
+        //用户编号
+        orderUserId:'',
+        //系列编号
+        seriesId:'',
+        //作者编号
+        authorId:'',
         addOption:{
           "loginUserID": "huileyou",
           "loginUserPass": "123",
@@ -77,31 +74,67 @@
           "operateUserName": "",
           "pcName": "",
           "data": {
-            "ed_ss_ID": "",                  //添加订单的课程编码
-            "ed_ss_IDName": "中国",        //添加订单的产品名称
-            "ed_oi_UserIF": "1",          //用户编码
-            "ed_oi_AgentID": "1",        //供应商编码
-            "ed_oi_Price": "199",             //订单价格
+            "ed_ss_ID": "",                  //添加订单的系列编码
+            "ed_ss_IDName": "",        //添加订单的产品名称
+            "ed_oi_UserIF": "",          //用户编码
+            "ed_oi_AgentID": "",        //供应商编码
+            "ed_oi_Price": "",             //订单价格
             // "ed_oi_Difference": "1",     //视频和系列的区分（0视频，1系列）
-            }
+          }
+        },
+        addOption1:{
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "data": {
+            "ed_ss_ID": "",                  //添加订单的系列编码
+            "ed_ss_IDName": "测试添加订单的产品名称",        //添加订单的产品名称
+            "ed_oi_UserIF": "14",          //用户编码
+            "ed_oi_AgentID": "1",        //供应商编码
+            "ed_oi_Price": "100",             //订单价格
+            // "ed_oi_Difference": "1",     //视频和系列的区分（0视频，1系列）
+          }
         },
       }
     },
     methods: {
+      //初始化订单
       initData() {
-      },
-      search() {
-        this.initData()
-      },
-      //查询订单
-      searchOrder(){
-        postPromise(getNewStr + '/EdOrderInfo/SelectS', this.option)
+        this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
+        //初始化供应商编码
+        this.supplierId=this.userInfo.sm_ui_UserCode;
+        //用户编码
+        this.orderUserId=this.userInfo.sm_ui_ID;
+       let option={
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+//          "page": "1",
+//          "rows": "10",
+          "ed_ss_ID": this.$route.query.seriesId?this.$route.query.seriesId:"",//系列编号
+//          "ed_ss_ID": "20",//系列编号
+          "ed_oi_UserID": this.userInfo.sm_ui_ID?this.userInfo.sm_ui_ID:"",//用户编码
+//          "ed_oi_UserID": "14",//用户编码
+          "ed_oi_PayState": '',//支付状态（0未支付，1已支付)
+          "ed_oi_Confirm": '',      //是否确认订单   （0未确认 ， 1已确认）
+        };
+       console.log("查询订单option:",option)
+        postPromise(getNewStr + '/EdOrderInfo/SelectS',option)
           .then(data => {
             var data = JSON.parse(data);
-            this.option=data.data[0];
-            console.log("option:",this.option)
+            let orderObj=data.data[0];
             if (Number(data.resultcode) == 200) {
-              alert(data.resultcontent)
+              console.log("查询订单返回结果 orderObj:",orderObj)
+              this.addOption.data.ed_ss_ID=orderObj.ed_ss_ID;
+              this.addOption.data.ed_ss_IDName=orderObj.ed_ss_IDName;
+              this.addOption.data.ed_oi_UserIF=this.orderUserId;
+              this.addOption.data.ed_oi_AgentID=orderObj.ed_oi_UserIF;
+              this.addOption.data.ed_oi_Price=orderObj.ed_oi_Price;
+//              alert(data.resultcontent)
             } else {
               alert(data.resultcontent)
             }
@@ -114,7 +147,7 @@
             var data = JSON.parse(data);
             if (Number(data.resultcode) == 200) {
               alert(data.resultcontent)
-//              this.$router.push({name:'Home'})
+              this.$router.push({name:'PayOrder'})
             } else {
               alert(data.resultcontent)
             }
@@ -122,11 +155,11 @@
       },
     },
     created(){
-      this.searchOrder();
+      this.initData()
     },
     mounted(){
-      var webId = sessionStorage.getItem('webId');
-      alert(webId)
+      this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
+      this.seriesId=this.$route.query.seriesId;
     },
   }
 </script>

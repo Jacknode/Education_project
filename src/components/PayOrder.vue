@@ -6,8 +6,9 @@
         <strong><i></i>订单提交成功！请您尽快支付！</strong>
         <div class="clearfix">
           <span>当前账号为: </span>
-          <strong>18380900462</strong>
-          <a href="javascript:;">查看我的订单</a>
+          <strong>{{account}}</strong>
+          <!--<a href="javascript:;">查看我的订单</a>-->
+          <router-link to="OrderDetails">查看我的订单</router-link>
         </div>
       </div>
       <div class="payTypeList clearfix">
@@ -27,7 +28,12 @@
   export default {
     computed: mapGetters([]),
     data() {
-      return {}
+      return {
+        //当前账号
+        account:'',
+        //用户信息
+        userInfo:'',
+      }
     },
     methods: {
       initData() {
@@ -35,6 +41,10 @@
       search() {
         this.initData()
       }
+    },
+    mounted(){
+      this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
+      this.account=this.userInfo.sm_ui_Name;
     },
   }
 </script>

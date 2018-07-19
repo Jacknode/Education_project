@@ -3,7 +3,8 @@
     <header>
       <div class="thisVideoWrap">
         <nav class="clearfix">
-          <a href="javascript:;">全部课程</a>
+          <!--<a href="javascript:;">全部课程</a>-->
+          <router-link to="home">全部课程</router-link>
           <span>&gt;</span>
           <a href="javascript:;">软件技术</a>
           <span>&gt;</span>
@@ -37,7 +38,7 @@
               <span> {{videoAboutList.length}}课时</span>
             </div>
             <div class="aboutMe clearfix">
-              <button @click="apply(videoDeatilsObj.ed_vo_ID)">我要报名</button>
+              <button @click="apply(videoDeatilsObj)">我要报名</button>
               <button>咨询课程</button>
             </div>
           </div>
@@ -83,10 +84,10 @@
               <strong class="classType">课程目录</strong>
               <dl>
                 <dd class="clearfix" v-for="item,index in videoAboutList">
-                  <strong>{{item.ed_vo_VedioName}}</strong>
+                  <strong>{{item.ed_vo_Title}}</strong>
                   <span></span>
                   <i></i>
-                  <em>{{item.ed_vo_VedioTime ? item.ed_vo_VedioTime : '' | getTiem}}</em>
+                  <em>{{item.ed_vo_Time ? item.ed_vo_Time : '' | getTiem}}</em>
                   <b></b>
                   <a href="JavaScript:;" @click="goPlayVideo(item)">播放视频</a>
                 </dd>
@@ -169,6 +170,8 @@
     ]),
     data() {
       return {
+        //用户信息
+        userInfo:'',
         radio: '1',
         starValue: 4,
         total: 0,
@@ -216,10 +219,16 @@
             })
           });
       },
-      apply(id){
-        let strId = id+'';
-        sessionStorage.setItem('webId', strId)
-        this.$router.push({name:'OrderDetails'})
+      //我要报名
+      apply(videoDeatilsObj){
+        const {href} = this.$router.resolve({
+          name: 'OrderDetails',
+          query: {id:videoDeatilsObj.ed_vo_ID,seriesId:videoDeatilsObj.ed_vo_SeriesID,}
+        });
+        if(this.userInfo){
+           window.open(href, '_blank');
+        };
+
       },
       initData() {
         let SecondaryVodeDetails = {
@@ -287,10 +296,11 @@
       }
     },
     mounted() {
-      let title = JSON.parse(sessionStorage.getItem('jumpTitle')).ed_re_Name;
-      if(title){
-        document.title = title;
-      };
+      this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
+//      let title = JSON.parse(sessionStorage.getItem('jumpTitle')).ed_re_Name;
+//      if(title){
+//        document.title = title;
+//      };
     },
   }
 </script>
