@@ -340,7 +340,6 @@
       },
       //去播放视频
       goPlayVideo(item) {
-        console.log(item)
         const {href} = this.$router.resolve({
           name: 'VideoSearch',
           query: {id:item.ed_vo_ID}
@@ -411,11 +410,9 @@
           })
       },
       imageChangeClass(item){
-        console.log(item.ed_re_PropertiesID)
       }
     },
     mounted() {
-//        console.log(this.homeVideoList)
         let jumpTitle='';
         sessionStorage.setItem('jumpTitle',jumpTitle);
     },

@@ -201,8 +201,8 @@ export default {
         })
     })
   },
-  //初始化视频详情
-  initVideoDeatils({commit}, data) {
+  //初始化课程信息
+  initCourseIfo({commit}, data) {
     return new Promise(function (relove, reject) {
       axios.post(getNewStr + '/HomeShow/SecondaryVodeDetails', JSON.stringify(data), {
         headers: {
@@ -212,8 +212,13 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initVideoDeatils', data.date[0]?data.date[0]:{});
-            commit('initVideoAbout', data.FilmSeries);
+            console.log("sucess",data)
+            //课程主体信息
+            commit('initCourseMainIfo', data.video[0]);
+            //课程视频信息
+            //课程推荐信息
+            // commit('initCourseIfo', data.date[0]?data.date[0]:{});
+            // commit('initVideoAbout', data.FilmSeries);
             relove();
           } else {
             reject(data.resultcontent);

@@ -41,8 +41,8 @@ export default {
   initTypeVideo(state, data) {
     state.typeVideoList = data;
   },
-  initVideoDeatils(state, obj) {
-    state.videoDeatilsObj = obj;
+  initCourseMainIfo(state, obj) {
+    state.courseMainIfoObj = obj;
   },
   initVideoAbout(state, data) {
     state.videoAboutList = data;

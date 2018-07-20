@@ -13,7 +13,7 @@ export default {
   recommendDataList: state => state.recommendDataList,
   videoDetailsList: state => state.videoDetailsList,
   typeVideoList: state => state.typeVideoList,
-  videoDeatilsObj: state => state.videoDeatilsObj,
+  courseMainIfoObj: state => state.courseMainIfoObj,
   videoAboutList: state => state.videoAboutList,
   videoCommentList: state => state.videoCommentList,
 

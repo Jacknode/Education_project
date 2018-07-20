@@ -14,16 +14,16 @@
         </nav>
         <div class="videlAndInformation clearfix">
           <div class="videoShow">
-            <img v-lazy="videoDeatilsObj.ed_vo_ImageURL" width="610" height="400">
-            <div class="videoIcon" @click="goPlay(videoDeatilsObj)"></div>
+            <img v-lazy="courseMainIfoObj.ed_vo_ImageURL" width="610" height="400">
+            <div class="videoIcon" @click="goPlay(courseMainIfoObj)"></div>
             <div class="videoTeacher">
               <div class="headIcon"></div>
               <strong>李强</strong>
-              <span>{{videoDeatilsObj.ed_vo_Title}}</span>
+              <span>{{courseMainIfoObj.ed_vo_Title}}</span>
             </div>
           </div>
           <div class="informationShow">
-            <h4 @click="goPlay(videoDeatilsObj)">{{videoDeatilsObj.ed_vo_Title}}</h4>
+            <h4 @click="goPlay(courseMainIfoObj)">{{courseMainIfoObj.ed_vo_Title}}</h4>
             <div class="videoOperation clearfix">
               <strong>326 人学习</strong>
               <a href="javascript:;" class="share"><i></i>分享</a>
@@ -31,14 +31,14 @@
             </div>
             <div class="price clearfix">
               <strong>价格</strong>
-              <span>￥<em>{{videoDeatilsObj.ed_vo_Price}}.00</em></span>
+              <span>￥<em>{{courseMainIfoObj.ed_vo_Price}}.00</em></span>
             </div>
             <div class="classTime">
               <strong>课程安排 :</strong>
-              <span> {{videoAboutList.length}}课时</span>
+              <span> {{Number(courseMainIfoObj.ed_vo_Time)}}课时</span>
             </div>
             <div class="aboutMe clearfix">
-              <button @click="apply(videoDeatilsObj)">我要报名</button>
+              <button @click="apply(courseMainIfoObj)">我要报名</button>
               <button>咨询课程</button>
             </div>
           </div>
@@ -63,19 +63,19 @@
               <ul class="classRecommendList clearfix">
                 <li>
                   <strong class="addEm">简介</strong><em>:</em>
-                  <span>{{videoDeatilsObj.ed_vo_Introduce}}</span>
+                  <span>{{courseMainIfoObj.ed_vo_Introduce}}</span>
                 </li>
                 <li>
                   <strong>学习目标 :</strong>
-                  <span>{{videoDeatilsObj.ed_vo_Target}}</span>
+                  <span>{{courseMainIfoObj.ed_vo_Target}}</span>
                 </li>
                 <li>
                   <strong>适合人群 :</strong>
-                  <span>{{videoDeatilsObj.ed_vo_Crowd}}</span>
+                  <span>{{courseMainIfoObj.ed_vo_Crowd}}</span>
                 </li>
                 <li>
                   <strong>详细介绍 :</strong>
-                  <span>{{videoDeatilsObj.ed_vo_Remark}}</span>
+                  <span>{{courseMainIfoObj.ed_vo_Remark}}</span>
                 </li>
               </ul>
             </div>
@@ -163,7 +163,7 @@
 
   export default {
     computed: mapGetters([
-      'videoDeatilsObj',
+      'courseMainIfoObj',
       'videoAboutList',
       'courseRecommendList',//课程推荐列表
       'videoCommentList'
@@ -220,10 +220,10 @@
           });
       },
       //我要报名
-      apply(videoDeatilsObj){
+      apply(courseMainIfoObj){
         const {href} = this.$router.resolve({
           name: 'OrderDetails',
-          query: {id:videoDeatilsObj.ed_vo_ID,seriesId:videoDeatilsObj.ed_vo_SeriesID,}
+          query: {id:courseMainIfoObj.ed_vo_ID,seriesId:courseMainIfoObj.ed_vo_SeriesID,}
         });
         if(this.userInfo){
            window.open(href, '_blank');
@@ -232,7 +232,7 @@
       },
       //初始化课程信息
       initData() {
-        let SecondaryVodeDetails = {
+        let option = {
           "loginUserID": "huileyou",  //惠乐游用户ID
           "loginUserPass": "123",  //惠乐游用户密码
           "operateUserID": "",//操作员编码
@@ -240,14 +240,14 @@
           "pcName": "",        //机器码
           "ed_vo_ID": this.videoId, //视频编号
         };
-/*        this.$store.dispatch('initVideoDeatils', SecondaryVodeDetails)
+        this.$store.dispatch('initCourseIfo', option)
           .then(() => {
           }, err => {
             this.$notify({
               message: err,
               type: 'error'
             })
-          })*/
+          })
       },
       initVideoComment(num) {
         let selectEdScoreInfo = {
@@ -301,7 +301,6 @@
       this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
       //获取课程网页标题
       let title = JSON.parse(sessionStorage.getItem('jumpTitle')).ed_vo_Title;
-      console.log(title)
       if(title){
         document.title = title;
       };
