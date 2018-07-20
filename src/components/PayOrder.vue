@@ -8,7 +8,8 @@
           <span>当前账号为: </span>
           <strong>{{account}}</strong>
           <!--<a href="javascript:;">查看我的订单</a>-->
-          <router-link to="OrderDetails">查看我的订单</router-link>
+          <!--<router-link to="OrderDetails">查看我的订单</router-link>-->
+          <router-link  :to="{path:'orderDetails', query:{seriesId:seriesId}}">查看我的订单</router-link>
         </div>
       </div>
       <div class="payTypeList clearfix">
@@ -29,6 +30,8 @@
     computed: mapGetters([]),
     data() {
       return {
+        //系列编号
+        seriesId:'2',
         //当前账号
         account:'',
         //用户信息

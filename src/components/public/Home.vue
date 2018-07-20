@@ -118,14 +118,14 @@
         <!--推荐详情-->
         <div class="RecommendDetail">
           <div class="RecommendMore">
-            <strong>视频推荐</strong>
+            <strong>课程推荐</strong>
             <router-link to="VideoSearch">更多&gt;&gt;</router-link>
           </div>
           <!--推荐内容-->
           <ul class="systemCC clearfix">
             <li v-for="item,index in homeVideoList" @click="goPlayVideo(item)">
-              <img v-lazy="item.ed_re_SeriesImageURL" width="260" height="190">
-              <strong>{{item.ed_re_Name}}</strong>
+              <img v-lazy="item.ed_vo_ImageURL" width="260" height="190">
+              <strong>{{item.ed_vo_Title}}</strong>
               <div class="clearfix">
                 <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
                 <span v-if="item.ed_vo_Price != 0" style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
@@ -340,9 +340,10 @@
       },
       //去播放视频
       goPlayVideo(item) {
+        console.log(item)
         const {href} = this.$router.resolve({
           name: 'VideoSearch',
-          query: {id:item.ed_re_ID}
+          query: {id:item.ed_vo_ID}
         });
         window.open(href, '_blank');
         //存储title

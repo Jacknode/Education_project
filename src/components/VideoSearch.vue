@@ -230,6 +230,7 @@
         };
 
       },
+      //初始化课程信息
       initData() {
         let SecondaryVodeDetails = {
           "loginUserID": "huileyou",  //惠乐游用户ID
@@ -239,14 +240,14 @@
           "pcName": "",        //机器码
           "ed_vo_ID": this.videoId, //视频编号
         };
-        this.$store.dispatch('initVideoDeatils', SecondaryVodeDetails)
+/*        this.$store.dispatch('initVideoDeatils', SecondaryVodeDetails)
           .then(() => {
           }, err => {
             this.$notify({
               message: err,
               type: 'error'
             })
-          })
+          })*/
       },
       initVideoComment(num) {
         let selectEdScoreInfo = {
@@ -296,11 +297,14 @@
       }
     },
     mounted() {
+      //获取用户信息
       this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
-//      let title = JSON.parse(sessionStorage.getItem('jumpTitle')).ed_re_Name;
-//      if(title){
-//        document.title = title;
-//      };
+      //获取课程网页标题
+      let title = JSON.parse(sessionStorage.getItem('jumpTitle')).ed_vo_Title;
+      console.log(title)
+      if(title){
+        document.title = title;
+      };
     },
   }
 </script>

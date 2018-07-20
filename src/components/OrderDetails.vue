@@ -147,7 +147,36 @@
             var data = JSON.parse(data);
             if (Number(data.resultcode) == 200) {
               alert(data.resultcontent)
-              this.$router.push({name:'PayOrder'})
+              this.$router.push({name:'PayOrder',query:{seriesId:20}})
+
+//              const {href} = this.$router.resolve({
+//                name:"PayOrder",
+//                query:{seriesId:20},
+//              });
+//              window.open(href,"_blank");
+            } else {
+              alert(data.resultcontent)
+              this.delete("28");
+            }
+          })
+      },
+      //删除订单
+      delete(id){
+        let deleteOption = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "data": {
+            "ed_oi_ID": id,//标识
+          }
+        };
+        postPromise(getNewStr + '/EdOrderInfo/Delete', deleteOption)
+          .then(data => {
+            var data = JSON.parse(data);
+            if (Number(data.resultcode) == 200) {
+              alert(data.resultcontent)
             } else {
               alert(data.resultcontent)
             }
