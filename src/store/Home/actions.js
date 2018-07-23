@@ -201,6 +201,23 @@ export default {
         })
     })
   },
+  //初始化订单详情
+  orderDetailAction({commit}, data){
+    axios.post(getNewStr + '/EdOrderInfo/SelectS', JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    })
+      .then(data => {
+        var data = data.data;
+        if (Number(data.resultcode) == 200) {
+          commit('orderDetailAction', data.data);
+          // relove(data.totalrows);
+        } else {
+          reject(data.resultcontent);
+        }
+      })
+  },
   //初始化课程信息
   initCourseIfo({commit}, data) {
     return new Promise(function (relove, reject) {
@@ -215,6 +232,10 @@ export default {
             console.log("sucess",data)
             //课程主体信息
             commit('initCourseMainIfo', data.video[0]);
+            //课程目录
+            commit('initCourseContents', data.data);
+            //课程相关
+            commit('initCourseAbout', data.correlation);
             //课程视频信息
             //课程推荐信息
             // commit('initCourseIfo', data.date[0]?data.date[0]:{});

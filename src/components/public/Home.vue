@@ -340,9 +340,13 @@
       },
       //去播放视频
       goPlayVideo(item) {
+        console.log(item)
         const {href} = this.$router.resolve({
           name: 'VideoSearch',
-          query: {id:item.ed_vo_ID}
+          query: {
+              id:item.ed_vo_ID,
+              title:item.ed_vo_Title
+          }
         });
         window.open(href, '_blank');
         //存储title
@@ -413,8 +417,8 @@
       }
     },
     mounted() {
-        let jumpTitle='';
-        sessionStorage.setItem('jumpTitle',jumpTitle);
+//        let jumpTitle='';
+//        sessionStorage.setItem('jumpTitle',jumpTitle);
     },
   }
 </script>

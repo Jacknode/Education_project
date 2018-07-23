@@ -14,9 +14,8 @@
             <strong>课程清单</strong>
             <ul class="payList">
               <li class="clearfix">
-                <strong>{{addOption.data.ed_ss_IDName}}</strong>
-                <!--<span> ¥1800.00</span>-->
-                <span>{{addOption.data.ed_oi_Price}}</span>
+                <strong>课程名称 :</strong>
+                <span>{{orderDetail[0].ed_ss_IDName}}</span>
               </li>
             </ul>
             <div class="payDetails clearfix">
@@ -26,8 +25,7 @@
               <div class="payMoneyDetails clearfix">
                 <div>
                   <strong>1个课程 :</strong>
-                  <!--<span> ¥1800.00</span>-->
-                  <span>{{addOption.data.ed_oi_Price}}</span>
+                  <span>¥{{orderDetail[0].ed_oi_Price}}</span>
                 </div>
                 <div>
                   <strong>优惠 :</strong>
@@ -35,8 +33,7 @@
                 </div>
                 <div>
                   <strong>应付金额 :</strong>
-                  <!--<span> ¥1800.00</span>-->
-                  <span>{{addOption.data.ed_oi_Price}}</span>
+                  <span>¥{{orderDetail[0].ed_oi_Price}}</span>
                 </div>
               </div>
             </div>
@@ -54,7 +51,9 @@
   import {mapGetters} from 'vuex'
   import {getNewStr,postPromise} from '@/assets/js/public'
   export default {
-    computed: mapGetters([]),
+    computed: mapGetters([
+      'orderDetail',
+    ]),
     data() {
       return {
         //供应商编码
@@ -74,27 +73,8 @@
           "operateUserName": "",
           "pcName": "",
           "data": {
-            "ed_ss_ID": "",                  //添加订单的系列编码
-            "ed_ss_IDName": "",        //添加订单的产品名称
-            "ed_oi_UserIF": "",          //用户编码
-            "ed_oi_AgentID": "",        //供应商编码
-            "ed_oi_Price": "",             //订单价格
-            // "ed_oi_Difference": "1",     //视频和系列的区分（0视频，1系列）
-          }
-        },
-        addOption1:{
-          "loginUserID": "huileyou",
-          "loginUserPass": "123",
-          "operateUserID": "",
-          "operateUserName": "",
-          "pcName": "",
-          "data": {
-            "ed_ss_ID": "",                  //添加订单的系列编码
-            "ed_ss_IDName": "测试添加订单的产品名称",        //添加订单的产品名称
-            "ed_oi_UserIF": "14",          //用户编码
-            "ed_oi_AgentID": "1",        //供应商编码
-            "ed_oi_Price": "100",             //订单价格
-            // "ed_oi_Difference": "1",     //视频和系列的区分（0视频，1系列）
+            "ed_ss_ID": "20",                  //添加订单的课程编码
+            "ed_oi_UserIF": "22",          //用户编码
           }
         },
       }
@@ -113,32 +93,28 @@
           "operateUserID": "",
           "operateUserName": "",
           "pcName": "",
-//          "page": "1",
-//          "rows": "10",
           "ed_ss_ID": this.$route.query.seriesId?this.$route.query.seriesId:"",//系列编号
-//          "ed_ss_ID": "20",//系列编号
-          "ed_oi_UserID": this.userInfo.sm_ui_ID?this.userInfo.sm_ui_ID:"",//用户编码
-//          "ed_oi_UserID": "14",//用户编码
+          "ed_oi_UserID": "",//用户编码
           "ed_oi_PayState": '',//支付状态（0未支付，1已支付)
-          "ed_oi_Confirm": '',      //是否确认订单   （0未确认 ， 1已确认）
         };
        console.log("查询订单option:",option)
-        postPromise(getNewStr + '/EdOrderInfo/SelectS',option)
+        this.$store.dispatch("orderDetailAction",option)
+          .then(()=>{},()=>{});
+/*        postPromise(getNewStr + '/EdOrderInfo/SelectS',option)
           .then(data => {
             var data = JSON.parse(data);
+            console.log("allData:",data);
             let orderObj=data.data[0];
             if (Number(data.resultcode) == 200) {
               console.log("查询订单返回结果 orderObj:",orderObj)
-              this.addOption.data.ed_ss_ID=orderObj.ed_ss_ID;
-              this.addOption.data.ed_ss_IDName=orderObj.ed_ss_IDName;
-              this.addOption.data.ed_oi_UserIF=this.orderUserId;
-              this.addOption.data.ed_oi_AgentID=orderObj.ed_oi_UserIF;
-              this.addOption.data.ed_oi_Price=orderObj.ed_oi_Price;
+//              this.addOption.data.ed_ss_ID=orderObj.ed_ss_ID;
+//              this.addOption.data.ed_oi_UserIF=this.orderUserId;
+//              this.addOption.data.ed_oi_Price=orderObj.ed_oi_Price;
 //              alert(data.resultcontent)
             } else {
               alert(data.resultcontent)
             }
-          })
+          })*/
       },
       //提交订单
       submitOrder(){
@@ -146,8 +122,8 @@
           .then(data => {
             var data = JSON.parse(data);
             if (Number(data.resultcode) == 200) {
-              alert(data.resultcontent)
-              this.$router.push({name:'PayOrder',query:{seriesId:20}})
+//              alert(data.resultcontent)
+              this.$router.push({name:'PayOrder',query:{seriesId:this.seriesId}})
 
 //              const {href} = this.$router.resolve({
 //                name:"PayOrder",
@@ -156,7 +132,9 @@
 //              window.open(href,"_blank");
             } else {
               alert(data.resultcontent)
-              this.delete("28");
+              if(data.resultcontent=="当前订单已存在,即将跳转到个人中心支付"){
+                this.$router.push({name:"PersonalCenter"})
+              };
             }
           })
       },
@@ -185,6 +163,8 @@
     },
     created(){
       this.initData()
+//      this.delete("20");
+
     },
     mounted(){
       this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));

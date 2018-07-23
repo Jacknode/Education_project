@@ -83,9 +83,9 @@
             <div class="classMeun">
               <strong class="classType">课程目录</strong>
               <dl>
-                <dd class="clearfix" v-for="item,index in videoAboutList">
+                <dd class="clearfix" v-for="item,index in courseContentsList">
                   <strong>{{item.ed_vo_Title}}</strong>
-                  <span></span>
+                  <span></span>2lqzz
                   <i></i>
                   <em>{{item.ed_vo_Time ? item.ed_vo_Time : '' | getTiem}}</em>
                   <b></b>
@@ -143,11 +143,11 @@
         <div class="secRecommend">
           <strong>课程推荐</strong>
           <ul class="recommendList">
-            <li v-for="item in courseRecommendList"  @click="goPlayVideo(item)">
-              <img src="" v-show="item.ed_re_SeriesImageURL" v-lazy="item.ed_re_SeriesImageURL" width="230" height="160">
-              <strong>{{item.ed_re_Name}}</strong>
+            <li v-for="item in courseAboutList"  @click="goPlayVideo(item)">
+              <img src="" v-show="item.ed_vo_ImageURL" v-lazy="item.ed_vo_ImageURL" width="230" height="160">
+              <strong>{{item.ed_vo_Title}}</strong>
               <div class="clearfix">
-                <span>{{item.ed_vo_Price}}</span>
+                <span>{{item.ed_ss_Price}}</span>
                 <a href="javascript:;">开始学习</a>
                 <!--<router-link to="/components/OrderDetails">开始学习</router-link>-->
               </div>
@@ -166,6 +166,8 @@
       'courseMainIfoObj',
       'videoAboutList',
       'courseRecommendList',//课程推荐列表
+      'courseContentsList',//课程目录
+      'courseAboutList',//课程相关推荐
       'videoCommentList'
     ]),
     data() {
@@ -223,7 +225,8 @@
       apply(courseMainIfoObj){
         const {href} = this.$router.resolve({
           name: 'OrderDetails',
-          query: {id:courseMainIfoObj.ed_vo_ID,seriesId:courseMainIfoObj.ed_vo_SeriesID,}
+//          query: {id:courseMainIfoObj.ed_vo_ID,seriesId:courseMainIfoObj.ed_ss_ID,}
+          query: {seriesId:courseMainIfoObj.ed_ss_ID,}
         });
         if(this.userInfo){
            window.open(href, '_blank');
@@ -300,9 +303,8 @@
       //获取用户信息
       this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
       //获取课程网页标题
-      let title = JSON.parse(sessionStorage.getItem('jumpTitle')).ed_vo_Title;
-      if(title){
-        document.title = title;
+      if(this.$route.query.title){
+        document.title=this.$route.query.title;
       };
     },
   }

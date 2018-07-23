@@ -17,6 +17,9 @@ export default {
   videoDetailsList: [],//教育详情页
   typeVideoList: [],//初始化教育详情视频
   courseMainIfoObj: {},//课程的主体信息
+  courseContentsList: [],//课程目录
+  courseAboutList: [],//课程相关(推荐)
   videoAboutList: [],//关于视频
   videoCommentList: [],//当前视频评论
+  orderDetail: [],//订单详情
 }

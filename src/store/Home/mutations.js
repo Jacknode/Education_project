@@ -44,6 +44,15 @@ export default {
   initCourseMainIfo(state, obj) {
     state.courseMainIfoObj = obj;
   },
+  initCourseContents(state, obj) {
+    state.courseContentsList = obj;
+  },
+  initCourseAbout(state, obj) {
+    state.courseAboutList = obj;
+  },
+  orderDetailAction(state, obj) {
+    state.orderDetail = obj;
+  },
   initVideoAbout(state, data) {
     state.videoAboutList = data;
   },
