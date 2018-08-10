@@ -6,7 +6,7 @@
       <div class="navBigBox">
         <div class="bigImageBox">
           <ul class="bigImageList clearfix" id="bigImageList" ref="bigImageList">
-            <li v-for="item,index in homePictureList" @click="imageChangeClass(item)"><img v-lazy="item.ed_re_SeriesImageURL"></li>
+            <li v-for="item,index in homePictureList" @click="imageChangeClass(item)"><img v-lazy="item.ed_ss_SeriesImageURL"></li>
           </ul>
           <div class="imgNav" id="imgNav">
             <a href="javascript:;"
@@ -109,8 +109,6 @@
           </div>
         </div>
       </div>
-
-
       <!--课程推荐-->
       <div class="RecommendClass">
         <!--模块线-->
@@ -124,7 +122,7 @@
           <!--推荐内容-->
           <ul class="systemCC clearfix">
             <li v-for="item,index in homeVideoList" @click="goPlayVideo(item)">
-              <img v-lazy="item.ed_vo_ImageURL" width="260" height="190">
+              <img v-show="item.ed_vo_ImageURL" v-lazy="item.ed_vo_ImageURL" width="260" height="190">
               <strong>{{item.ed_vo_Title}}</strong>
               <div class="clearfix">
                 <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
@@ -152,7 +150,7 @@
         </div>
         <ul class="systemCC clearfix">
           <li v-for="item,index in homeRecommendList" @click="goPlayVideo(item)">
-            <img v-lazy="item.ed_re_SeriesImageURL" width="260" height="190">
+            <img v-show="item.ed_re_SeriesImageURL" v-lazy="item.ed_re_SeriesImageURL" width="260" height="190">
             <strong>{{item.ed_re_Name}}</strong>
             <div class="clearfix">
               <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
@@ -180,7 +178,7 @@
         </div>
         <ul class="systemCC clearfix">
           <li v-for="item,index in classList" @click="goPlaySeriesVideo(item)">
-            <img v-lazy="item.ed_vo_ImageURL" width="260" height="190">
+            <img v-show="item.ed_vo_ImageURL" v-lazy="item.ed_vo_ImageURL" width="260" height="190">
             <strong>{{item.ed_vo_Title}}</strong>
             <div class="clearfix">
               <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
@@ -189,7 +187,7 @@
             </div>
           </li>
         </ul>
-      </div>
+      </div>-->
 
 
     </section>
@@ -373,14 +371,14 @@
             cname: item.label
           }
         });
-        window.open(href, '_blank')
+        window.open(href, '_blank');
       },
       //退出登录
       outLogin() {
         sessionStorage.removeItem('userInfo');
-        localStorage.removeItem('userName')
-        localStorage.removeItem('userPassword')
-        window.location.reload()
+        localStorage.removeItem('userName');
+        localStorage.removeItem('userPassword');
+        window.location.reload();
       },
       //去个人中心
       goPersonalCenter() {
@@ -399,7 +397,7 @@
           "pcName": "",
           "userID": this.userID,//用户编码
           "password": this.password//密码
-        }
+        };
         this.$store.dispatch('loginSubmit', userLogin)
           .then(data => {
             this.userInfo = data.data;

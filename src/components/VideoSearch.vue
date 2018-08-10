@@ -228,8 +228,18 @@
 //          query: {id:courseMainIfoObj.ed_vo_ID,seriesId:courseMainIfoObj.ed_ss_ID,}
           query: {seriesId:courseMainIfoObj.ed_ss_ID,}
         });
+        const {login} = this.$router.resolve({
+          name: 'Login',
+//          query: {id:courseMainIfoObj.ed_vo_ID,seriesId:courseMainIfoObj.ed_ss_ID,}
+//          query: {seriesId:courseMainIfoObj.ed_ss_ID,}
+        });
+        //用户信息存在时跳转订单页面,不存在时跳转到
         if(this.userInfo){
            window.open(href, '_blank');
+        }else{
+          this.$router.push({
+            name: 'Login',
+          })
         };
 
       },
@@ -265,7 +275,7 @@
           "ed_se_VedioID": this.videoId,//视频编号
           "ed_se_UserID": "",//用户编码
           "ed_se_Score": "",//分数
-        }
+        };
         this.$store.dispatch('initVideoComment', selectEdScoreInfo)
           .then(total => {
             this.total = Number(total);

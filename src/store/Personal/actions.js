@@ -1,7 +1,58 @@
 import {getNewStr, postPromise} from '@/assets/js/public'
 
 export default {
-//初始化用户信息
+  //微信支付生成二维码字符串
+  payAction({commit}, data) {
+    return new Promise(function (relove, reject) {
+      axios.post('http://wechat.1000da.com.cn/Order/MakeWechatQRCode', JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+        .then(data => {
+          var data = data.data;
+          if (Number(data.resultcode) == 200) {
+            relove(data)
+          } else {
+            reject(data.resultcontent)
+          }
+        })
+    })
+  },
+  //获取微信支付状态
+  getOrderStatus(store, data) {
+    return new Promise(function (relove, reject) {
+      postPromise('http://wechat.1000da.com.cn/Order/QueryOrderStatus', data)
+        .then(data => {
+          var data = JSON.parse(data);
+          if (Number(data.resultcode) == 200) {
+            relove(data)
+          } else {
+            reject(data.resultcontent)
+          }
+        })
+    })
+  },
+  //初始化我的订单信息
+  initMyOrderAction({commit}, data) {
+    return new Promise(function (relove, reject) {
+      axios.post(getNewStr + '/EdOrderInfo/SelectS', JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+        .then(data => {
+          var data = data.data;
+          if (Number(data.resultcode) == 200) {
+            commit('initMyOrderAction', data.data);
+            relove(data.totalrows);
+          } else {
+            reject(data.resultcontent);
+          }
+        })
+    })
+  },
+  //初始化用户信息
   initUserInformation({commit}, data) {
     return new Promise(function (relove, reject) {
       axios.post(getNewStr + '/UserInfo/Select', JSON.stringify(data), {

@@ -8,4 +8,5 @@ export default {
   moneyBadDetailsList: state => state.moneyBadDetailsList,
   integralList: state => state.integralList,
   courseRecommendList: state => state.courseRecommendList,
+  myOrderList: state => state.myOrderList,
 }
