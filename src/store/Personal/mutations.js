@@ -17,6 +17,9 @@ export default {
   initMoney(state, obj){
     state.moneyObj = obj;
   },
+  initMyOrderAction(state, data){
+    state.myOrderList = data;
+  },
   initMoneyBadDetails(state, data) {
     state.moneyBadDetailsList = data;
   },

@@ -90,6 +90,7 @@
           "operatePassword": "123",//操作员密码
           "operateUserName": "",//
           "pcName": "",
+          token:this.userInfo.token,
           "sm_up_ID": this.userInfo.sm_ui_ID,//钱包编码=用户编码
         };
         this.$store.dispatch('initMoney', selectUserPot)
@@ -110,6 +111,7 @@
           "operatePassword": "123",//操作员密码
           "operateUserName": "",//
           "pcName": "",
+          token:this.userInfo.token,
           "potID": this.userInfo.sm_ui_ID,//钱包编码
           "page": num ? num : 1,
           "rows": "5"
@@ -146,6 +148,7 @@
           "operateUserID": "",//操作员编码
           "operateUserName": "",//操作员名称
           "pcName": "",//机器码
+          token:this.userInfo.token,
           "userCode": this.userInfo.sm_ui_ID,//用户编码
         };
         this.$store.dispatch('initIntegral', selectUserTotalScore)

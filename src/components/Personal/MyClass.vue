@@ -6,25 +6,33 @@
         <a href="javascript:;">学习记录</a>
       </div>
       <ul class="dataList">
-        <li class="clearfix" v-for="item,index in 3">
-          <img src="../../assets/img/video.png" width="160" height="110">
+        <li class="clearfix" v-for="item,index in myOrderList">
+          <!--图片-->
+          <img v-show="item.picture" v-lazy="item.picture" width="160" height="110">
           <div class="classInfo">
-            <strong>高考语文高分复习指导</strong>
+            <!--订单名称-->
+            <strong>{{item.ed_ss_IDName}}</strong>
+            <!--课时-->
             <span>1课时</span>
+            <!--有效期-->
             <em>有效期至 2020.03.06</em>
           </div>
           <div class="classOperation">
-            <a href="javascript:;">继续学习</a>
+            <a @click="ContinueStudy(item)">继续学习</a>
+            <!--<button @click="ContinueStudy">继续学习</button>-->
             <button>删除</button>
           </div>
         </li>
+        <li v-show="!myOrderList.length" style="text-align: center;margin-top: 30px;font-weight: bold;font-size: 24px;">暂无数据</li>
       </ul>
+      <!--分页-->
       <div class="paging">
         <el-pagination
           background
           :page-size="5"
           layout="prev, pager, next"
           @current-change="handleCurrentChange"
+          v-show="total"
           :total="total">
         </el-pagination>
       </div>
@@ -35,14 +43,49 @@
   import {mapGetters} from 'vuex'
 
   export default {
-    computed: mapGetters([]),
+    computed: mapGetters([
+      'myOrderList',
+    ]),
     data() {
       return {
-        total: 1000,
+        total: 0,
+        userInfo:{}
       }
     },
+    created(){
+      this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+      this.initData();
+    },
     methods: {
+      //继续学习
+      ContinueStudy(item){
+        console.log(111,item)
+          const {href} = this.$router.resolve({
+            name: 'PayOrder',
+            query: {orderId:item.ed_oi_ID}
+          });
+          window.open(href, '_blank')
+      },
+      //初始化我的订单
       initData() {
+        let userId =JSON.parse(sessionStorage.getItem("userInfo")).sm_ui_ID+'';
+        let options = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "token":this.userInfo.token,
+          "page": "1",
+          "rows": "10",
+          "ed_ss_ID": "",//系列编号
+          "ed_oi_UserID": userId?userId:"",//用户编码
+          "ed_oi_PayState": "",//支付状态（0未支付，1已支付)
+        };
+        this.$store.dispatch("initMyOrderAction",options)
+        .then((total)=>{
+          this.total = total
+        })
       },
       search() {
         this.initData()

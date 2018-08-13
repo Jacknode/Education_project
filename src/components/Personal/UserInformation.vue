@@ -161,7 +161,10 @@
     },
     created() {
       this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-      this.initUserInformation();
+      if(this.userInfo){
+        this.initUserInformation();
+      }
+
     },
     methods: {
       //登录的个人信息
@@ -172,11 +175,12 @@
           "operateUserID": "",
           "operateUserName": "",
           "pcName": "",
+          token:this.userInfo.token,
           "sm_ui_ID": this.userInfo.sm_ui_ID,
         }
         this.$store.dispatch('initUserInformation', selectUser)
           .then(() => {
-            sessionStorage.setItem('userInfo', JSON.stringify(this.userInformationObj))
+//            sessionStorage.setItem('userInfo', JSON.stringify(this.userInformationObj))
           }, err => {
             this.$notify({
               message: err,
@@ -286,6 +290,7 @@
           "operateUserID": "",
           "operateUserName": "",
           "pcName": "",
+          token:this.userInfo.token,
           "data": this.userInfo
         }
         this.$store.dispatch('updateUserInfoSubmit', updateUser)

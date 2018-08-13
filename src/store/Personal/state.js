@@ -8,4 +8,5 @@ export default {
   moneyBadDetailsList: [],//钱包消费明细
   integralList: [],//积分列表
   courseRecommendList:[],//课程推荐列表
+  myOrderList:[],//个人中心我的订单详情
 }

@@ -54,6 +54,7 @@
           "operateUserID": "",
           "operateUserName": "",
           "pcName": "",
+          token:this.userInfo.token,
           "userCode": this.userInfo.sm_ui_UserCode,//当前用户的账号
           "oldPassword": this.oldPassword,//原来密码
           "newPassword": this.newPassword,//新密码
