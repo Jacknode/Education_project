@@ -21,5 +21,5 @@ export default {
   courseAboutList: [],//课程相关(推荐)
   videoAboutList: [],//关于视频
   videoCommentList: [],//当前视频评论
-  orderDetail: [],//订单详情
+  orderDet: [],//订单详情
 }

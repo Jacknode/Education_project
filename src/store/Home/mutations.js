@@ -51,7 +51,7 @@ export default {
     state.courseAboutList = obj;
   },
   orderDetailAction(state, obj) {
-    state.orderDetail = obj;
+    state.orderDet = obj[0];
   },
   initVideoAbout(state, data) {
     state.videoAboutList = data;

@@ -19,6 +19,29 @@ export default {
         })
     })
   },
+  //支付订单
+  wechatPayWay(store, data) {
+    return new Promise((relove, reject) => {
+      axios.post(getNewStr+'/EdOrderInfo/PayOrder', JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+        .then(data => {
+          var data = data.data;
+          console.log(data)
+          if (Number(data.resultcode) == 200) {
+            relove(data.resultcontent)
+          } else {
+            reject(data.resultcontent)
+          }
+        })
+    })
+  },
+
+
+
+
   //获取微信支付状态
   getOrderStatus(store, data) {
     return new Promise(function (relove, reject) {
@@ -33,6 +56,28 @@ export default {
         })
     })
   },
+  //删除订单
+  DeleteOrder(store,data){
+
+    return new Promise((relove, reject) => {
+      axios.post(getNewStr + '/EdOrderInfo/Delete', JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+        .then(data => {
+          var data = data.data;
+          if (Number(data.resultcode) == 200) {
+            relove(data.resultcontent)
+          } else {
+            reject(data.resultcontent)
+          }
+        })
+    })
+  },
+
+
+
   //初始化我的订单信息
   initMyOrderAction({commit}, data) {
     return new Promise(function (relove, reject) {

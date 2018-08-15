@@ -12,17 +12,11 @@
           <router-link  :to="{path:'orderDetails', query:{seriesId:seriesId}}">查看我的订单</router-link>
         </div>
       </div>
-<!--      <div class="payTypeList clearfix">
-        <a href="javascript:;" class="active">微信扫码</a>
-      </div>-->
-<!--      <div class="QRCodePay">
-        <div class="QRCodeBox">
-          &lt;!&ndash;<img src="" width="198" height="198">&ndash;&gt;
-        </div>
-      </div>-->
+
+      <!--二维码-->
       <div class="sweepQRCodeBoxWrap">
         <div class="sweepQRCodeBox">
-          <div class="QRCode" ref="ewm"></div>
+          <div id="QRCode" ref="ewm"></div>
         </div>
         <a href="javascript:;" @click="changePay">>择其他支付方式</a>
       </div>
@@ -39,7 +33,7 @@
       return {
         centerDialogVisible:false,
         text:'',
-        orderInfo:{},
+
         timer: null,
         hide: false,
         user:{},
@@ -55,37 +49,27 @@
         account:'',
         //用户信息
         userInfo:'',
+        orderInfo:'',
       }
     },
     created(){
-
+      if(sessionStorage.getItem('orderInfo')){
+        this.orderInfo = JSON.parse(sessionStorage.getItem('orderInfo'));
+      }
+      if(sessionStorage.getItem('userInfo')){
+        this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+      }
     },
     methods: {
       //初始化支付
       initPay(){
         let payOptions = {
-          "loginUserID": "huileyou",
-          "loginUserPass": "123",
-          "operateUserID": "",
-          "operateUserName": "",
-          "pcName": "",
-          "token":"",
-          "operateUserID": "",       //下单的用户编码
-          "orderID": "",                   //支付的订单编码
-          "payWay": "微信"                   //付款方式
+          "userID": "qianke",
+          "password": "qianke123",
+          "stationID": "qianlidagzh",
+          "money": this.orderInfo.ed_oi_Price      //付款方式
         };
         return this.$store.dispatch('payAction', payOptions)
-          .then((suc)=>{
-          },(err)=>{
-          this.$notify({
-            type:err,
-            message:'error'
-          });
-          })
-      },
-      //初始化数据
-      initData() {
-
       },
       //选择其他方式支付
       changePay(){
@@ -96,189 +80,94 @@
     mounted(){
       this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
       this.account=this.userInfo.sm_ui_Name;
-/*      if(this.userInfo.sm_ui_Name){
-        let date = new Date();
-        this.timer1 = setInterval(()=>{
-          leftTimer(this,date.getFullYear(),date.getMonth()+1,date.getDate(),date.getHours(),date.getMinutes()+20,0,0).then(()=>{
-            clearInterval(this.timer1)
-          })
-        },1000)
-      }*/
+
       var qrcode = new QRCode(this.$refs.ewm, {
         width: 200,
         height: 200
       });
-      //订单编号
-      let orderID = '';
-      let orderInfo = JSON.parse(sessionStorage.getItem('orderInfo'));
-//      orderInfo.oi_SellMoney = parseInt(orderInfo.oi_SellMoney)
-//      orderInfo.adultPrice = parseInt(orderInfo.adultPrice)
-//      orderInfo.childPrice = parseInt(orderInfo.childPrice)
-//      this.type = orderInfo.type;
-/*      if(orderInfo){
-        this.orderInfo = orderInfo;
-        if(orderInfo.orderID){
-          orderID = orderInfo.orderID
-        }else{
-          orderID = orderInfo.oi_OrderID
-        }
-      }*/
 
+ //订单编号
+      let orderID = '';
+      let orderInfo = this.orderInfo;
+      orderInfo.ed_oi_Price = parseInt(orderInfo.ed_oi_Price)
+//     this.type = orderInfo.type;
+      if(orderInfo){
+        this.orderInfo = orderInfo;
+        if(orderInfo.ed_oi_Number){
+          orderID = orderInfo.ed_oi_Number
+        }else{
+          orderID = orderInfo.ed_oi_Number
+        }
+      }
       if (this.i == false) {
         setTimeout(()=>{
-          this.initPay().then(data => {
-            qrcode.makeCode(data);
-            if (this.isLoad > 0) {
-              return;
-            }
-            clearInterval(this.timer);
-            this.timer = setInterval(() => {
-              console.log(111,data)
-              let options = {
-                "userID": "qianke",
-                "password": "qianke123",
-                "stationID": "qianlidagzh",
-                "orderNo": data
-              };
-              this.$store.dispatch('getOrderStatus', options)
-                .then(resulte => {
-                  if (this.isLoad > 0) {
-                    return;
+
+          if(orderInfo.ed_oi_PayState==0){
+            this.initPay()
+              .then(data => {
+                qrcode.makeCode(data.list);
+                if (this.isLoad > 0) {
+                  return;
+                }
+                clearInterval(this.timer);
+                this.timer = setInterval(() => {
+                  let options = {
+                    "userID": "qianke",
+                    "password": "qianke123",
+                    "stationID": "qianlidagzh",
+                    "orderNo": data.backstring
                   }
-                  if (resulte == "SUCCESS") {
-                    clearInterval(this.timer);
-                    this.isLoad++;
-                    //旅行社订单支付
-                    switch (data){
-                      case 0:
-                        sessionStorage.setItem('orderTypeID',0)
+                  this.$store.dispatch('getOrderStatus', options)
+                    .then(resulte => {
+                      if (this.isLoad > 0) {
+                        return;
+                      }
+                      if (resulte.list == "SUCCESS") {
+                        clearInterval(this.timer);
+                        this.isLoad++;
+                        //支付订单
                         let wOptions = {
+
                           "loginUserID": "huileyou",
                           "loginUserPass": "123",
-                          "operateUserID": this.user.sm_ui_ID,
+
                           "operateUserName": "",
                           "pcName": "",
-                          token:JSON.parse(sessionStorage.getItem('user')).token,
-                          "orderID":  orderInfo.OrderID,
-                          "payWay": "微信支付",
+                          "token":this.userInfo.token,
+                          "operateUserID": this.orderInfo.ed_oi_ID,         //下单用户账号
+                          "ed_oi_Number": this.orderInfo.ed_oi_Number,                   //支付的订单号
+                          "payWay": "微信支付"                   //付款方式
+
                         }
                         this.$store.dispatch('wechatPayWay',wOptions)
-                          .then(()=>{
-                            //支付成功
-                            this.$router.push({name:'MyTourOrder'});
+                          .then(suc => {
+                            this.$notify({
+                              message: suc,
+                              type: 'success'
+                            });
+
+                            this.$router.push({name:'PlayVideo',query:{id:this.orderInfo.ed_oi_ID}});
                             clearInterval(this.timer);
                           },err=>{
+
                             this.$notify({
                               message: err,
                               type: 'error'
                             });
                           })
-                        break;
-                      case 2:
-                        sessionStorage.setItem('orderTypeID',2)
-                        let tOptions = {
-                          "loginUserID": "huileyou",
-                          "loginUserPass": "123",
-                          "operateUserID": this.user.sm_ui_ID,
-                          "operateUserName": "",
-                          "pcName": "",
-                          token:JSON.parse(sessionStorage.getItem('user')).token,
-                          "orderID": orderInfo.OrderID,
-                          "payWay": "微信支付",
-                        };
-                        this.$store.dispatch('ticketWechatPayWay',tOptions)
-                          .then(()=>{
-                            //支付成功
-                            this.$router.push({name:'MyTourOrder'});
-                            clearInterval(this.timer);
-                          },err=>{
-                            this.$notify({
-                              message: err,
-                              type: 'error'
-                            });
-                          })
-                        break;
-                      case 3:
-                        sessionStorage.setItem('orderTypeID',3);
-                        //美食
-                        let mOptions = {
-                          "loginUserID": "huileyou",
-                          "loginUserPass": "123",
-                          "operateUserID": this.user.sm_ui_ID,
-                          "operateUserName": "",
-                          "pcName": "",
-                          token:JSON.parse(sessionStorage.getItem('user')).token,
-                          "fd_or_OrderID": orderInfo.OrderID,
-                          "fd_or_PayWay": "微信支付",
-                        };
-                        this.$store.dispatch('foodWechatPayWay',mOptions)
-                          .then(()=>{
-                            //支付成功
-                            this.$router.push({name:'MyTourOrder'});
-                            clearInterval(this.timer);
-                          },err=>{
-                            this.$notify({
-                              message: err,
-                              type: 'error'
-                            });
-                          });
-                        break;
-                      case 4:
-                        sessionStorage.setItem('orderTypeID',4);
-                        //酒店
-                        let hOptions = {
-                          "loginUserID": "huileyou",
-                          "loginUserPass": "123",
-                          "operateUserID": this.user.sm_ui_ID,
-                          "operateUserName": "",
-                          "pcName": "",
-                          token:JSON.parse(sessionStorage.getItem('user')).token,
-                          "ht_or_OrderID": orderInfo.OrderID,
-                          "ht_or_PayWay": "微信支付",
-                        };
-                        this.$store.dispatch('hotelWechatPayWay',hOptions)
-                          .then(()=>{
-                            //支付成功
-                            this.$router.push({name:'MyTourOrder'});
-                            clearInterval(this.timer);
-                          },err=>{
-                            this.$notify({
-                              message: err,
-                              type: 'error'
-                            });
-                          });
-                        break;
-                      case 5:
-                        sessionStorage.setItem('orderTypeID',5);
-                        //租车
-                        let cOptions = {
-                          "loginUserID": "huileyou",
-                          "loginUserPass": "123",
-                          "operateUserID": this.user.sm_ui_ID,
-                          "operateUserName": "操作员名称",
-                          "pcName": "",
-                          token:JSON.parse(sessionStorage.getItem('user')).token,
-                          "OrderId": orderInfo.cr_cro_Id,//订单编号
-                          "ht_or_PayWay":"微信支付",//支付方式
-                          "ht_or_PayParam":"",//支付参数
-                        };
-                        this.$store.dispatch('carWechatPayWay',cOptions)
-                          .then(()=>{
-                            //支付成功
-                            this.$router.push({name:'MyTourOrder'});
-                            clearInterval(this.timer);
-                          },err=>{
-                            this.$notify({
-                              message: err,
-                              type: 'error'
-                            });
-                          });
-                        break;
-                    }
-                  }
-                })
-            }, 300)
-          })
+
+                      }
+                    })
+                }, 300)
+              })
+          }else{
+            this.$notify({
+              title: '警告',
+              message: '订单已支付！',
+              type: 'warning'
+            });
+          }
+
         },30)
       }
       this.i = true;

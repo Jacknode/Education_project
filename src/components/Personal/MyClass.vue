@@ -2,8 +2,8 @@
   <div>
     <div id="wrap">
       <div class="classification clearfix">
-        <a href="javascript:;" class="active">购买课程</a>
-        <a href="javascript:;">学习记录</a>
+        <a href="javascript:;" v-for="item,index in content" :class="{active:index==meatId}" @click="changeAvtive(index)">{{item}}</a>
+        <!--<a href="javascript:;">学习记录</a>-->
       </div>
       <ul class="dataList">
         <li class="clearfix" v-for="item,index in myOrderList">
@@ -19,8 +19,14 @@
           </div>
           <div class="classOperation">
             <a @click="ContinueStudy(item)">继续学习</a>
-            <!--<button @click="ContinueStudy">继续学习</button>-->
-            <button>删除</button>
+
+               <input type="button" value="删除" @click="Delete(item)">
+
+            <!--<el-button-->
+              <!--size="mini"-->
+              <!--type="danger"-->
+              <!--@click="Delete(scope.row.ed_oi_ID)">删除-->
+            <!--</el-button>-->
           </div>
         </li>
         <li v-show="!myOrderList.length" style="text-align: center;margin-top: 30px;font-weight: bold;font-size: 24px;">暂无数据</li>
@@ -45,11 +51,14 @@
   export default {
     computed: mapGetters([
       'myOrderList',
+      'orderDetail'
     ]),
     data() {
       return {
         total: 0,
-        userInfo:{}
+        userInfo:{},
+        meatId:0,
+        content:['购买课程','学习记录']
       }
     },
     created(){
@@ -57,14 +66,58 @@
       this.initData();
     },
     methods: {
+      changeAvtive(index){
+        this.meatId=index
+      },
       //继续学习
       ContinueStudy(item){
-        console.log(111,item)
+
+
+        if(item.ed_oi_PayState){
+          const {href} = this.$router.resolve({
+            name: 'PlayVideo',
+            query: {id:item.ed_oi_ID}
+        });
+
+          window.open(href, '_blank')
+        }else {
+          sessionStorage.setItem('orderInfo',JSON.stringify(item))
           const {href} = this.$router.resolve({
             name: 'PayOrder',
             query: {orderId:item.ed_oi_ID}
           });
           window.open(href, '_blank')
+        }
+
+
+      },
+      //删除
+      Delete(item){
+        let deleteOptions = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "token": this.userInfo.token,
+          "data": {
+            "ed_oi_ID":item.ed_oi_ID,//标识
+          }
+        }
+        this.$store.dispatch('DeleteOrder', deleteOptions)
+          .then(suc => {
+            this.$notify({
+              message: suc,
+              type: 'success'
+            });
+            this.initData()
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            });
+          });
+
       },
       //初始化我的订单
       initData() {
@@ -164,7 +217,15 @@
     float: right;
     margin-top: 40px;
   }
-
+  .classOperation input{
+    height: 30px;
+    width: 50px;
+    border-radius: 3px;
+  }
+  .classOperation input:hover{
+    background-color: #0461b1;
+    color: white;
+  }
   .classOperation a {
     float: left;
     width: 80px;

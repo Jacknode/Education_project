@@ -210,6 +210,7 @@ export default {
     })
       .then(data => {
         var data = data.data;
+        console.log('110',data)
         if (Number(data.resultcode) == 200) {
           commit('orderDetailAction', data.data);
           // relove(data.totalrows);
@@ -229,7 +230,7 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            console.log("sucess",data)
+
             //课程主体信息
             commit('initCourseMainIfo', data.video[0]);
             //课程目录

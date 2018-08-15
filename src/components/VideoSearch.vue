@@ -39,7 +39,7 @@
             </div>
             <div class="aboutMe clearfix">
               <button @click="apply(courseMainIfoObj)">我要报名</button>
-              <button>咨询课程</button>
+              <button v-show="false">咨询课程</button>
             </div>
           </div>
         </div>
@@ -48,17 +48,15 @@
     <section>
       <div class="secNavWrap">
         <div class="secNav clearfix">
-          <a href="javascript:;" class="active">课程介绍</a>
-          <a href="javascript:;">课程目录</a>
-          <a href="javascript:;">学员评价</a>
+          <a href="javascript:;"  v-for="item,index in content" :class="{active: index == meatId}"   @click="changeAvtive(index)" >{{item}}</a>
         </div>
       </div>
       <div class="secContentWrap clearfix">
         <!--课程介绍-->
-        <div class="secContent">
+        <div class="secContent" >
           <div class="classRecommend">
             <!--课程介绍-->
-            <div>
+            <div v-show="meatId == 0">
               <strong class="classType">课程介绍</strong>
               <ul class="classRecommendList clearfix">
                 <li>
@@ -80,12 +78,12 @@
               </ul>
             </div>
             <!--课程目录-->
-            <div class="classMeun">
+            <div class="classMeun" v-show="meatId == 1" >
               <strong class="classType">课程目录</strong>
               <dl>
                 <dd class="clearfix" v-for="item,index in courseContentsList">
                   <strong>{{item.ed_vo_Title}}</strong>
-                  <span></span>2lqzz
+                  <span></span>
                   <i></i>
                   <em>{{item.ed_vo_Time ? item.ed_vo_Time : '' | getTiem}}</em>
                   <b></b>
@@ -94,7 +92,7 @@
               </dl>
             </div>
             <!--学员评价-->
-            <div class="studentEvaluate">
+            <div class="studentEvaluate"  v-show="meatId == 2">
               <strong class="classType">学员评价</strong>
               <div class="evaluateNav clearfix">
                 <strong><span>95%</span>好评度</strong>
@@ -125,7 +123,7 @@
                   </div>
                 </li>
               </ul>
-            </div>
+            </div   >
             <!--分页-->
             <div class="paging">
               <el-pagination
@@ -153,7 +151,7 @@
               </div>
             </li>
           </ul>
-        </div>
+        </div >
       </div>
     </section>
   </div>
@@ -162,6 +160,7 @@
   import {mapGetters} from 'vuex'
 
   export default {
+
     computed: mapGetters([
       'courseMainIfoObj',
       'videoAboutList',
@@ -172,7 +171,24 @@
     ]),
     data() {
       return {
+
+        meatId: 0,
         //用户信息
+        content:['课程介绍','课程目录','学员评价'],
+        showList: [
+          {
+            id: 0,
+            isShow: true
+          },
+          {
+            id: 1,
+            isShow: false
+          },
+          {
+            id: 2,
+            isShow: false
+          }
+        ],
         userInfo:'',
         radio: '1',
         starValue: 4,
@@ -188,6 +204,16 @@
       this.initCourseRecommend();
     },
     methods: {
+
+      changeAvtive(index){
+        this.meatId=index
+      },
+      classList(){
+        for(i==0;i<this.showList.length;i++){
+          console.log(showList[i])
+        }
+      },
+
       //去播放视频
       goPlayVideo(item) {
         const {href} = this.$router.resolve({
@@ -223,9 +249,11 @@
       },
       //我要报名
       apply(courseMainIfoObj){
-        const {href} = this.$router.resolve({
+         // console.log(courseMainIfoObj)
+          sessionStorage.setItem('orderClass',JSON.stringify(courseMainIfoObj))
+          const {href} = this.$router.resolve({
           name: 'OrderDetails',
-//          query: {id:courseMainIfoObj.ed_vo_ID,seriesId:courseMainIfoObj.ed_ss_ID,}
+      //  query: {id:courseMainIfoObj.ed_vo_ID,seriesId:courseMainIfoObj.ed_ss_ID,}
           query: {seriesId:courseMainIfoObj.ed_ss_ID,}
         });
         const {login} = this.$router.resolve({
@@ -241,7 +269,6 @@
             name: 'Login',
           })
         };
-
       },
       //初始化课程信息
       initData() {
@@ -339,9 +366,9 @@
     float: left;
   }
 
-  nav a:hover {
-    color: #0461b1;
-  }
+  /*nav a:hover {*/
+    /*color: #0461b1;*/
+  /*}*/
 
   nav span {
     float: left;
@@ -513,7 +540,7 @@
     color: #333333;
   }
 
-  .secNav a:hover,
+
   .secNav a.active {
     background-color: #0059bd;
     color: #fff;

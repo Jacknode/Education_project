@@ -18,7 +18,7 @@
           <strong>{{moneyObj.sm_up_Money}}.00</strong>
         </div>
         <div class="balanceOperation">
-          <a href="javascript:;" class="recharge">充值</a>
+          <a href="javascript:;" class="recharge" @click="Recharge">充值</a>
           <!--<a href="javascript:;" class="putForward">提现</a>-->
         </div>
       </div>
@@ -81,6 +81,10 @@
       this.initMoneyBadDetails();
     },
     methods: {
+      //充值
+      Recharge(){
+
+      },
       //初始化钱包余额
       initMoney() {
         let selectUserPot = {

@@ -16,7 +16,7 @@ export default {
   courseMainIfoObj: state => state.courseMainIfoObj,
   courseContentsList: state => state.courseContentsList,
   courseAboutList: state => state.courseAboutList,
-  orderDetail: state => state.orderDetail,
+  orderDet: state => state.orderDet,
   videoAboutList: state => state.videoAboutList,
   videoCommentList: state => state.videoCommentList,
 

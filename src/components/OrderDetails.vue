@@ -7,7 +7,7 @@
           <div class="payType">
             <strong>支付方式</strong>
             <div class="payTypeList clearfix">
-              <a href="JavaScript:;">在线支付<i></i></a>
+              <a href="JavaScript:;" v-for="item,index in payType" :class="{active:index==n}" @click="chargeActive(index,item)">{{item}}<i></i></a>
             </div>
           </div>
           <div class="payMenu">
@@ -15,7 +15,7 @@
             <ul class="payList">
               <li class="clearfix">
                 <strong>课程名称 :</strong>
-                <span>{{orderDetail[0].ed_ss_IDName}}</span>
+                <span>{{orderDetail.ed_ss_Name}}</span>
               </li>
             </ul>
             <div class="payDetails clearfix">
@@ -25,15 +25,15 @@
               <div class="payMoneyDetails clearfix">
                 <div>
                   <strong>1个课程 :</strong>
-                  <span>¥{{orderDetail[0].ed_oi_Price}}</span>
+                  <span>¥{{orderDetail.ed_vo_Price}}</span>
                 </div>
                 <div>
                   <strong>优惠 :</strong>
-                  <span> -¥0.00</span>
+                  <span> -¥10.00</span>
                 </div>
                 <div>
                   <strong>应付金额 :</strong>
-                  <span>¥{{orderDetail[0].ed_oi_Price}}</span>
+                  <span>¥{{orderDetail.ed_vo_Price-10}}</span>
                 </div>
               </div>
             </div>
@@ -52,20 +52,24 @@
   import {getNewStr,postPromise} from '@/assets/js/public'
   export default {
     computed: mapGetters([
-      'orderDetail',
+      'orderDet',
     ]),
     data() {
       return {
+        id:'',
         //供应商编码
         supplierId:'',
         //用户信息
+        orderDetail:'',
         userInfo:'',
+        n:0,
         //用户编号
         orderUserId:'',
         //系列编号
         seriesId:'',
         //作者编号
         authorId:'',
+        payType:['微信支付','支付宝支付'],
         addOption:{
           "loginUserID": "huileyou",
           "loginUserPass": "123",
@@ -73,21 +77,24 @@
           "operateUserName": "",
           "pcName": "",
           "data": {
-            "ed_ss_ID": "20",                  //添加订单的课程编码
-            "ed_oi_UserIF": "22",          //用户编码
+            "ed_ss_ID": "",                  //添加订单的课程编码
+            "ed_oi_UserIF": "",          //用户编码
           }
         },
       }
     },
     methods: {
+
+      chargeActive(index,item){
+        this.n=index
+      },
+
       //初始化订单
       initData() {
-        this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
-        //初始化供应商编码
-        this.supplierId=this.userInfo.sm_ui_UserCode;
+
         //用户编码
         this.orderUserId=this.userInfo.sm_ui_ID;
-       let option={
+        let option={
           "loginUserID": "huileyou",
           "loginUserPass": "123",
           "operateUserID": "",
@@ -97,78 +104,50 @@
           "ed_oi_UserID": "",//用户编码
           "ed_oi_PayState": '',//支付状态（0未支付，1已支付)
         };
-       console.log("查询订单option:",option)
         this.$store.dispatch("orderDetailAction",option)
-          .then(()=>{},()=>{});
-/*        postPromise(getNewStr + '/EdOrderInfo/SelectS',option)
-          .then(data => {
-            var data = JSON.parse(data);
-            console.log("allData:",data);
-            let orderObj=data.data[0];
-            if (Number(data.resultcode) == 200) {
-              console.log("查询订单返回结果 orderObj:",orderObj)
-//              this.addOption.data.ed_ss_ID=orderObj.ed_ss_ID;
-//              this.addOption.data.ed_oi_UserIF=this.orderUserId;
-//              this.addOption.data.ed_oi_Price=orderObj.ed_oi_Price;
-//              alert(data.resultcontent)
-            } else {
-              alert(data.resultcontent)
-            }
-          })*/
       },
-      //提交订单
+      // 提交订单
       submitOrder(){
-        postPromise(getNewStr + '/EdOrderInfo/Insert', this.addOption)
-          .then(data => {
-            var data = JSON.parse(data);
-            if (Number(data.resultcode) == 200) {
-//              alert(data.resultcontent)
-              this.$router.push({name:'PayOrder',query:{seriesId:this.seriesId}})
 
-//              const {href} = this.$router.resolve({
-//                name:"PayOrder",
-//                query:{seriesId:20},
-//              });
-//              window.open(href,"_blank");
-            } else {
-              alert(data.resultcontent)
-              if(data.resultcontent=="当前订单已存在,即将跳转到个人中心支付"){
-                this.$router.push({name:"PersonalCenter"})
-              };
-            }
-          })
+
+
+          this.addOption.data.ed_ss_ID =this.seriesId;
+          this.addOption.data.ed_oi_UserIF = this.userInfo.sm_ui_ID;
+          postPromise(getNewStr + '/EdOrderInfo/InsertOderInFo', this.addOption)
+
+            .then(data => {
+              var data = JSON.parse(data);
+              if (Number(data.resultcode) == 200&&data.resultcontent=='添加订单成功') {
+                sessionStorage.setItem('orderInfo',JSON.stringify(data.data[0]))
+                this.$router.push({name:'PayOrder',query:{seriesId:this.seriesId}})
+              } else {
+                  this.$notify({
+                    title: '警告',
+                    message: '订单已存在！',
+                    type: 'warning'
+                  });
+                   this.$router.push({name:"MyClass"})
+                // alert(data.resultcontent)
+                // if(data.resultcontent=="当前订单已存在,即将跳转到个人中心支付"){
+                //   this.$router.push({name:"PersonalCenter"})
+                // };
+              }
+            })
       },
-      //删除订单
-      delete(id){
-        let deleteOption = {
-          "loginUserID": "huileyou",
-          "loginUserPass": "123",
-          "operateUserID": "",
-          "operateUserName": "",
-          "pcName": "",
-          "data": {
-            "ed_oi_ID": id,//标识
-          }
-        };
-        postPromise(getNewStr + '/EdOrderInfo/Delete', deleteOption)
-          .then(data => {
-            var data = JSON.parse(data);
-            if (Number(data.resultcode) == 200) {
-              alert(data.resultcontent)
-            } else {
-              alert(data.resultcontent)
-            }
-          })
-      },
+
     },
     created(){
-      this.initData()
-//      this.delete("20");
+      this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
+      //初始化供应商编码
+      this.supplierId=this.userInfo.sm_ui_UserCode;
+      this.orderDetail=JSON.parse(sessionStorage.getItem('orderClass'))
+      if(sessionStorage.getItem('userInfo')){
+        this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
+      }
+      this.seriesId=this.$route.query.seriesId;
 
     },
     mounted(){
-      this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
-      this.seriesId=this.$route.query.seriesId;
     },
   }
 </script>
@@ -348,6 +327,5 @@
     padding: 0 48px;
     color: #fff;
   }
-
 
 </style>
