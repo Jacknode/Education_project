@@ -28,6 +28,7 @@
           </div>
           <div class="informationShow">
             <span>课程第一集: </span>
+            <!--header播放-->
             <h4 @click="goPlay(courseMainIfoObj)">{{courseMainIfoObj.ed_vo_Title}}</h4>
             <div class="videoOperation clearfix">
               <strong>326 人学习</strong>
@@ -380,7 +381,7 @@
       },
       //去播放
       goPlay(item) {
-
+        console.log(1111,item)
         this.PersonnalCenterInfo(item.ed_ss_ID)
         .then(()=>{
           let payStatus=this.myOrderList[0];

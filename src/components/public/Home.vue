@@ -117,12 +117,13 @@
         <div class="RecommendDetail">
           <div class="RecommendMore">
             <strong>课程推荐</strong>
-            <router-link to="VideoSearch">更多&gt;&gt;</router-link>
+            <router-link to="VideoDetails">更多&gt;&gt;</router-link>
           </div>
           <!--推荐内容-->
           <ul class="systemCC clearfix">
             <li v-for="item,index in homeVideoList" @click="goPlayRecommendVideo(item)">
-              <img v-show="item.ed_vo_ImageURL" :src="item.ed_vo_ImageURL" width="260" height="190">
+              <!--<img v-show="item.ed_vo_ImageURL" :src="item.ed_vo_ImageURL" width="260" height="190">-->
+              <img v-show="item.ed_vo_ImageURL" v-lazy="item.ed_vo_ImageURL" width="260" height="190">
               <strong>{{item.ed_vo_Title}}</strong>
               <div class="clearfix">
                 <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>

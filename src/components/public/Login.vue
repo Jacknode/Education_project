@@ -117,16 +117,16 @@
           "pcName": "",
           "userID": this.userID,//用户编码
           "password": this.password//密码
-        }
+        };
         this.$store.dispatch('loginSubmit', userLogin)
           .then(data => {
             this.$notify({
               message: data.resultcontent,
               type: 'success'
-            })
+            });
             this.userID = '';
             this.password = '';
-            sessionStorage.setItem('userInfo', JSON.stringify(data.data))
+            sessionStorage.setItem('userInfo', JSON.stringify(data.data));
             this.$router.push({name: 'Home'})
           }, err => {
             this.$notify({
