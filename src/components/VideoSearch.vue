@@ -384,24 +384,24 @@
 
         this.PersonnalCenterInfo(item.ed_ss_ID)
         .then(()=>{
-          console.log(this.myOrderList)
           let payStatus=this.myOrderList[0];
-          if(payStatus.ed_oi_PayState==1&&payStatus.ed_oi_UserName){
-            const {href} = this.$router.resolve({
-              name: 'PlayVideo',
-              query: {
-                id: item.ed_vo_ID
+
+              if(payStatus&&payStatus.ed_oi_PayState==1&&payStatus.ed_oi_UserName){
+                const {href} = this.$router.resolve({
+                  name: 'PlayVideo',
+                  query: {
+                    id: item.ed_vo_ID
+                  }
+                });
+                window.open(href, '_blank')
+              }else{
+                this.$notify({
+                  title: '警告',
+                  message: '课程未购买！请购买课程学习！',
+                  type: 'warning'
+                });
+                this.$router.push({name:"MyClass"})
               }
-            });
-            window.open(href, '_blank')
-          }else{
-            this.$notify({
-              title: '警告',
-              message: '课程未购买！请购买课程学习！',
-              type: 'warning'
-            });
-            this.$router.push({name:"MyClass"})
-          }
        })
       },
       goPlayVideo(item) {
@@ -410,7 +410,7 @@
           .then(()=>{
             console.log(this.myOrderList)
             let payStatus=this.myOrderList[0];
-            if(payStatus.ed_oi_PayState==1&&payStatus.ed_oi_UserName){
+            if(payStatus&&payStatus.ed_oi_PayState==1&&payStatus.ed_oi_UserName){
               const {href} = this.$router.resolve({
                 name: 'PlayVideo',
                 query: {
