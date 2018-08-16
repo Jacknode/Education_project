@@ -99,14 +99,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            // console.log(1)
-            // type: 'success',
-            // message: '删除成功!'
-          });
-
-       this.Delete(item)
-
+          this.Delete(item)
         })
     },
       //删除

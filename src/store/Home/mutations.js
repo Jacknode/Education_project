@@ -48,7 +48,7 @@ export default {
   },
   initCourseContents(state, obj) {
     state.courseContentsList = obj;
-    console.log(111,state.courseContentsList )
+
   },
   initCourseAbout(state, obj) {
     state.courseAboutList = obj;
