@@ -1,5 +1,6 @@
 <template>
   <div id="wrap">
+
     <header>
       <div class="thisVideoWrap">
         <nav class="clearfix">
@@ -14,7 +15,10 @@
         </nav>
         <div class="videlAndInformation clearfix">
           <div class="videoShow">
-            <img v-lazy="courseMainIfoObj.ed_vo_ImageURL" width="610" height="400">
+
+            <img v-lazy="courseMainIfoObj.ed_vo_ImageURL" width="610" height="400" @click="goPlay(courseMainIfoObj)">
+
+
             <div class="videoIcon" @click="goPlay(courseMainIfoObj)"></div>
             <div class="videoTeacher">
               <div class="headIcon"></div>
@@ -23,6 +27,7 @@
             </div>
           </div>
           <div class="informationShow">
+            <span>课程第一集: </span>
             <h4 @click="goPlay(courseMainIfoObj)">{{courseMainIfoObj.ed_vo_Title}}</h4>
             <div class="videoOperation clearfix">
               <strong>326 人学习</strong>
@@ -45,10 +50,11 @@
         </div>
       </div>
     </header>
+
     <section>
       <div class="secNavWrap">
         <div class="secNav clearfix">
-          <a href="javascript:;"  v-for="item,index in content" :class="{active: index == meatId}"   @click="changeAvtive(index)" >{{item}}</a>
+          <a href="javascript:;"  v-for="item,index in content" :class="{active:index == meatId}"   @click="changeAvtive(index)" >{{item}}</a>
         </div>
       </div>
       <div class="secContentWrap clearfix">
@@ -77,7 +83,9 @@
                 </li>
               </ul>
             </div>
+
             <!--课程目录-->
+
             <div class="classMeun" v-show="meatId == 1" >
               <strong class="classType">课程目录</strong>
               <dl>
@@ -91,7 +99,9 @@
                 </dd>
               </dl>
             </div>
+
             <!--学员评价-->
+
             <div class="studentEvaluate"  v-show="meatId == 2">
               <strong class="classType">学员评价</strong>
               <div class="evaluateNav clearfix">
@@ -124,6 +134,7 @@
                 </li>
               </ul>
             </div   >
+
             <!--分页-->
             <div class="paging">
               <el-pagination
@@ -158,20 +169,19 @@
 </template>
 <script>
   import {mapGetters} from 'vuex'
-
   export default {
-
     computed: mapGetters([
       'courseMainIfoObj',
       'videoAboutList',
       'courseRecommendList',//课程推荐列表
       'courseContentsList',//课程目录
       'courseAboutList',//课程相关推荐
-      'videoCommentList'
+      'videoCommentList',
+      'personnalCenterInfo',
+      'myOrderList'
     ]),
     data() {
       return {
-
         meatId: 0,
         //用户信息
         content:['课程介绍','课程目录','学员评价'],
@@ -194,9 +204,20 @@
         starValue: 4,
         total: 0,
         videoId: '',
+        p:[],
       }
     },
-    created() {
+
+    //查询个人中心信息
+
+
+    created(){
+      // if(sessionStorage.getItem('jumpTitle')){
+      //      let jumpTitle= JSON.parse(sessionStorage.getItem('jumpTitle'))
+      //      this.PersonnalCenterInfo(jumpTitle.ed_ss_ID);
+      // }
+
+      this.selectClassification();
       this.videoId = this.$route.query.id;
       this.initData();
       this.initVideoComment();
@@ -214,14 +235,9 @@
         }
       },
 
-      //去播放视频
-      goPlayVideo(item) {
-        const {href} = this.$router.resolve({
-          name: 'VideoSearch',
-          query: {id:item.ed_re_ID}
-        });
-        window.open(href, '_blank')
-      },
+
+
+
       //课程推荐查询
       initCourseRecommend(){
         let courseRecommendOption={
@@ -247,6 +263,30 @@
             })
           });
       },
+      //根据课程查视频免费
+      selectClassification(){
+        let options= {
+          "loginUserID": "huileyou",  //惠乐游用户ID
+          "loginUserPass": "123",  //惠乐游用户密码
+          "operateUserID": "",//操作员编码
+          "operateUserName": "",//操作员名称
+          "pcName": "",        //机器码
+          "token": "",
+          "ed_ss_ID": "25", //视频编码
+        }
+        this.$store.dispatch('initCourseMainIfo', options)
+          .then(() => {
+          }, err => {
+            this.$notify({
+              message: err,
+              type: 'error'
+            })
+          });
+      },
+
+
+
+
       //我要报名
       apply(courseMainIfoObj){
          // console.log(courseMainIfoObj)
@@ -281,7 +321,11 @@
           "ed_vo_ID": this.videoId, //视频编号
         };
         this.$store.dispatch('initCourseIfo', option)
-          .then(() => {
+          .then((suc) => {
+            // this.$notify({
+            //   message: suc,
+            //   type: 'success'
+            // });
           }, err => {
             this.$notify({
               message: err,
@@ -316,24 +360,83 @@
       handleCurrentChange(num) {
         this.initVideoComment(num);
       },
+      //获取个人中心信息
+      PersonnalCenterInfo(id) {
+        let userId =JSON.parse(sessionStorage.getItem("userInfo")).sm_ui_ID+'';
+        let options = {
+          "loginUserID": "huileyou",
+          "loginUserPass": "123",
+          "operateUserID": "",
+          "operateUserName": "",
+          "pcName": "",
+          "token":this.userInfo.token,
+          "page": "1",
+          "rows": "10",
+          "ed_ss_ID":id,//系列编号
+          "ed_oi_UserID": userId?userId:"",//用户编码
+          "ed_oi_PayState": "",//支付状态（0未支付，1已支付)
+        };
+      return this.$store.dispatch("initMyOrderAction",options)
+
+      },
       //去播放
       goPlay(item) {
-        const {href} = this.$router.resolve({
-          name: 'PlayVideo',
-          query: {
-            id: item.ed_vo_ID
+
+        this.PersonnalCenterInfo(item.ed_ss_ID)
+        .then(()=>{
+          console.log(this.myOrderList)
+          let payStatus=this.myOrderList[0];
+          if(payStatus.ed_oi_PayState==1&&payStatus.ed_oi_UserName){
+            const {href} = this.$router.resolve({
+              name: 'PlayVideo',
+              query: {
+                id: item.ed_vo_ID
+              }
+            });
+            window.open(href, '_blank')
+          }else{
+            this.$notify({
+              title: '警告',
+              message: '课程未购买！请购买课程学习！',
+              type: 'warning'
+            });
+            this.$router.push({name:"MyClass"})
           }
-        });
-        window.open(href, '_blank')
+       })
       },
       goPlayVideo(item) {
-        const {href} = this.$router.resolve({
-          name: 'PlayVideo',
-          query: {
-            id: item.ed_fs_VedioID
-          }
-        });
-        window.open(href, '_blank')
+        console.log(item)
+        this.PersonnalCenterInfo(item.ed_ss_ID)
+          .then(()=>{
+            console.log(this.myOrderList)
+            let payStatus=this.myOrderList[0];
+            if(payStatus.ed_oi_PayState==1&&payStatus.ed_oi_UserName){
+              const {href} = this.$router.resolve({
+                name: 'PlayVideo',
+                query: {
+                  id: item.ed_vo_ID
+                }
+              });
+              window.open(href, '_blank')
+            }else{
+              this.$notify({
+                title: '警告',
+                message: '课程未购买！请购买课程学习！',
+                type: 'warning'
+              });
+              this.$router.push({name:"MyClass"})
+            }
+          })
+
+
+        // console.log(1,this.myOrderList)
+        // const {href} = this.$router.resolve({
+        //   name: 'PlayVideo',
+        //   query: {
+        //     id: item.ed_fs_VedioID
+        //   }
+        // });
+        // window.open(href, '_blank')
       }
     },
     mounted() {

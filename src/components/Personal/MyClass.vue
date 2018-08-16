@@ -20,7 +20,7 @@
           <div class="classOperation">
             <a @click="ContinueStudy(item)">继续学习</a>
 
-               <input type="button" value="删除" @click="Delete(item)">
+               <input type="button" value="删除" @click="goDelete(item)">
 
             <!--<el-button-->
               <!--size="mini"-->
@@ -71,8 +71,7 @@
       },
       //继续学习
       ContinueStudy(item){
-
-
+        console.log(item)
         if(item.ed_oi_PayState){
           const {href} = this.$router.resolve({
             name: 'PlayVideo',
@@ -91,6 +90,25 @@
 
 
       },
+
+      //删除确认
+      goDelete(item){
+
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            // console.log(1)
+            // type: 'success',
+            // message: '删除成功!'
+          });
+
+       this.Delete(item)
+
+        })
+    },
       //删除
       Delete(item){
         let deleteOptions = {

@@ -9,4 +9,5 @@ export default {
   integralList: [],//积分列表
   courseRecommendList:[],//课程推荐列表
   myOrderList:[],//个人中心我的订单详情
+  personnalCenterInfo:[],
 }

@@ -60,17 +60,13 @@ export default {
   DeleteOrder(store,data){
 
     return new Promise((relove, reject) => {
-      axios.post(getNewStr + '/EdOrderInfo/Delete', JSON.stringify(data), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
+      postPromise(getNewStr + '/EdOrderInfo/Delete', data)
         .then(data => {
-          var data = data.data;
+          var data = JSON.parse(data)
           if (Number(data.resultcode) == 200) {
-            relove(data.resultcontent)
+            relove(data.resultcontent);
           } else {
-            reject(data.resultcontent)
+            reject(data.resultcontent);
           }
         })
     })
@@ -81,13 +77,10 @@ export default {
   //初始化我的订单信息
   initMyOrderAction({commit}, data) {
     return new Promise(function (relove, reject) {
-      axios.post(getNewStr + '/EdOrderInfo/SelectS', JSON.stringify(data), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
+      postPromise(getNewStr + 'EdOrderInfo/SelectS', data)
         .then(data => {
-          var data = data.data;
+          var data = JSON.parse(data);
+
           if (Number(data.resultcode) == 200) {
             commit('initMyOrderAction', data.data);
             relove(Number(data.totalrows));
@@ -96,6 +89,23 @@ export default {
           }
         })
     })
+
+  },
+  PersonnalCenterInfo({commit}, data) {
+    return new Promise(function (relove, reject) {
+      postPromise(getNewStr + 'EdOrderInfo/SelectS', data)
+        .then(data => {
+          var data = JSON.parse(data);
+
+          if (Number(data.resultcode) == 200) {
+            commit('initPersonnalCenterInfo', data.data);
+            relove(Number(data.totalrows));
+          } else {
+            reject(data.resultcontent);
+          }
+        })
+    })
+
   },
   //初始化用户信息
   initUserInformation({commit}, data) {
@@ -122,6 +132,7 @@ export default {
       postPromise(getNewStr + '/Job/SelectGroupJob', data)
         .then(data => {
           var data = JSON.parse(data);
+
           if (Number(data.resultcode) == 200) {
             commit('initOccupation', data.data);
             relove();

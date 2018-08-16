@@ -19,9 +19,11 @@ export default {
   },
   initHomeVideo(state, data) {
     state.homeVideoList = data;
+
   },
   initHomeRecommend(state, data) {
     state.homeRecommendList = data;
+
   },
   initHomeClass(state, data) {
     state.homeClassList = data;
@@ -42,10 +44,11 @@ export default {
     state.typeVideoList = data;
   },
   initCourseMainIfo(state, obj) {
-    state.courseMainIfoObj = obj;
+    state.courseMainIfoObj = obj
   },
   initCourseContents(state, obj) {
     state.courseContentsList = obj;
+    console.log(111,state.courseContentsList )
   },
   initCourseAbout(state, obj) {
     state.courseAboutList = obj;

@@ -88,7 +88,7 @@ export default {
           if (Number(data.resultcode) == 200) {
             commit('initHomePicture', data.recommend)
             commit('initHomeVideo', data.recommendVedio)
-            commit('initHomeRecommend', data.recommendSeries)
+             commit('initHomeRecommend', data.recommendSeries)
             commit('initHomeClass', data.show)
             commit('initHomeNav', data.totalRows)
             relove();
@@ -98,6 +98,31 @@ export default {
         })
     })
   },
+
+
+
+  //根据课程查视频
+  initCourseMainIfo({commit}, data) {
+
+    return new Promise(function (relove, reject) {
+      postPromise(getNewStr + '/EWebPage/selectBroadcast', data)
+        .then(data => {
+          var data = JSON.parse(data)
+
+          if (Number(data.resultcode) == 200) {
+            commit('initCourseMainIfo', data.video[0]);
+            commit('initCourseContents', data.data);
+            relove(data.totalRows);
+          } else {
+            reject(data.resultcontent);
+          }
+        })
+    })
+
+
+
+  },
+
   //初始化视频
   initPlayVideo({commit}, data) {
     return new Promise(function (relove, reject) {
@@ -158,11 +183,6 @@ export default {
   initVideoDetails({commit}, data) {
     return new Promise(function (relove, reject) {
       postPromise(getNewStr + '/HomeShow/SecondaryPage', data)
-      // axios.post(getNewStr + '/HomeShow/SecondaryPage', JSON.stringify(data), {
-      //   headers: {
-      //     'Content-Type': 'application/x-www-form-urlencoded'
-      //   }
-      // })
         .then(data => {
           var data = JSON.parse(data)
           if (Number(data.resultcode) == 200) {
@@ -185,11 +205,6 @@ export default {
   initTypeVideo({commit}, data) {
     return new Promise(function (relove, reject) {
       postPromise(getNewStr + '/HomeShow/SecondaryVode', data)
-      // axios.post(getNewStr + '/HomeShow/SecondaryVode', JSON.stringify(data), {
-      //   headers: {
-      //     'Content-Type': 'application/x-www-form-urlencoded'
-      //   }
-      // })
         .then(data => {
           var data = JSON.parse(data)
           if (Number(data.resultcode) == 200) {
@@ -210,7 +225,7 @@ export default {
     })
       .then(data => {
         var data = data.data;
-        console.log('110',data)
+
         if (Number(data.resultcode) == 200) {
           commit('orderDetailAction', data.data);
           // relove(data.totalrows);
@@ -222,26 +237,20 @@ export default {
   //初始化课程信息
   initCourseIfo({commit}, data) {
     return new Promise(function (relove, reject) {
-      axios.post(getNewStr + '/HomeShow/SecondaryVodeDetails', JSON.stringify(data), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      })
+      postPromise(getNewStr + '/HomeShow/SecondaryVodeDetails', data)
         .then(data => {
-          var data = data.data;
-          if (Number(data.resultcode) == 200) {
+          var data = JSON.parse(data)
 
+          if (Number(data.resultcode) == 200) {
             //课程主体信息
-            commit('initCourseMainIfo', data.video[0]);
+            // commit('initCourseMainIfo', data.video[0]);
             //课程目录
-            commit('initCourseContents', data.data);
+            // commit('initCourseContents', data.data);
             //课程相关
             commit('initCourseAbout', data.correlation);
-            //课程视频信息
-            //课程推荐信息
-            // commit('initCourseIfo', data.date[0]?data.date[0]:{});
-            // commit('initVideoAbout', data.FilmSeries);
-            relove();
+
+
+            relove(data.totalRows);
           } else {
             reject(data.resultcontent);
           }

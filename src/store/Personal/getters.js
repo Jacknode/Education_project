@@ -9,4 +9,5 @@ export default {
   integralList: state => state.integralList,
   courseRecommendList: state => state.courseRecommendList,
   myOrderList: state => state.myOrderList,
+  personnalCenterInfo: state => state.personnalCenterInfo
 }

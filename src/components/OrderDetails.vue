@@ -84,11 +84,9 @@
       }
     },
     methods: {
-
       chargeActive(index,item){
         this.n=index
       },
-
       //初始化订单
       initData() {
 
@@ -110,11 +108,9 @@
       submitOrder(){
 
 
-
           this.addOption.data.ed_ss_ID =this.seriesId;
           this.addOption.data.ed_oi_UserIF = this.userInfo.sm_ui_ID;
           postPromise(getNewStr + '/EdOrderInfo/InsertOderInFo', this.addOption)
-
             .then(data => {
               var data = JSON.parse(data);
               if (Number(data.resultcode) == 200&&data.resultcontent=='添加订单成功') {
@@ -123,7 +119,7 @@
               } else {
                   this.$notify({
                     title: '警告',
-                    message: '订单已存在！',
+                    message: '订单已存在！请支付学习！',
                     type: 'warning'
                   });
                    this.$router.push({name:"MyClass"})
@@ -141,6 +137,7 @@
       //初始化供应商编码
       this.supplierId=this.userInfo.sm_ui_UserCode;
       this.orderDetail=JSON.parse(sessionStorage.getItem('orderClass'))
+      console.log( this.orderDetail)
       if(sessionStorage.getItem('userInfo')){
         this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
       }

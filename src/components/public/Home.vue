@@ -121,8 +121,8 @@
           </div>
           <!--推荐内容-->
           <ul class="systemCC clearfix">
-            <li v-for="item,index in homeVideoList" @click="goPlayVideo(item)">
-              <img v-show="item.ed_vo_ImageURL" v-lazy="item.ed_vo_ImageURL" width="260" height="190">
+            <li v-for="item,index in homeVideoList" @click="goPlayRecommendVideo(item)">
+              <img v-show="item.ed_vo_ImageURL" :src="item.ed_vo_ImageURL" width="260" height="190">
               <strong>{{item.ed_vo_Title}}</strong>
               <div class="clearfix">
                 <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
@@ -140,21 +140,15 @@
         <div class="systemNav">
           <div class="systemNavCon clearfix">
             <strong>免费公开课</strong>
-            <!--<div class="systemN">-->
-            <!--<a href="javascript:;">平面设计</a>-->
-            <!--<a href="javascript:;">事业单位</a>-->
-            <!--<a href="javascript:;">考研</a>-->
-            <!--<a href="javascript:;">地方公务员</a>-->
-            <!--</div>-->
           </div>
         </div>
         <ul class="systemCC clearfix">
           <li v-for="item,index in homeRecommendList" @click="goPlayVideo(item)">
-            <img v-show="item.ed_re_SeriesImageURL" v-lazy="item.ed_re_SeriesImageURL" width="260" height="190">
-            <strong>{{item.ed_re_Name}}</strong>
+            <img v-show="item.ed_ss_SeriesImageURL" v-lazy="item.ed_ss_SeriesImageURL" width="260" height="190">
+            <strong>{{item.ed_ss_Name}}</strong>
             <div class="clearfix">
               <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
-              <span v-else style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
+              <span v-else style="color: #f43232;">{{'￥' + item.ed_ss_Price}}</span>
               <a href="javascript:;">我要报名</a>
             </div>
           </li>
@@ -178,18 +172,16 @@
         </div>
         <ul class="systemCC clearfix">
           <li v-for="item,index in classList" @click="goPlaySeriesVideo(item)">
-            <img v-show="item.ed_vo_ImageURL" v-lazy="item.ed_vo_ImageURL" width="260" height="190">
+            <img v-show="item.ed_vo_ImageURL" :src="item.ed_vo_ImageURL" width="260" height="190">
             <strong>{{item.ed_vo_Title}}</strong>
             <div class="clearfix">
               <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
-              <span v-else style="color: #f43232;">{{'￥'}}{{item.ed_vo_Price!=0&&item.ed_vo_Price?item.ed_vo_Price:'0'}}</span>
+              <span v-else style="color: #f43232;">{{'￥'}}{{item.ed_ss_Price}}</span>
               <a href="javascript:;">我要报名</a>
             </div>
           </li>
         </ul>
       </div>
-
-
     </section>
 
 
@@ -225,6 +217,8 @@
       'homeNavList'
     ]),
     created() {
+      // this.selectClassification();
+
       if (localStorage.getItem('userName') && localStorage.getItem('userPassword')) {
         this.userID = Decrypt(localStorage.getItem('userName'))
         this.password = Decrypt(localStorage.getItem('userPassword'))
@@ -239,7 +233,7 @@
       this.initData();
     },
     methods: {
-//      初始化首页数据
+      //初始化首页数据
       initData() {
         let HomeShow = {
           "loginUserID": "huileyou",  //惠乐游用户ID
@@ -257,6 +251,7 @@
               this.playPicture();
             })
             this.classList = this.homeClassList.filter(item => {
+
               if (item.vedio.length) {
                 return true;
               }
@@ -269,6 +264,10 @@
             })
           })
       },
+
+
+
+
       //轮播
       playPicture() {
         this.liW = document.body.offsetWidth;
@@ -336,22 +335,40 @@
         this.classList = item.vedio;
         this.typeIndex = index;
       },
-      //去播放视频
-      goPlayVideo(item) {
-        console.log(item)
+
+      //去播放推荐课程视频
+      goPlayRecommendVideo(item) {
+
         const {href} = this.$router.resolve({
           name: 'VideoSearch',
           query: {
-              id:item.ed_vo_ID,
-              title:item.ed_vo_Title
+            id:item.ed_vo_ID,
+            title:item.ed_vo_Title
           }
         });
         window.open(href, '_blank');
         //存储title
         let jumpTitle=item;
-
         sessionStorage.setItem('jumpTitle',JSON.stringify(jumpTitle));
       },
+
+      //去播放视频
+      goPlayVideo(item) {
+
+        const {href} = this.$router.resolve({
+          name: 'VideoSearch',
+          query: {
+              id:item.ed_re_ID,
+              title:item.ed_re_Name
+          }
+        });
+        window.open(href, '_blank');
+        //存储title
+        let jumpTitle=item;
+        sessionStorage.setItem('jumpTitle',JSON.stringify(jumpTitle));
+      },
+
+
       //去播放视频
       goPlaySeriesVideo(item) {
         const {href} = this.$router.resolve({
@@ -412,6 +429,8 @@
           })
       },
       imageChangeClass(item){
+
+
       }
     },
     mounted() {

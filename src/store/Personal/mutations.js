@@ -19,6 +19,13 @@ export default {
   },
   initMyOrderAction(state, data){
     state.myOrderList = data;
+
+
+  },
+
+  initPersonnalCenterInfo(state, data){
+    state.personnalCenterInfo = data;
+    console.log(1,state.personnalCenterInfo )
   },
   initMoneyBadDetails(state, data) {
     state.moneyBadDetailsList = data;
