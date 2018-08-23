@@ -50,7 +50,7 @@ export default {
     state.courseContentsList = obj;
 
   },
-  initCourseAbout(state, obj) {
+  correlation(state, obj) {
     state.courseAboutList = obj;
   },
   orderDetailAction(state, obj) {

@@ -92,11 +92,12 @@ export default {
 
   },
   PersonnalCenterInfo({commit}, data) {
+    console.log('PersonnalCenterInfo>data1:',data)
     return new Promise(function (relove, reject) {
       postPromise(getNewStr + 'EdOrderInfo/SelectS', data)
         .then(data => {
           var data = JSON.parse(data);
-
+          console.log('PersonnalCenterInfo>data2:',data)
           if (Number(data.resultcode) == 200) {
             commit('initPersonnalCenterInfo', data.data);
             relove(Number(data.totalrows));

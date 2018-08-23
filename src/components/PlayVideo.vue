@@ -12,7 +12,7 @@
           <div class="playVideoBox">
             <video ref="videoWrap" :src="videoBox.ed_vo_FileURL" width="880" height="500" controls="controls"></video>
             <div class="videoIcon" v-show="showPlay">
-              <img v-lazy="videoBox.ed_vo_TomImageURL" width="880" height="500">
+              <img v-lazy="videoBox.ed_vo_ImageURL" width="880" height="500">
               <div @click="playVideoBtn"></div>
             </div>
           </div>
@@ -145,12 +145,14 @@
     methods: {
       //初始化视频列表
       initData() {
+        console.log('this.videoId:',this.videoId)
         let selectEdVedioInfo = {
           "loginUserID": "huileyou",
           "loginUserPass": "123",
           "operateUserID": "",
           "operateUserName": "",
           "pcName": "",
+          "token":"",
           "ed_vo_ID": this.videoId,//视频编号
         };
         this.$store.dispatch('initPlayVideo', selectEdVedioInfo)

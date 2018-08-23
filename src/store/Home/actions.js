@@ -87,8 +87,9 @@ export default {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
             commit('initHomePicture', data.recommend)
-            commit('initHomeVideo', data.recommendVedio)
+            commit('initHomeVideo', data.recommend)
              commit('initHomeRecommend', data.recommendSeries)
+            console.log('show:',data.show)
             commit('initHomeClass', data.show)
             commit('initHomeNav', data.totalRows)
             relove();
@@ -108,9 +109,8 @@ export default {
       postPromise(getNewStr + '/EWebPage/selectBroadcast', data)
         .then(data => {
           var data = JSON.parse(data)
-
           if (Number(data.resultcode) == 200) {
-            commit('initCourseMainIfo', data.video[0]);
+            // commit('initCourseMainIfo', data.video[0]);
             commit('initCourseContents', data.data);
             relove(data.totalRows);
           } else {
@@ -126,15 +126,17 @@ export default {
   //初始化视频
   initPlayVideo({commit}, data) {
     return new Promise(function (relove, reject) {
-      axios.post(getNewStr + '/EdVedio/Select', JSON.stringify(data), {
+      axios.post(getNewStr + '/EWebPage/selectVideo', JSON.stringify(data), {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       })
         .then(data => {
           var data = data.data;
+          console.log('data:',data);
           if (Number(data.resultcode) == 200) {
-            commit('initPlayVideo', data.data)
+            commit('initPlayVideo', data.directory
+            )
             relove();
           } else {
             reject(data.resultcontent);
@@ -237,17 +239,16 @@ export default {
   //初始化课程信息
   initCourseIfo({commit}, data) {
     return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/HomeShow/SecondaryVodeDetails', data)
+      postPromise(getNewStr + '/EWebPage/selectBroadcast', data)
         .then(data => {
           var data = JSON.parse(data)
-
           if (Number(data.resultcode) == 200) {
             //课程主体信息
-            // commit('initCourseMainIfo', data.video[0]);
+            commit('initCourseMainIfo', data.video[0]);
             //课程目录
-            // commit('initCourseContents', data.data);
+            commit('initCourseContents', data.data);
             //课程相关
-            commit('initCourseAbout', data.correlation);
+            commit('correlation', data.correlation);
 
 
             relove(data.totalRows);

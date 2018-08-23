@@ -111,23 +111,23 @@
       </div>
       <!--课程推荐-->
       <div class="RecommendClass">
-        <!--模块线-->
+                                       <!--模块线-->
         <span style="width: 100%;height: 46px;background-color: #c8c8c8;display: inline-block"></span>
-        <!--推荐详情-->
+                                       <!--推荐详情-->
         <div class="RecommendDetail">
           <div class="RecommendMore">
             <strong>课程推荐</strong>
             <router-link to="VideoDetails">更多&gt;&gt;</router-link>
           </div>
-          <!--推荐内容-->
+                                        <!--推荐内容-->
           <ul class="systemCC clearfix">
             <li v-for="item,index in homeVideoList" @click="goPlayRecommendVideo(item)">
               <!--<img v-show="item.ed_vo_ImageURL" :src="item.ed_vo_ImageURL" width="260" height="190">-->
-              <img v-show="item.ed_vo_ImageURL" v-lazy="item.ed_vo_ImageURL" width="260" height="190">
-              <strong>{{item.ed_vo_Title}}</strong>
+              <img v-show="item.ed_ss_SeriesImageURL" v-lazy="item.ed_ss_SeriesImageURL" width="260" height="190">
+              <strong>{{item.ed_ss_Name}}</strong>
               <div class="clearfix">
-                <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
-                <span v-if="item.ed_vo_Price != 0" style="color: #f43232;">{{'￥' + item.ed_vo_Price}}</span>
+                <span v-if="item.ed_ss_Price == 0" style="color: green;">免费</span>
+                <span v-if="item.ed_ss_Price != 0" style="color: #f43232;">{{'￥' + item.ed_ss_Price}}</span>
                 <a href="javascript:;">我要报名</a>
               </div>
             </li>
@@ -165,7 +165,7 @@
               <a href="javascript:;"
                  :class="{active:typeIndex == index}"
                  v-for="item,index in homeClassList"
-                 v-show="item.vedio.length"
+                 v-show="item"
                  @mouseover="changeClassType(item,index)"
               >{{item.ed_te_Name}}</a>
             </div>
@@ -173,8 +173,8 @@
         </div>
         <ul class="systemCC clearfix">
           <li v-for="item,index in classList" @click="goPlaySeriesVideo(item)">
-            <img v-show="item.ed_vo_ImageURL" :src="item.ed_vo_ImageURL" width="260" height="190">
-            <strong>{{item.ed_vo_Title}}</strong>
+            <img v-show="item.ed_ss_SeriesImageURL" :src="item.ed_ss_SeriesImageURL" width="260" height="190">
+            <strong>{{item.ed_ss_Name}}</strong>
             <div class="clearfix">
               <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
               <span v-else style="color: #f43232;">{{'￥'}}{{item.ed_ss_Price}}</span>
@@ -250,9 +250,8 @@
           .then(() => {
             this.$nextTick(() => {
               this.playPicture();
-            })
+            });
             this.classList = this.homeClassList.filter(item => {
-
               if (item.vedio.length) {
                 return true;
               }
@@ -339,12 +338,11 @@
 
       //去播放推荐课程视频
       goPlayRecommendVideo(item) {
-
         const {href} = this.$router.resolve({
           name: 'VideoSearch',
           query: {
-            id:item.ed_vo_ID,
-            title:item.ed_vo_Title
+            id:item.ed_ss_ID,
+            title:item.ed_ss_Name
           }
         });
         window.open(href, '_blank');
@@ -355,12 +353,11 @@
 
       //去播放视频
       goPlayVideo(item) {
-
         const {href} = this.$router.resolve({
           name: 'VideoSearch',
           query: {
-              id:item.ed_re_ID,
-              title:item.ed_re_Name
+              id:item.ed_ss_ID,
+              title:item.ed_ss_Name
           }
         });
         window.open(href, '_blank');

@@ -63,24 +63,25 @@
     methods: {
       //初始化支付
       initPay(){
+        console.log('orderInfo:',this.orderInfo)
         let payOptions = {
           "userID": "qianke",
           "password": "qianke123",
           "stationID": "qianlidagzh",
           "money": this.orderInfo.ed_oi_Price      //付款方式
+//          "money": 1     //付款方式
         };
         return this.$store.dispatch('payAction', payOptions)
       },
       //选择其他方式支付
       changePay(){
-        this.$router.push({name:'PayOrder'})
+        this.$router.push({name:'PayOrder'});
         window.location.reload()
       },
     },
     mounted(){
       this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
       this.account=this.userInfo.sm_ui_Name;
-
       var qrcode = new QRCode(this.$refs.ewm, {
         width: 200,
         height: 200
@@ -91,6 +92,7 @@
       let orderInfo = this.orderInfo;
       orderInfo.ed_oi_Price = parseInt(orderInfo.ed_oi_Price)
 //     this.type = orderInfo.type;
+
       if(orderInfo){
         this.orderInfo = orderInfo;
         if(orderInfo.ed_oi_Number){
@@ -101,7 +103,6 @@
       }
       if (this.i == false) {
         setTimeout(()=>{
-
           if(orderInfo.ed_oi_PayState==0){
             this.initPay()
               .then(data => {
