@@ -19,12 +19,12 @@
           <dd v-if="!videoDetailsList.length" class="lastClass">暂无课程分类</dd>
         </dl>
         <ul class="screenCondition clearfix">
-          <li><a href="javascript:;">综合排序</a></li>
-          <li><a href="javascript:;">好评率</a><i></i></li>
-          <li><a href="javascript:;">人气</a><i></i></li>
-          <li><a href="javascript:;">最新</a><i></i></li>
-          <li><a href="javascript:;">价格</a><i></i></li>
-          <li><a href="javascript:;">价格区间</a></li>
+          <!--<li><a href="javascript:;">综合排序</a></li>-->
+          <!--<li><a href="javascript:;">好评率</a><i></i></li>-->
+          <!--<li><a href="javascript:;">人气</a><i></i></li>-->
+          <!--<li><a href="javascript:;">最新</a><i></i></li>-->
+          <!--<li><a href="javascript:;">价格</a><i></i></li>-->
+          <!--<li><a href="javascript:;">价格区间</a></li>-->
           <li><a href="javascript:;">全部</a></li>
           <li><a href="javascript:;">免费</a></li>
           <li><a href="javascript:;">付费</a></li>

@@ -3,15 +3,15 @@
 
     <header>
       <div class="thisVideoWrap">
-        <nav class="clearfix">
+        <nav class="clearfix" style="padding-top: 20px">
           <!--<a href="javascript:;">全部课程</a>-->
-          <router-link to="home">全部课程</router-link>
-          <span>&gt;</span>
-          <a href="javascript:;">软件技术</a>
-          <span>&gt;</span>
-          <a href="javascript:;">编程语言</a>
-          <span>&gt;</span>
-          <a href="javascript:;">精通网络Socket套接字技术</a>
+          <!--<router-link to="home">全部课程</router-link>-->
+          <!--<span>&gt;</span>-->
+          <!--<a href="javascript:;">软件技术</a>-->
+          <!--<span>&gt;</span>-->
+          <!--<a href="javascript:;">编程语言</a>-->
+          <!--<span>&gt;</span>-->
+          <!--<a href="javascript:;">精通网络Socket套接字技术</a>-->
         </nav>
         <div class="videlAndInformation clearfix">
           <div class="videoShow">

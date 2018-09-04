@@ -8,6 +8,7 @@
             <strong>支付方式</strong>
             <div class="payTypeList clearfix">
               <a href="JavaScript:;" v-for="item,index in payType" :class="{active:index==n}" @click="chargeActive(index,item)">{{item}}<i></i></a>
+
             </div>
           </div>
           <div class="payMenu">
@@ -15,7 +16,7 @@
             <ul class="payList">
               <li class="clearfix">
                 <strong>课程名称 :</strong>
-                <span>{{orderDetail.ed_ss_Name}}</span>
+                <span>{{orderDetail.ed_ss_IDName}}</span>
               </li>
             </ul>
             <div class="payDetails clearfix">
@@ -56,13 +57,23 @@
     ]),
     data() {
       return {
+        n:0,
+        list:[
+          {
+            name:'在线支付',
+            id:1
+          },
+          {
+            name:'微信支付',
+            id:2
+          }
+        ],
         id:'',
         //供应商编码
         supplierId:'',
         //用户信息
         orderDetail:'',
         userInfo:'',
-        n:0,
         //用户编号
         orderUserId:'',
         //系列编号
@@ -182,6 +193,7 @@
   }
 
   .payTypeList > a {
+    margin-right: 10px;
     float: left;
     padding: 0 24px;
     border: 1px solid transparent;

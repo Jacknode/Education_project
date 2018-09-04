@@ -12,6 +12,16 @@
           <router-link  :to="{path:'orderDetails', query:{seriesId:seriesId}}">查看我的订单</router-link>
         </div>
       </div>
+      <!---->
+
+<!--      <div class="payTypeList clearfix">
+        <a href="javascript:;" class="active">微信扫码</a>
+      </div>-->
+<!--      <div class="QRCodePay">
+        <div class="QRCodeBox">
+          &lt;!&ndash;<img src="" width="198" height="198">&ndash;&gt;
+        </div>
+      </div>-->
 
       <!--二维码-->
       <div class="sweepQRCodeBoxWrap">
@@ -80,6 +90,7 @@
       },
     },
     mounted(){
+
       this.userInfo=JSON.parse(sessionStorage.getItem('userInfo'));
       this.account=this.userInfo.sm_ui_Name;
       var qrcode = new QRCode(this.$refs.ewm, {
@@ -93,7 +104,7 @@
       orderInfo.ed_oi_Price = parseInt(orderInfo.ed_oi_Price)
 //     this.type = orderInfo.type;
 
-      if(orderInfo){
+     if(orderInfo){
         this.orderInfo = orderInfo;
         if(orderInfo.ed_oi_Number){
           orderID = orderInfo.ed_oi_Number
@@ -168,7 +179,6 @@
               type: 'warning'
             });
           }
-
         },30)
       }
       this.i = true;

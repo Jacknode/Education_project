@@ -71,7 +71,6 @@
       },
       //继续学习
       ContinueStudy(item){
-        console.log(666,item)
         if(item.ed_oi_PayState){
           const {href} = this.$router.resolve({
             name: 'PlayVideo',

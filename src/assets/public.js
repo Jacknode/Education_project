@@ -302,4 +302,4 @@ export const deepClone = (obj)=>{
 }
 //http://hly.1000da.com.cn
 
-export const getNewStr =  '/api'; //'http://192.168.3.4' //'http://192.168.3.50'
+export const getNewStr =  'http://hly.1000da.com.cn'; //'http://192.168.3.4' //'http://192.168.3.50'
