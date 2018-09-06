@@ -45,7 +45,7 @@
               <span> {{Number(courseMainIfoObj.ed_vo_Time)}}课时</span>
             </div>
             <div class="aboutMe clearfix">
-              <button @click="apply(courseMainIfoObj)">我要报名</button>
+              <button @click="apply(courseMainIfoObj)" v-show="!courseMainIfoObj.ed_vo_Price==0">我要报名</button>
               <button v-show="false">咨询课程</button>
             </div>
           </div>
@@ -185,6 +185,7 @@
     data() {
       return {
         meatId: 0,
+        iWantSingUp: true,//我要报名
         courseId: '',//课程编码
         //用户信息
         content:['课程介绍','课程目录','学员评价'],

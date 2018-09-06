@@ -128,7 +128,7 @@
               <div class="clearfix">
                 <span v-if="item.ed_ss_Price == 0" style="color: green;">免费</span>
                 <span v-if="item.ed_ss_Price != 0" style="color: #f43232;">{{'￥' + item.ed_ss_Price}}</span>
-                <a href="javascript:;">我要报名</a>
+                <a href="javascript:;" v-show="!item.ed_ss_Price == 0">我要报名</a>
               </div>
             </li>
           </ul>
@@ -150,7 +150,7 @@
             <div class="clearfix">
               <span v-if="item.ed_vo_Price==0" style="color: green;">免费</span>
               <span v-else style="color: #f43232;">{{'￥' + item.ed_ss_Price}}</span>
-              <a href="javascript:;">我要报名</a>
+              <a href="javascript:;"  v-show="!item.ed_ss_Price == 0">我要报名</a>
             </div>
           </li>
         </ul>
@@ -261,7 +261,7 @@
             this.$notify({
               message: err,
               type: 'error'
-            })
+          })
           })
       },
 

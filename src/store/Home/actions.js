@@ -5,6 +5,25 @@
 import {getNewStr, postPromise} from '@/assets/js/public'
 
 export default {
+  //更多页面免费查询
+/*  searchIsFreeAction({commit}, data) {
+
+    return new Promise(function (relove, reject) {
+      postPromise(getNewStr + '/HomeShow/SecondaryVode', data)
+        .then(data => {
+          var data = JSON.parse(data)
+          if (Number(data.resultcode) == 200) {
+            commit('initTypeVideo', data.data);
+            relove(data.totalRows);
+          } else {
+            reject(data.resultcontent);
+          }
+        })
+    })
+
+
+
+  },*/
   //登录提交
   loginSubmit({commit}, data) {
     return new Promise(function (relove, reject) {
@@ -89,7 +108,6 @@ export default {
             commit('initHomePicture', data.recommend)
             commit('initHomeVideo', data.recommend)
              commit('initHomeRecommend', data.recommendSeries)
-            console.log('show:',data.show)
             commit('initHomeClass', data.show)
             commit('initHomeNav', data.totalRows)
             relove();
@@ -133,7 +151,6 @@ export default {
       })
         .then(data => {
           var data = data.data;
-          console.log('data:',data);
           if (Number(data.resultcode) == 200) {
             commit('initPlayVideo', data.directory
             )
@@ -181,12 +198,12 @@ export default {
         })
     })
   },
-  //初始化教育详情页
+  //初始化教育二级页面课程分类
   initVideoDetails({commit}, data) {
     return new Promise(function (relove, reject) {
       postPromise(getNewStr + '/HomeShow/SecondaryPage', data)
         .then(data => {
-          var data = JSON.parse(data)
+          var data = JSON.parse(data);
           if (Number(data.resultcode) == 200) {
             let arr = data.totalRows;
             if(arr.length){
@@ -194,8 +211,8 @@ export default {
                 ed_te_ID:'',
                 ed_te_Name:'全部'
               })
-            }
-            commit('initVideoDetails', arr)
+            };
+            commit('initVideoDetails', arr);
             relove();
           } else {
             reject(data.resultcontent);
@@ -203,15 +220,22 @@ export default {
         })
     })
   },
-  //初始化教育详情视频
-  initTypeVideo({commit}, data) {
+  //二级页面初始化课程
+  initCourseAction({commit}, data) {
     return new Promise(function (relove, reject) {
       postPromise(getNewStr + '/HomeShow/SecondaryVode', data)
         .then(data => {
-          var data = JSON.parse(data)
+          var data = JSON.parse(data);
           if (Number(data.resultcode) == 200) {
-            commit('initTypeVideo', data.data)
-            relove(data.totalRows);
+            let arr = data.totalRows;
+            if(arr.length){
+              arr.unshift({
+                ed_te_ID:'',
+                ed_te_Name:'全部'
+              })
+            };
+            commit('initVideoDetails', arr);
+            relove();
           } else {
             reject(data.resultcontent);
           }

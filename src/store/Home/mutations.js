@@ -11,6 +11,9 @@ export default {
   showLoading(state) {
     state.isLoading = true;
   },
+/*  searchIsFreeAction(state, data) {
+    state.searchIsFreeList = data;
+  },*/
   hideLoading(state) {
     state.isLoading = false;
   },

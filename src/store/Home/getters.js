@@ -13,11 +13,13 @@ export default {
   recommendDataList: state => state.recommendDataList,
   videoDetailsList: state => state.videoDetailsList,
   typeVideoList: state => state.typeVideoList,
+
   courseMainIfoObj: state => state.courseMainIfoObj,
   courseContentsList: state => state.courseContentsList,
   courseAboutList: state => state.courseAboutList,
   orderDet: state => state.orderDet,
   videoAboutList: state => state.videoAboutList,
   videoCommentList: state => state.videoCommentList,
+  // searchIsFreeList: state => state.searchIsFreeList,
 
 }
