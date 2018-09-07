@@ -161,6 +161,27 @@ export default {
         })
     })
   },
+  //视频播放页相关课程
+  relateCourseAction({commit},data){
+    return new Promise(function (relove, reject) {
+      axios.post(getNewStr + '/EWebPage/selectVideo', JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+        .then(data => {
+          var data = data.data;
+          if (Number(data.resultcode) == 200) {
+            console.log(111,data)
+            commit('relateCourseAction', data.directory
+            )
+            relove();
+          } else {
+            reject(data.resultcontent);
+          }
+        })
+    })
+  },
   //初始化评论
   initRecommend({commit}, data) {
     return new Promise(function (relove, reject) {
@@ -223,18 +244,16 @@ export default {
   //二级页面初始化课程
   initCourseAction({commit}, data) {
     return new Promise(function (relove, reject) {
-      postPromise(getNewStr + '/HomeShow/SecondaryVode', data)
+      axios.post(getNewStr + '/HomeShow/SecondaryVode', JSON.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
         .then(data => {
-          var data = JSON.parse(data);
+          var data = data.data;
           if (Number(data.resultcode) == 200) {
-            let arr = data.totalRows;
-            if(arr.length){
-              arr.unshift({
-                ed_te_ID:'',
-                ed_te_Name:'全部'
-              })
-            };
-            commit('initVideoDetails', arr);
+            commit('initVideoDetails', data.directory
+            )
             relove();
           } else {
             reject(data.resultcontent);

@@ -37,6 +37,9 @@ export default {
   initPlayVideo(state, data) {
     state.playVideoList = data;
   },
+  relateCourseAction(state, data) {
+    state.relateCourseList = data;
+  },
   initRecommend(state, data) {
     state.recommendDataList = data;
   },

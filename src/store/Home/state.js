@@ -22,5 +22,6 @@ export default {
   videoAboutList: [],//关于视频
   videoCommentList: [],//当前视频评论
   orderDet: [],//订单详情
+  relateCourseList: [],//相关课程列表
   // searchIsFreeList: [],//更多视频详情页是否免费
 }

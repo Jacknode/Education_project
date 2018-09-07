@@ -191,20 +191,18 @@
           "pcName": "",        //机器码
           "token":"",
           "charge": isCharge?isCharge:"",   //是否收费（0不收费，1要收费）
-          "ed_vt_ID": typeId?typeId:'', //类型ID
-          Name:name?name:''//模糊查询的课程名称
-//          "page": num ? num : 1,//页码
-//          "rows": 12//条数
+          "ed_vt_ID": typeId?typeId:0, //类型ID
+          Name:name?name:'',//模糊查询的课程名称
+          "page": num ? num : 1,//页码
+          "rows": 5//条数
         };
         this.listLoading = true;
-/*        if(num){
-          option.page = num;
-          option.rows = 12;
-        };*/
         console.log('初始化课程option:',option);
         this.$store.dispatch('initCourseAction', option)
           .then(
-            ()=>{},
+            ()=>{
+              this.listLoading = false;
+            },
             ()=>{}
           )
       },

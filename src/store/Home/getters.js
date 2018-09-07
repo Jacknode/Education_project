@@ -20,6 +20,7 @@ export default {
   orderDet: state => state.orderDet,
   videoAboutList: state => state.videoAboutList,
   videoCommentList: state => state.videoCommentList,
+  relateCourseList: state => state.relateCourseList,
   // searchIsFreeList: state => state.searchIsFreeList,
 
 }

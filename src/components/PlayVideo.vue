@@ -43,20 +43,37 @@
         <div class="aboutVideo">
           <nav class="clearfix">
             <a href="javascript:;" class="active">本节介绍</a>
-            <a href="javascript:;">资料下载</a>
+            <!--<a href="javascript:;">资料下载</a>-->
           </nav>
           <p>{{videoBox.ed_vo_Introduce}}</p>
+    <!--相关课程-->
           <div class="aboutClass">
             <strong>相关课程</strong>
+<!--            <div class="clearfix">
+              <div class="leftLast" id="lastIcon"><i></i></div>
+              <div class="classList">
+                <ul class="clearfix" id="classList">
+                  <li v-for="item,index in relateCourseList">
+                    <img src="../assets/img/video.png" width="230" height="160">
+                    <strong>{{item.ed_vo_Title}}</strong>
+                    <div class="clearfix">
+                      <span>{{item.ed_ss_Price}}</span>
+                      <a href="javascript:;">开始学习</a>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="rightNext" id="nextIcon"><i></i></div>
+            </div>-->
             <div class="clearfix">
               <div class="leftLast" id="lastIcon"><i></i></div>
               <div class="classList">
                 <ul class="clearfix" id="classList">
                   <li v-for="item,index in 3">
                     <img src="../assets/img/video.png" width="230" height="160">
-                    <strong>高考语文高分复习指导</strong>
+                    <strong>{{1}}</strong>
                     <div class="clearfix">
-                      <span>免费</span>
+                      <span>{{1}}</span>
                       <a href="javascript:;">开始学习</a>
                     </div>
                   </li>
@@ -122,7 +139,8 @@
   export default {
     computed: mapGetters([
       'playVideoList',
-      'recommendDataList'
+      'recommendDataList',
+      'relateCourseList',
     ]),
     data() {
       return {
@@ -132,8 +150,10 @@
         videoBox: {},
         showPlay: true,
         videoIndex: 0,
+        courseSessionId: '',//课程编码
         userInfo: {},
         commentContent: '',
+//        relateCourse: [],//相关课程
       }
     },
     created() {
@@ -141,10 +161,13 @@
       this.userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
       this.initData();
       this.initRecommend();
+      //初始化相关课程
+      this.relateCourse();
     },
     methods: {
       //初始化视频列表
       initData() {
+        console.log('this.videoId:',this.videoId)
         console.log('this.videoId:',this.videoId)
         let selectEdVedioInfo = {
           "loginUserID": "huileyou",
@@ -161,10 +184,10 @@
               const {href} = this.$router.resolve({
                 name: '404',
               });
-              window.open(href, '_blank')
-              this.$router.push({name: 'Home'})
+              window.open(href, '_blank');
+              this.$router.push({name: 'Home'});
               return
-            }
+            };
             this.videoBox = this.playVideoList[0];
           }, err => {
             this.$notify({
@@ -180,6 +203,7 @@
       },
       //选择视频播放
       changeVideo(item, index) {
+        console.log(index)
         this.videoBox = item;
         this.videoIndex = index;
         this.showPlay = true;
@@ -195,7 +219,7 @@
           "page": "1",
           "rows": "10",
           "ed_se_ID": "",//视频评分ID
-          "ed_se_VedioID": this.videoId,//视频编号
+          "ed_se_VedioID": this.courseSessionId,//视频编号
           "ed_se_UserID": "",//用户编码
           "ed_se_Score": "",//分数
         }
@@ -210,6 +234,7 @@
       },
       //添加评论
       addRecommend() {
+        console.log('this.courseSessionId:',this.courseSessionId)
         let insertEdScoreInfo = {
           "loginUserID": "huileyou",
           "loginUserPass": "123",
@@ -217,7 +242,7 @@
           "operateUserName": "",
           "pcName": "",
           "data": {
-            "ed_se_VedioID": this.videoId,//视频编号
+            "ed_se_VedioID": this.courseSessionId,//视频编号
             "ed_se_UserID": this.userInfo.sm_ui_ID,//用户编码
             "ed_se_Score": this.choiceValue,//分数
             "ed_se_Comment": this.commentContent,//评论内容
@@ -240,10 +265,30 @@
               type: 'error'
             })
           })
-      }
+      },
+      //相关课程
+      relateCourse(){
+        let option = {
+          "loginUserID": "huileyou",  //惠乐游用户ID
+          "loginUserPass": "123",  //惠乐游用户密码
+          "operateUserID": "",//操作员编码
+          "operateUserName": "",//操作员名称
+          "pcName": "",        //机器码
+          "token":"",
+          "ed_vo_ID": this.$route.query.id,   //视频编码
+          };
+        this.$store.dispatch("relateCourseAction",option)
+          .then(
+            ()=>{},
+            ()=>{}
+          );
+      },
 
     },
     mounted() {
+      //获取课程编码
+      this.courseSessionId = JSON.parse(sessionStorage.getItem('courseSessionId'));
+      console.log(111,this.courseSessionId)
       //相关课程轮播
       let classList = document.getElementById('classList');
       let classLTs = classList.children;

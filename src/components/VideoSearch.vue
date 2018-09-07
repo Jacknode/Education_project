@@ -54,13 +54,14 @@
     </header>
 
     <section>
+      <!--课程导航-->
       <div class="secNavWrap">
         <div class="secNav clearfix">
           <a href="javascript:;"  v-for="item,index in content" :class="{active:index == meatId}"   @click="changeAvtive(index)" >{{item}}</a>
         </div>
       </div>
       <div class="secContentWrap clearfix">
-        <!--课程介绍-->
+<!--课程内容-->
         <div class="secContent" >
           <div class="classRecommend">
             <!--课程介绍-->
@@ -85,9 +86,7 @@
                 </li>
               </ul>
             </div>
-
-<!--课程目录-->
-
+            <!--课程目录-->
             <div class="classMeun" v-show="meatId == 1" >
               <strong class="classType">课程目录</strong>
               <dl>
@@ -101,9 +100,7 @@
                 </dd>
               </dl>
             </div>
-
             <!--学员评价-->
-
             <div class="studentEvaluate"  v-show="meatId == 2">
               <strong class="classType">学员评价</strong>
               <div class="evaluateNav clearfix">
@@ -187,6 +184,7 @@
         meatId: 0,
         iWantSingUp: true,//我要报名
         courseId: '',//课程编码
+        courseSessionId: '',//课程编码
         //用户信息
         content:['课程介绍','课程目录','学员评价'],
         showList: [
@@ -471,7 +469,7 @@
 
       //去播放视频
       goPlayVideo(item) {
-        this.PersonnalCenterInfo(item.ed_ss_ID)
+/*        this.PersonnalCenterInfo(item.ed_ss_ID)
           .then(()=>{
             let payStatus=this.myOrderList[0];
             if(payStatus.ed_oi_PayState==1&&payStatus.ed_oi_UserName){
@@ -490,16 +488,16 @@
               });
               this.$router.push({name:"MyClass"})
             }
-          })
+          })*/
 
-
-        // const {href} = this.$router.resolve({
-        //   name: 'PlayVideo',
-        //   query: {
-        //     id: item.ed_fs_VedioID
-        //   }
-        // });
-        // window.open(href, '_blank')
+         console.log(item)
+         const {href} = this.$router.resolve({
+           name: 'PlayVideo',
+           query: {
+             id: item.ed_vo_ID
+           }
+         });
+         window.open(href, '_blank')
       }
     },
     mounted() {
@@ -509,6 +507,8 @@
       if(this.$route.query.title){
         document.title=this.$route.query.title;
       };
+      //存储课程编码
+      this.courseSessionId=sessionStorage.setItem('courseSessionId',this.$route.query.id)
 
     },
   }
