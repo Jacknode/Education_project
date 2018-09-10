@@ -141,6 +141,7 @@
         <div class="systemNav">
           <div class="systemNavCon clearfix">
             <strong>免费公开课</strong>
+            <router-link class="more" to="VideoDetails">更多&gt;&gt;</router-link>
           </div>
         </div>
         <ul class="systemCC clearfix">
@@ -161,6 +162,7 @@
         <div class="systemNav">
           <div class="systemNavCon clearfix">
             <strong>系统课程</strong>
+
             <div class="systemN">
               <a href="javascript:;"
                  :class="{active:typeIndex == index}"
@@ -169,7 +171,9 @@
                  @mouseover="changeClassType(item,index)"
               >{{item.ed_te_Name}}</a>
             </div>
+            <router-link class="smore" to="VideoDetails">更多&gt;&gt;</router-link>
           </div>
+
         </div>
         <ul class="systemCC clearfix">
           <li v-for="item,index in classList" @click="goPlaySeriesVideo(item)">
@@ -1193,5 +1197,16 @@
     color: #808080;
     margin-top: 10px;
     font-size: 12px;
+  }
+  .more{
+    float: right;
+    margin-right:15px;
+    margin-top:15px;
+    color: silver;
+  }
+  .smore{
+    float: right;
+    margin-right:-570px;
+    color: silver;
   }
 </style>

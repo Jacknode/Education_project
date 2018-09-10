@@ -252,9 +252,8 @@ export default {
         .then(data => {
           var data = data.data;
           if (Number(data.resultcode) == 200) {
-            commit('initVideoDetails', data.directory
-            )
-            relove();
+            commit('initCourseAction', data.data)
+            relove(data.totalRows);
           } else {
             reject(data.resultcontent);
           }

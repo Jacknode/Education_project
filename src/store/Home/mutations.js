@@ -43,6 +43,9 @@ export default {
   initRecommend(state, data) {
     state.recommendDataList = data;
   },
+  initCourseAction(state, data) {
+    state.CourseList = data;
+  },
   initVideoDetails(state, data) {
     state.videoDetailsList = data;
   },

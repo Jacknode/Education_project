@@ -21,6 +21,6 @@ export default {
   videoAboutList: state => state.videoAboutList,
   videoCommentList: state => state.videoCommentList,
   relateCourseList: state => state.relateCourseList,
-  // searchIsFreeList: state => state.searchIsFreeList,
+  CourseList: state => state.CourseList,
 
 }
