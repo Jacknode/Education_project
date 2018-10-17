@@ -2,10 +2,12 @@
   <div>
     <div id="wrap">
       <div id="wrapBox">
+        <!--全部课程-->
         <nav class="clearfix">
-          <a href="javascript:;" @click="searchAll">{{'全部课程'}}</a>
-          <a href="javascript:;" v-for="item in childrenList" @click="searchChildrenList(item.ed_te_ID)"><span>&gt;</span>{{item.ed_te_Name}}</a>
+          <a href="javascript:;" @click="searchAll">{{'全部课程'}}</a><span>&gt;</span>
+          <a href="javascript:;" v-for="item,index in childrenList" @click="searchChildrenList(item.ed_te_ID)">{{item.ed_te_Name}}<span>&gt;</span></a>
         </nav>
+        <!--课程分类-->
         <dl class="classType clearfix" v-loading="isloading">
           <dt>课程分类</dt>
           <dd
@@ -18,6 +20,7 @@
           </dd>
           <dd v-if="!videoDetailsList.length" class="lastClass">暂无课程分类</dd>
         </dl>
+        <!--课程详细分类-->
         <ul class="screenCondition clearfix">
           <!--<li><a href="javascript:;">综合排序</a></li>-->
           <!--<li><a href="javascript:;">好评率</a><i></i></li>-->
@@ -25,13 +28,14 @@
           <!--<li><a href="javascript:;">最新</a><i></i></li>-->
           <!--<li><a href="javascript:;">价格</a><i></i></li>-->
           <!--<li><a href="javascript:;">价格区间</a></li>-->
-          <li><a href="javascript:;">全部</a></li>
-          <li><a href="javascript:;">免费</a></li>
-          <li><a href="javascript:;">付费</a></li>
+          <li><a href="javascript:;" @click="initTypeVideo('')">全部</a></li>
+          <li><a href="javascript:;" @click="initTypeVideo('0')">免费</a></li>
+          <li><a href="javascript:;" @click="initTypeVideo('1')">付费</a></li>
         </ul>
-        <ul class="classList clearfix" v-loading="listLoading">
-          <li class="prompt" v-show="!typeVideoList.length">暂无相关视频</li>
-          <li v-for="item,index in typeVideoList" @click="goVideoSearch(item)">
+        <!--<ul class="classList clearfix" v-show="listIsLoading">-->
+        <ul class="classList clearfix" v-loading="listLoading" v-show="listIsLoading">
+          <li class="prompt" v-show="!CourseList.length">暂无相关视频</li>
+          <li v-for="item,index in CourseList" @click="goVideoSearch(item)">
             <img v-lazy="item.ed_ss_SeriesImageURL" width="260" height="193">
             <strong>{{item.ed_ss_Name}}</strong>
             <div class="clearfix">
@@ -41,6 +45,19 @@
             </div>
           </li>
         </ul>
+        <!--是否收费-->
+<!--        <ul class="classList clearfix" v-loading="freeIsLoading">
+          <li class="prompt" v-show="!CourseList.length">暂无相关视频</li>
+          <li v-for="item,index in CourseList" @click="goVideoSearch(item)">
+            <img v-lazy="item.ed_ss_SeriesImageURL" width="260" height="193">
+            <strong>{{item.ed_ss_Name}}</strong>
+            <div class="clearfix">
+              <span v-if="item.ed_vo_Price == 0" style="color: green;">免费</span>
+              <span v-if="item.ed_vo_Price != 0">￥{{item.ed_ss_Price}}</span>
+              <a href="javascript:;">我要报名</a>
+            </div>
+          </li>
+        </ul>-->
         <div class="paging">
           <el-pagination
             background
@@ -48,8 +65,7 @@
             layout="prev, pager, next"
             @current-change="handleCurrentChange"
             :total="total"
-            v-show="total
-"
+            v-show="total"
           >
           </el-pagination>
         </div>
@@ -63,80 +79,72 @@
   export default {
     computed: mapGetters([
       'videoDetailsList',
-      'typeVideoList'
+      'typeVideoList',
+      'searchIsFreeList',
+      'CourseList',
     ]),
     data() {
       return {
         isloading:false,
         listLoading:false,
-        childrenList:[],
-        total: 1000,
-        typeId: '',
+        freeIsLoading:false,
+        listIsLoading:true,
+        childrenList:[],//全部课程面包屑
+        typeId: '',//类型Id
+        crumbsId: '',//面包屑Id
+        freeType: '',//免费的类型
         typeName: '',
         typeCId: '',
         childrenName: '',
         seriesId: '',
+        newCourseId: '',//新课程编号
         activeIndex: 0,
         total: 0,
+        tType:'',//传入课程类型
+        comObj:{
+          "ed_te_ID":'',
+          "ed_te_Name":'',
+          "ed_te_ParentID":0,
+        },//传入课程类型合成对象
       }
     },
     created() {
-      this.typeId = this.$route.query.id;
-      this.seriesId = this.$route.query.seriesId;
-      this.typeName = this.$route.query.name;
-      this.typeCId = this.$route.query.cid;
-      this.childrenName = this.$route.query.cname;
+      //初始化课程分类
       this.initData();
-      this.initTypeVideo(1,this.$route.query.keyword);
+      //初始化课程信息
+      this.initTypeVideo('','','0',1);
+    },
+    mounted(){
+//      this.comObj.ed_te_ID=this.$route.query.cid;
+//      this.comObj.ed_te_Name=this.$route.query.cname;
+//      this.childrenList.push(this.comObj)
     },
     methods: {
+/*
+ * 分页
+ * */
 
-      searchAll(){
-        this.childrenList = [];
-        this.initData(0)
+      handleCurrentChange(num) {
+        this.initTypeVideo('','','',num)
       },
-      searchChildrenList(id){
-        this.childrenList = this.childrenList.filter(item=>{
-          if(item.ed_te_ID==id){
-            return true
-          }
-          return false
-        })
-        this.typeCId = id;
-        this.initData(id);
-        this.initTypeVideo(1)
-      },
-      //查询类型
+
+/*
+ * 初始化课程分类
+ * */
+
       initData(id) {
-//        if( !this.typeId ){
-//          return
-//        }
-        let SecondaryPage = {
+        let option = {
           "loginUserID": "huileyou",  //惠乐游用户ID
           "loginUserPass": "123",  //惠乐游用户密码
           "operateUserID": "",//操作员编码
           "operateUserName": "",//操作员名称
           "pcName": "",        //机器码
-          "ed_vt_ID": this.typeId?this.typeId:'' //类型
+          "ed_vt_ID": id?id:'' //课程类型ID
         };
-        if(id||id==0){
-          SecondaryPage.ed_vt_ID = id;
-        }
         this.isloading = true;
-        this.$store.dispatch('initVideoDetails', SecondaryPage)
+        this.$store.dispatch('initVideoDetails', option)
           .then(() => {
-          this.isloading = false;
-            for (let i = 0; i < this.videoDetailsList.length; i++) {
-              if (this.videoDetailsList[i].ed_te_ID == this.typeCId) {
-//                this.childrenName = this.videoDetailsList[i].ed_te_Name;
-                this.activeIndex = i;
-              }
-            }
-            if(!this.videoDetailsList.length){
-//              this.childrenList = [];
-////              this.initData()
-//              window.location.reload()
-            }
+            this.isloading = false;
           }, err => {
             this.$notify({
               message: err,
@@ -144,72 +152,103 @@
             })
           })
       },
-      //查询类型对应得视频
-      initTypeVideo(num,name) {
-        let SecondaryVode = {
+
+/*
+ * 点击课程分类
+ * */
+
+      changeClassType(item, index) {
+        //清空点击首页分类进入详情页的分类
+//        this.childrenList.shift();
+        for(let i =0;i<this.childrenList.length;i++){
+//          this.childrenList[i]=this.comObj;
+//          this.childrenList.remove(this.comObj);
+//          break;
+        };
+        //刷新面包屑
+        this.childrenList.push(item);
+        //刷新课程分类
+        this.initData(item.ed_te_ID);
+        //刷新课程信息
+        console.log(item.ed_te_ID);
+        this.newCourseId=item.ed_te_ID;
+        console.log(111,this.newCourseId)
+        this.initTypeVideo('','',this.newCourseId,1);
+      },
+
+/*
+ *点击面包屑
+ * */
+
+      searchChildrenList(id){
+        //刷新课程分类
+        this.initData(id);
+        //刷新面包屑
+        let arr = this.childrenList;
+        this.childrenList=[];
+        for(let i = 0;i<arr.length;i++){
+          //重新添加面包屑
+          this.childrenList.push(arr[i]);
+          //到点击对象时停止添加
+          if(arr[i].ed_te_ID==id){
+            break;
+          };
+
+        };
+        //刷新课程列表
+
+      },
+
+/*
+ *初始化课程
+ * */
+
+      initTypeVideo(isCharge,name,typeId,num) {
+        let option = {
           "loginUserID": "huileyou",  //惠乐游用户ID
           "loginUserPass": "123",  //惠乐游用户密码
           "operateUserID": "",//操作员编码
           "operateUserName": "",//操作员名称
           "pcName": "",        //机器码
-          "ed_vt_ID": this.typeCId?this.typeCId:'', //类型
-          Name:name?name:''
-//          "page": num ? num : 1,//页码
-//          "rows": 12//条数
+          "token":"",
+          "charge": isCharge?isCharge:"",   //是否收费（0不收费，1要收费）
+          'Name':name?name:'',//模糊查询的课程名称
+          "ed_vt_ID": typeId?typeId:'0', //类型ID
+          "page": num ? num : 1,//页码
+          "rows": 8//条数
         };
+        console.log('option:',option)
         this.listLoading = true;
-        if(num){
-          SecondaryVode.page = num
-          SecondaryVode.rows = 12
-        }
-        this.$store.dispatch('initTypeVideo', SecondaryVode)
-          .then(total => {
-            this.listLoading = false;
-            this.total = Number(total)
-          })
+        this.$store.dispatch('initCourseAction', option)
+          .then(
+            (total)=>{
+              this.total=total;
+              this.listLoading = false;
+            },
+            ()=>{}
+          )
       },
-      //分页
-      handleCurrentChange(num) {
-        this.initTypeVideo(num)
+
+/*
+ *点击全部去查询全部课程
+ *  */
+
+      searchAll(){
+        this.childrenList = [];
+        this.initData(0)
       },
-      changeClassType(item, index) {
-        this.activeIndex = index;
-//        this.childrenList.filter(v=>{
-//          if(v.)
-//        })
-//        const filterNonUnique = arr => arr.filter(i => arr.indexOf(i.ed_te_ParentID) === arr.lastIndexOf(i.ed_te_ParentID))
+
+/*
+ *是否收费
+ *  */
+//      searchIsFree(free){
+//        let isFree=free;
+//        this.initTypeVideo(isFree,'','','');
+//      },
 
 
-//        const reducedFilter = (data, keys, fn) =>
-//          data.filter(fn).map(el =>
-//            keys.reduce((acc, key) => {
-//              acc[key] = el[key];
-//              return acc;
-//            }, {})
-//          );
-//        console.log(filterNonUnique(this.childrenList))
-        this.childrenList.push(item)
-        let arr = this.childrenList;
-        for(var i=0;i<arr.length;i++){
-          if(arr[i].ed_te_ParentID==item.ed_te_ParentID){
-//            this.childrenList = [];
-            this.childrenList.push(item)
-            break
-          }
-        }
-        this.childrenList = Array.from(new Set(this.childrenList))
-//        this.childrenName = item.ed_te_Name;
-        this.typeCId = item.ed_te_ID;
-        this.typeId = item.ed_te_ID;
-        if(item.ed_te_ID==''){
-          this.childrenList = []
-        }
-        this.initData()
 
-        this.initTypeVideo(1);
-      },
       goVideoSearch(item) {
-//        console.log(item)
 //        return
         this.$router.push({name: 'VideoSearch', query: {id: item.ed_ss_ID}})
       },

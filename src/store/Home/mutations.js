@@ -11,6 +11,9 @@ export default {
   showLoading(state) {
     state.isLoading = true;
   },
+/*  searchIsFreeAction(state, data) {
+    state.searchIsFreeList = data;
+  },*/
   hideLoading(state) {
     state.isLoading = false;
   },
@@ -34,8 +37,14 @@ export default {
   initPlayVideo(state, data) {
     state.playVideoList = data;
   },
+  relateCourseAction(state, data) {
+    state.relateCourseList = data;
+  },
   initRecommend(state, data) {
     state.recommendDataList = data;
+  },
+  initCourseAction(state, data) {
+    state.CourseList = data;
   },
   initVideoDetails(state, data) {
     state.videoDetailsList = data;
